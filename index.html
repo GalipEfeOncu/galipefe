@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galip Efe Oncu | Portfolio</title>
+    <meta name="description" content="Galip Efe Oncu - Software Engineering Student & Game Developer Portfolio">
+    <style>
+        /* --- MODERN RESET & VARIABLES --- */
+        :root {
+            /* Light Theme (Default - but we focus on styling dark heavily) */
+            --bg-color: #f8fafc;       
+            --surface-color: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --primary-accent: #6366f1; /* Indigo/Violetish */
+            --secondary-accent: #10b981; /* Emerald Green */
+            
+            --radius: 16px;
+            --container-width: 1000px;
+            --overlay-bg: rgba(255, 255, 255, 0.85);
+            --header-height: 80px;
+        }
+
+        /* --- PREFERRED DARK THEME (The Real Vibe) --- */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #0f172a;       /* Slate 900 - Deep Blue/Grey */
+                --surface-color: #1e293b;  /* Slate 800 */
+                --text-main: #f1f5f9;      /* Slate 100 */
+                --text-muted: #94a3b8;     /* Slate 400 */
+                --border-color: #334155;   /* Slate 700 */
+                --primary-accent: #818cf8; /* Lighter Indigo */
+                --secondary-accent: #34d399; /* Bright Emerald */
+                --overlay-bg: rgba(15, 23, 42, 0.85);
+            }
+        }
+
+        /* Override to Force Dark Mode Vibe if user system is light, 
+           remove this block if you want actual light mode support */
+        /* Currently keeping automatic, but designed dark-first */
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { 
+            scroll-behavior: smooth; 
+            scroll-padding-top: calc(var(--header-height) + 2rem);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* --- LAYOUT UTILS --- */
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* --- STICKY HEADER --- */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            background-color: rgba(15, 23, 42, 0.7); /* Transparanlık */
+            backdrop-filter: blur(12px); /* Blur Efekti */
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 4rem;
+        }
+
+        @media (prefers-color-scheme: light) {
+            header { background-color: rgba(248, 250, 252, 0.8); }
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary-accent);
+            border-radius: 50%;
+        }
+
+        nav ul { display: flex; gap: 2rem; list-style: none; }
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        nav a:hover { color: var(--primary-accent); }
+
+        /* --- HERO SECTION --- */
+        .hero { 
+            padding: 2rem 0 6rem 0; 
+            animation: fadeIn 0.8s ease-out; 
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.1); /* Subtle Indigo tint */
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--text-main), var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* --- PROJECTS GRID --- */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Stylish Card Design */
+        .project-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            height: 100%;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-accent);
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Sahte Görsel Alanı (Placeholder for Visuals) */
+        .card-visual {
+            height: 140px;
+            width: 100%;
+            background: linear-gradient(135deg, var(--surface-color) 0%, var(--bg-color) 100%);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--border-color);
+            position: relative;
+        }
+        
+        /* Proje tiplerine göre gradientler */
+        .card-visual.game { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); }
+        .card-visual.tool { background: linear-gradient(135deg, #064e3b 0%, #059669 100%); }
+        .card-visual.other { background: linear-gradient(135deg, #171717 0%, #404040 100%); }
+
+        .card-icon {
+            font-size: 3rem;
+            opacity: 0.3;
+            color: white;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        .tech-pill {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .view-project-link {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 32px;
+            height: 32px;
+            background: var(--bg-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .project-card:hover .view-project-link {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* --- INFO GRID (Bottom) --- */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 6rem;
+            padding-top: 4rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .info-col h3 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .social-btn:hover {
+            border-color: var(--primary-accent);
+            background: rgba(99, 102, 241, 0.05);
+            transform: translateX(5px);
+        }
+
+        .social-handle {
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 0.9rem;
+        }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .skill-tag {
+            padding: 0.5rem 1rem;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--overlay-bg);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+
+        .modal-card {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            width: 100%;
+            max-width: 800px;
+            border-radius: 20px;
+            padding: 3rem;
+            position: relative;
+            transform: translateY(30px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-overlay.active .modal-card { transform: translateY(0); }
+
+        .modal-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: 0.2s;
+            font-size: 1.2rem;
+        }
+
+        .modal-close:hover { background: var(--text-main); color: var(--bg-color); border-color: var(--text-main); }
+
+        .modal-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -1px; }
+        .modal-subtitle { font-size: 1.1rem; color: var(--primary-accent); margin-bottom: 2rem; display: block; font-weight: 600; }
+        .modal-text { font-size: 1.1rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 2rem; }
+        
+        .modal-cta {
+            display: inline-block;
+            background: var(--text-main);
+            color: var(--bg-color);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: opacity 0.2s;
+        }
+        .modal-cta:hover { opacity: 0.9; }
+
+        footer { text-align: center; padding: 4rem 0; color: var(--text-muted); font-size: 0.9rem; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Mobile tweaks */
+        @media (max-width: 768px) {
+            header { padding: 1.5rem 0; }
+            .hero h1 { font-size: 2.5rem; }
+            .info-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .modal-card { padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <span class="logo-dot"></span>
+                Efe.
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="mailto:galipefe75@gmail.com">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-badge">Available for Work</div>
+            <h1>Hi, I'm Galip Efe Oncu.<br>Software Engineering Student & Game Developer.</h1>
+            <p>I build immersive digital experiences and useful tools. Passionate about game mechanics, clean architecture, and solving complex problems with code.</p>
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="projects">
+            <div class="section-header">
+                <h2 class="section-title">Selected Works</h2>
+            </div>
+
+            <div class="projects-grid">
+                
+                <!-- Project 1 -->
+                <article class="project-card" onclick="openModal(0)">
+                    <div class="card-visual game">
+                        <span class="card-icon">🎮</span>
+                        <div class="view-project-link">↗</div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Soul Claim Survivors</h3>
+                        <p class="card-desc">A fast-paced, rogue-lite action game built with Unity.</p>
+                        <div class="tech-stack">
+                            <span class="tech-pill">Unity</span>
+                            <span class="tech-pill">C#</span>
+                            <span class="tech-pill">DOTween</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project 2 -->
+                <article class="project-card" onclick="openModal(1)">
+                    <div class="card-visual tool">
+                        <span class="card-icon">⚡</span>
+                        <div class="view-project-link">↗</div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">GameTracker</h3>
+                        <p class="card-desc">AI-powered desktop assistant for managing your game library.</p>
+                        <div class="tech-stack">
+                            <span class="tech-pill">WinForms</span>
+                            <span class="tech-pill">MSSQL</span>
+                            <span class="tech-pill">Gemini AI</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project 3 -->
+                <article class="project-card" onclick="openModal(2)">
+                    <div class="card-visual other">
+                        <span class="card-icon">💾</span>
+                        <div class="view-project-link">↗</div>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">More on GitHub</h3>
+                        <p class="card-desc">Check out my other experiments, open source contributions and code snippets.</p>
+                        <div class="tech-stack">
+                            <span class="tech-pill">Open Source</span>
+                            <span class="tech-pill">Git</span>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- ABOUT & LINKS -->
+        <section id="about" class="info-grid">
+            <div class="info-col">
+                <h3>Connect</h3>
+                <div class="social-links">
+                    <a href="https://github.com/GalipEfeOncu?tab=repositories" target="_blank" class="social-btn">
+                        <span>GitHub</span>
+                        <span class="social-handle">@GalipEfeOncu</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/galiponcu/" target="_blank" class="social-btn">
+                        <span>LinkedIn</span>
+                        <span class="social-handle">/in/galiponcu</span>
+                    </a>
+                    <a href="mailto:galipefe75@gmail.com" class="social-btn">
+                        <span>Email</span>
+                        <span class="social-handle">galipefe75@gmail.com</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="info-col">
+                <h3>Technical Toolkit</h3>
+                <div class="skills-container">
+                    <span class="skill-tag">C#</span>
+                    <span class="skill-tag">Java</span>
+                    <span class="skill-tag">Unity 2D/3D</span>
+                    <span class="skill-tag">.NET Framework</span>
+                    <span class="skill-tag">WinForms</span>
+                    <span class="skill-tag">MSSQL</span>
+                    <span class="skill-tag">REST APIs</span>
+                    <span class="skill-tag">Git</span>
+                    <span class="skill-tag">Game Design</span>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 Galip Efe Oncu. Built with code & passion.</p>
+        </footer>
+
+    </div>
+
+    <!-- MODAL POPUP -->
+    <div id="modal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeModalBtn()">×</button>
+            <h2 id="modal-title" class="modal-title">Project Title</h2>
+            <span id="modal-subtitle" class="modal-subtitle">Subtitle</span>
+            <div id="modal-desc" class="modal-text">Description goes here...</div>
+            <a id="modal-link" href="#" target="_blank" class="modal-cta">View Project</a>
+        </div>
+    </div>
+
+    <script>
+        const projects = [
+            {
+                title: "Soul Claim Survivors",
+                subtitle: "Unity 2D / Action Roguelike",
+                description: "This project is a chaotic, fast-paced action game inspired by the Vampire Survivors genre. Built entirely in Unity with C#, it features a robust Entity Component System (ECS) approach for performance optimization. <br><br>I implemented a custom Object Pooling system to handle hundreds of enemies on screen simultaneously without frame drops. Visuals are enhanced using the Universal Render Pipeline (URP), and animations are smoothed using DOTween. The architecture is modular, making it easy to add new weapons, enemies, and waves.",
+                link: "https://github.com/GalipEfeOncu/soul-claim-survivors"
+            },
+            {
+                title: "GameTracker",
+                subtitle: ".NET WinForms Desktop App",
+                description: "GameTracker is a sophisticated desktop application designed for gamers to organize their collections. Unlike standard CRUD apps, this tool integrates Google's Gemini AI to provide personalized game recommendations based on your library.<br><br>The backend is powered by MSSQL for reliable data storage. It fetches real-time game data (images, ratings, details) using the RAWG API. The UI is built with Windows Forms but customized for a modern look and feel.",
+                link: "https://github.com/GalipEfeOncu/gametracker"
+            },
+            {
+                title: "GitHub Profile",
+                subtitle: "Experiments & Open Source",
+                description: "Explore my complete coding history, including class assignments, experimental game mechanics, and utility scripts. This is where I push my code daily.",
+                link: "https://github.com/GalipEfeOncu?tab=repositories"
+            }
+        ];
+
+        const modal = document.getElementById('modal');
+        const body = document.body;
+
+        function openModal(index) {
+            const p = projects[index];
+            document.getElementById('modal-title').innerText = p.title;
+            document.getElementById('modal-subtitle').innerText = p.subtitle;
+            document.getElementById('modal-desc').innerHTML = p.description;
+            document.getElementById('modal-link').href = p.link;
+            
+            modal.classList.add('active');
+            body.style.overflow = 'hidden';
+        }
+
+        function closeModal(e) {
+            if (e.target === modal) closeModalBtn();
+        }
+
+        function closeModalBtn() {
+            modal.classList.remove('active');
+            body.style.overflow = 'auto';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'Escape') closeModalBtn();
+        });
+
+        console.log("Vibe Check: Dark Mode Aesthetic Loaded 🌑");
+    </script>
+</body>
+</html>
