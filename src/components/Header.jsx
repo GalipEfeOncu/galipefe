@@ -1,15 +1,23 @@
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const location = useLocation();
+
+    const navItems = [
+        { to: '/', label: 'About' },
+        { to: '/projects', label: 'Projects' },
+        { to: '/contact', label: 'Contact' },
+    ];
 
     return (
         <header className="header">
             <div className="container header-content">
-                <a href="#" className="logo">
+                <Link to="/" className="logo" onClick={() => setIsMenuOpen(false)}>
                     <span className="logo-dot"></span>
                     Galip Efe Öncü
-                </a>
+                </Link>
 
                 <button
                     className="menu-toggle"
@@ -20,9 +28,16 @@ export default function Header() {
                 </button>
 
                 <nav className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
-                    <a href="#hero" onClick={() => setIsMenuOpen(false)}>About</a>
-                    <a href="#projects" onClick={() => setIsMenuOpen(false)}>Projects</a>
-                    <a href="#contact" onClick={() => setIsMenuOpen(false)}>Contact</a>
+                    {navItems.map((item) => (
+                        <Link
+                            key={item.to}
+                            to={item.to}
+                            className={location.pathname === item.to ? 'nav-active' : ''}
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            {item.label}
+                        </Link>
+                    ))}
                 </nav>
             </div>
         </header>
