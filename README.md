@@ -1,16 +1,57 @@
-# React + Vite
+# Galip Efe Öncü — Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal portfolio website showcasing my projects in game development, desktop applications, and web development.
 
-Currently, two official plugins are available:
+**🔗 Live:** [galipefeoncu.github.io/galipefe](https://galipefeoncu.github.io/galipefe/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
 
-## React Compiler
+- React 19 + Vite
+- Vanilla CSS
+- GitHub Pages (CI/CD with GitHub Actions)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Featured Projects
 
-## Expanding the ESLint configuration
+| Project | Tech | Status |
+|---------|------|--------|
+| **Soul Claim Survivors** | Unity, C# | 🟡 In Progress |
+| **GameTracker** | .NET WinForms, MSSQL, Gemini AI | ✅ Completed |
+| **Prayer Time** | React, Vite, Tailwind CSS | ✅ Completed |
+| **Survival Game** | Unity 3D, Procedural Generation | 🔴 Discontinued |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Run Locally
+
+```bash
+npm install
+npm run dev
+```
+
+---
+
+# Galip Efe Öncü — Portfolyo
+
+Oyun geliştirme, masaüstü uygulamalar ve web geliştirme alanlarındaki projelerimi sergileyen kişisel portfolyo websitesi.
+
+**🔗 Canlı:** [galipefeoncu.github.io/galipefe](https://galipefeoncu.github.io/galipefe/)
+
+## Teknolojiler
+
+- React 19 + Vite
+- Vanilla CSS
+- GitHub Pages (GitHub Actions ile CI/CD)
+
+## Öne Çıkan Projeler
+
+| Proje | Teknoloji | Durum |
+|-------|-----------|-------|
+| **Soul Claim Survivors** | Unity, C# | 🟡 Devam Ediyor |
+| **GameTracker** | .NET WinForms, MSSQL, Gemini AI | ✅ Tamamlandı |
+| **Prayer Time** | React, Vite, Tailwind CSS | ✅ Tamamlandı |
+| **Survival Game** | Unity 3D, Prosedürel Üretim | 🔴 Durduruldu |
+
+## Yerelde Çalıştırma
+
+```bash
+npm install
+npm run dev
+```
