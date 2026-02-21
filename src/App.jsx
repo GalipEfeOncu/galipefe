@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import Header from './components/Header';
-import Hero from './components/Hero';
 import About from './components/About';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
@@ -29,23 +28,22 @@ function App() {
   };
 
   return (
-    <>
+    <div className="app-wrapper">
       <ScrollToTop />
       <Header />
       <Routes>
         <Route path="/" element={
-          <main>
-            <Hero />
+          <main className="main-content">
             <About />
           </main>
         } />
         <Route path="/projects" element={
-          <main>
+          <main className="main-content">
             <Projects onOpenModal={openModal} />
           </main>
         } />
         <Route path="/contact" element={
-          <main>
+          <main className="main-content">
             <Contact />
           </main>
         } />
@@ -54,7 +52,7 @@ function App() {
       {selectedProject && (
         <Modal project={selectedProject} onClose={closeModal} />
       )}
-    </>
+    </div>
   );
 }
 
