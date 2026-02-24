@@ -79,11 +79,20 @@ export default function Modal({ project, onClose }) {
                         </div>
                     )}
 
-                    {project.link && (
-                        <div className="modal-footer">
-                            <a href={project.link} target="_blank" rel="noopener noreferrer" className="modal-cta-btn">
-                                View Project →
-                            </a>
+                    {(project.link || project.demoLink) && (
+                        <div className="modal-footer" style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '1.5rem', width: '100%' }}>
+                            {project.link && (
+                                <a href={project.link} target="_blank" rel="noopener noreferrer" className="modal-secondary-btn" style={{ flex: 1, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                                    <span>GitHub Repo</span>
+                                    <span style={{ fontSize: '1.2em' }}>💻</span>
+                                </a>
+                            )}
+                            {project.demoLink && (
+                                <a href={project.demoLink} target="_blank" rel="noopener noreferrer" className="modal-cta-btn" style={{ flex: 1, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                                    <span>Live Demo</span>
+                                    <span style={{ fontSize: '1.2em' }}>🚀</span>
+                                </a>
+                            )}
                         </div>
                     )}
                 </div>

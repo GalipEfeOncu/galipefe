@@ -2,6 +2,25 @@ const base = import.meta.env.BASE_URL;
 
 export const projects = [
     {
+        id: 5,
+        title: "Chaos Typing",
+        subtitle: "React & Vite / Web Browser Game",
+        status: "Completed",
+        description: "A chaotic, fast-paced typing and tower-defense game. The interface actively tries to troll the player with distractions like fake Windows errors, screen tilt, blur effects, and WhatsApp notifications. Features a dynamic vocabulary pool to test focus under pressure and a global leaderboard powered by Firebase.",
+        link: "https://github.com/GalipEfeOncu/chaos-typing",
+        demoLink: "https://galipefeoncu.github.io/chaos-typing/",
+        image: `${base}assets/images/ChaosTyping.png`,
+        icon: "⚔️",
+        tags: ["React", "Vite", "Firebase", "Game Dev"],
+        learnings: [
+            "Building high-performance game loops in React using requestAnimationFrame",
+            "Implementing complex state management with Context and Refs",
+            "Integrating Firebase for a realtime Global Leaderboard",
+            "Designing dynamic UI elements that interact negatively with the user (trolling mechanics)",
+            "Optimizing DOM manipulation to maintain a stable 60 FPS"
+        ]
+    },
+    {
         id: 1,
         title: "Soul Claim Survivors",
         subtitle: "Unity 2D / Action Roguelike",
@@ -44,6 +63,7 @@ export const projects = [
         status: "Completed",
         description: "A sleek and modern web application to track prayer times. It features automatic location detection, a countdown timer to the next prayer, and highlights religious days. Built with React and Vite for high performance, focusing on a clean and responsive user interface.",
         link: "https://github.com/GalipEfeOncu/prayer-time",
+        demoLink: "https://galipefeoncu.github.io/prayer-time/",
         image: `${base}assets/images/PrayerTime.png`,
         icon: "🕌",
         tags: ["React", "Vite", "REST API", "Tailwind CSS"],
