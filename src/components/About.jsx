@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 
 const base = import.meta.env.BASE_URL;
 
 export default function About() {
+    const { t } = useLanguage();
     const birthDate = new Date(2006, 8, 2); // September 2, 2006
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
@@ -11,12 +13,11 @@ export default function About() {
         age--;
     }
 
-
     const interests = [
-        { icon: '🎮', label: 'Gaming' },
-        { icon: '🚶', label: 'Walking' },
-        { icon: '📚', label: 'Reading' },
-        { icon: '💪', label: 'Fitness' },
+        { icon: '🎮', label: t('hero.interests.gaming') },
+        { icon: '🚶', label: t('hero.interests.walking') },
+        { icon: '📚', label: t('hero.interests.reading') },
+        { icon: '💪', label: t('hero.interests.fitness') },
     ];
 
     return (
@@ -35,12 +36,12 @@ export default function About() {
                     />
                 </div>
                 <h1 className="hero-profile-name">Galip Efe Öncü</h1>
-                <span className="about-role">Software Engineering Student</span>
+                <span className="about-role">{t('hero.role')}</span>
                 <div className="status-badge">
                     <span className="status-dot"></span>
-                    Available for Work
+                    {t('hero.status')}
                 </div>
-                <p className="hero-profile-desc">I build immersive digital experiences and useful tools. Passionate about game mechanics, clean architecture, and solving complex problems with code.</p>
+                <p className="hero-profile-desc">{t('hero.desc')}</p>
                 <div className="about-interests">
                     {interests.map((item) => (
                         <span key={item.label} className="about-interest-chip">
@@ -50,27 +51,17 @@ export default function About() {
                     ))}
                 </div>
                 <blockquote className="about-quote">
-                    <p>"Whatever you do in this life, it's not legendary, unless your friends are there to see it."</p>
+                    <p>{t('hero.quote')}</p>
                 </blockquote>
             </div>
 
             {/* Bio & Details */}
             <div className="about-details">
                 <div className="about-bio">
-                    <h2 className="section-title">About Me</h2>
-                    <p>
-                        I'm <strong>{age} years old</strong>, a Software Engineering student from <strong>Konya</strong>, Turkey.
-                        Currently studying at <strong>Fırat University</strong> in Elazığ, where I'm a sophomore in the Department of Software Engineering.
-                    </p>
-                    <p>
-                        Before university, I graduated from <strong>Adilkaraağaç Vocational and Technical High School</strong>,
-                        IT department, which gave me a strong technical foundation early on.
-                    </p>
-                    <p>
-                        I'm passionate about building immersive digital experiences — from action roguelikes in Unity to modern web apps with React.
-                        When I'm not coding, you'll probably find me exploring open-world RPGs (The Witcher 3 is an all-time favorite ❤️),
-                        going for walks, reading, or hitting the gym.
-                    </p>
+                    <h2 className="section-title">{t('about.title')}</h2>
+                    <p dangerouslySetInnerHTML={{ __html: t('about.bio1').replace('{age}', age) }}></p>
+                    <p dangerouslySetInnerHTML={{ __html: t('about.bio2') }}></p>
+                    <p dangerouslySetInnerHTML={{ __html: t('about.bio3') }}></p>
                 </div>
 
                 {/* Quick Facts */}
@@ -78,29 +69,29 @@ export default function About() {
                     <div className="about-fact-item">
                         <span className="about-fact-icon">📍</span>
                         <div>
-                            <span className="about-fact-label">Location</span>
-                            <span className="about-fact-value">Konya, Turkey</span>
+                            <span className="about-fact-label">{t('about.facts.location')}</span>
+                            <span className="about-fact-value">{t('about.facts.locationVal')}</span>
                         </div>
                     </div>
                     <div className="about-fact-item">
                         <span className="about-fact-icon">🎓</span>
                         <div>
-                            <span className="about-fact-label">University</span>
-                            <span className="about-fact-value">Fırat University — Software Eng. (2nd year)</span>
+                            <span className="about-fact-label">{t('about.facts.university')}</span>
+                            <span className="about-fact-value">{t('about.facts.universityVal')}</span>
                         </div>
                     </div>
                     <div className="about-fact-item">
                         <span className="about-fact-icon">🌍</span>
                         <div>
-                            <span className="about-fact-label">Languages</span>
-                            <span className="about-fact-value">Turkish (Native) · English (B2)</span>
+                            <span className="about-fact-label">{t('about.facts.languages')}</span>
+                            <span className="about-fact-value">{t('about.facts.languagesVal')}</span>
                         </div>
                     </div>
                     <div className="about-fact-item">
                         <span className="about-fact-icon">🎯</span>
                         <div>
-                            <span className="about-fact-label">Favorite Game</span>
-                            <span className="about-fact-value">The Witcher 3: Wild Hunt</span>
+                            <span className="about-fact-label">{t('about.facts.game')}</span>
+                            <span className="about-fact-value">{t('about.facts.gameVal')}</span>
                         </div>
                     </div>
                 </div>
@@ -113,16 +104,16 @@ export default function About() {
                 <Link to="/projects" className="about-cta-card">
                     <div className="about-cta-icon">🚀</div>
                     <div className="about-cta-content">
-                        <h3>My Projects</h3>
-                        <p>Check out what I've been building — games, apps, and more.</p>
+                        <h3>{t('about.cta.projectsTitle')}</h3>
+                        <p>{t('about.cta.projectsDesc')}</p>
                     </div>
                     <span className="about-cta-arrow">→</span>
                 </Link>
                 <Link to="/contact" className="about-cta-card">
                     <div className="about-cta-icon">💬</div>
                     <div className="about-cta-content">
-                        <h3>Get in Touch</h3>
-                        <p>Have a question or want to collaborate? Let's connect.</p>
+                        <h3>{t('about.cta.contactTitle')}</h3>
+                        <p>{t('about.cta.contactDesc')}</p>
                     </div>
                     <span className="about-cta-arrow">→</span>
                 </Link>

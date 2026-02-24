@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { projects } from '../data/projects';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Projects({ onOpenModal }) {
     const [filter, setFilter] = useState('All');
+    const { t } = useLanguage();
 
     const getStatusClass = (status) => {
         switch (status) {
@@ -13,7 +15,12 @@ export default function Projects({ onOpenModal }) {
         }
     };
 
-    const statuses = ['All', 'Completed', 'Work in Progress', 'Discontinued'];
+    const statuses = [
+        { id: 'All', label: t('projects.filters.all') },
+        { id: 'Completed', label: t('projects.filters.completed') },
+        { id: 'Work in Progress', label: t('projects.filters.wip') },
+        { id: 'Discontinued', label: t('projects.filters.discontinued') }
+    ];
 
     const filteredProjects = filter === 'All'
         ? projects
@@ -21,13 +28,18 @@ export default function Projects({ onOpenModal }) {
 
     const [featured, ...rest] = filteredProjects;
 
+    const translateStatus = (statusId) => {
+        const found = statuses.find(s => s.id === statusId);
+        return found ? found.label : statusId;
+    };
+
     return (
         <section className="container section" id="projects">
             {/* Page Header */}
             <div className="projects-header">
-                <h1 className="projects-title">My Projects</h1>
+                <h1 className="projects-title">{t('projects.title')}</h1>
                 <p className="projects-subtitle">
-                    A collection of things I've built — from action games to desktop apps and modern web experiences.
+                    {t('projects.subtitle')}
                 </p>
             </div>
 
@@ -35,14 +47,14 @@ export default function Projects({ onOpenModal }) {
             <div className="projects-filters">
                 {statuses.map((status) => (
                     <button
-                        key={status}
-                        className={`filter-tab ${filter === status ? 'filter-active' : ''}`}
-                        onClick={() => setFilter(status)}
+                        key={status.id}
+                        className={`filter-tab ${filter === status.id ? 'filter-active' : ''}`}
+                        onClick={() => setFilter(status.id)}
                     >
-                        {status}
-                        {status !== 'All' && (
+                        {status.label}
+                        {status.id !== 'All' && (
                             <span className="filter-count">
-                                {projects.filter(p => p.status === status).length}
+                                {projects.filter(p => p.status === status.id).length}
                             </span>
                         )}
                     </button>
@@ -61,7 +73,7 @@ export default function Projects({ onOpenModal }) {
                     <div className="project-featured-image">
                         {featured.status && (
                             <span className={`card-status-badge ${getStatusClass(featured.status)}`}>
-                                {featured.status}
+                                {translateStatus(featured.status)}
                             </span>
                         )}
                         {featured.image ? (
@@ -73,8 +85,8 @@ export default function Projects({ onOpenModal }) {
                     <div className="project-featured-content">
                         <div>
                             <h2 className="project-featured-title">{featured.title}</h2>
-                            <span className="project-featured-subtitle">{featured.subtitle}</span>
-                            <p className="project-featured-desc">{featured.description}</p>
+                            <span className="project-featured-subtitle">{t(`projectData.${featured.translationKey}.subtitle`)}</span>
+                            <p className="project-featured-desc">{t(`projectData.${featured.translationKey}.desc`)}</p>
                         </div>
                         <div className="tags">
                             {featured.tags && featured.tags.map(tag => (
@@ -100,7 +112,7 @@ export default function Projects({ onOpenModal }) {
                             <div className="project-card-v-image">
                                 {project.status && (
                                     <span className={`card-status-badge ${getStatusClass(project.status)}`}>
-                                        {project.status}
+                                        {translateStatus(project.status)}
                                     </span>
                                 )}
                                 {project.image ? (
@@ -112,8 +124,8 @@ export default function Projects({ onOpenModal }) {
                             <div className="project-card-v-content">
                                 <div>
                                     <h3 className="project-card-v-title">{project.title}</h3>
-                                    <span className="project-card-v-subtitle">{project.subtitle}</span>
-                                    <p className="project-card-v-desc">{project.description}</p>
+                                    <span className="project-card-v-subtitle">{t(`projectData.${project.translationKey}.subtitle`)}</span>
+                                    <p className="project-card-v-desc">{t(`projectData.${project.translationKey}.desc`)}</p>
                                 </div>
                                 <div className="tags">
                                     {project.tags && project.tags.map(tag => (

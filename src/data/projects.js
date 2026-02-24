@@ -3,6 +3,7 @@ const base = import.meta.env.BASE_URL;
 export const projects = [
     {
         id: 5,
+        translationKey: "chaosTyping",
         title: "Chaos Typing",
         subtitle: "React & Vite / Web Browser Game",
         status: "Completed",
@@ -22,6 +23,7 @@ export const projects = [
     },
     {
         id: 1,
+        translationKey: "soulClaim",
         title: "Soul Claim Survivors",
         subtitle: "Unity 2D / Action Roguelike",
         status: "Work in Progress",
@@ -40,6 +42,7 @@ export const projects = [
     },
     {
         id: 2,
+        translationKey: "gameTracker",
         title: "GameTracker",
         subtitle: ".NET WinForms Desktop App",
         status: "Completed",
@@ -58,6 +61,7 @@ export const projects = [
     },
     {
         id: 3,
+        translationKey: "prayerTime",
         title: "Prayer Time",
         subtitle: "React & Vite / Modern Web App",
         status: "Completed",
@@ -77,6 +81,7 @@ export const projects = [
     },
     {
         id: 4,
+        translationKey: "survivalGame",
         title: "Survival Game",
         subtitle: "Unity 3D / First Person Survival",
         status: "Discontinued",

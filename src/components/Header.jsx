@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const location = useLocation();
+    const { lang, toggleLang, t } = useLanguage();
 
     const navItems = [
-        { to: '/', label: 'About' },
-        { to: '/projects', label: 'Projects' },
-        { to: '/contact', label: 'Contact' },
+        { to: '/', label: t('nav.about') },
+        { to: '/projects', label: t('nav.projects') },
+        { to: '/contact', label: t('nav.contact') },
     ];
 
     return (
@@ -19,13 +21,26 @@ export default function Header() {
                     Galip Efe Öncü
                 </Link>
 
-                <button
-                    className="menu-toggle"
-                    onClick={() => setIsMenuOpen(!isMenuOpen)}
-                    aria-label="Toggle menu"
-                >
-                    {isMenuOpen ? '✕' : '☰'}
-                </button>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <button
+                        onClick={toggleLang}
+                        style={{
+                            background: 'transparent', border: '1px solid var(--border-color)',
+                            color: 'var(--text-color)', cursor: 'pointer', padding: '0.4rem 0.8rem',
+                            borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold'
+                        }}
+                    >
+                        {lang === 'en' ? 'TR 🔄' : 'EN 🔄'}
+                    </button>
+
+                    <button
+                        className="menu-toggle"
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        aria-label="Toggle menu"
+                    >
+                        {isMenuOpen ? '✕' : '☰'}
+                    </button>
+                </div>
 
                 <nav className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
                     {navItems.map((item) => (

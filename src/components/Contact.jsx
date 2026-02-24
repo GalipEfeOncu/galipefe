@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Contact() {
+    const { t } = useLanguage();
+
     const contactMethods = [
         {
             name: 'GitHub',
@@ -72,25 +75,25 @@ export default function Contact() {
 
     const skillCategories = [
         {
-            title: 'Languages',
+            title: t('contact.category.lang'),
             icon: (
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                     <path d="M8 3a2 2 0 0 0-2 2v4a2 2 0 0 1-2 2H3v2h1a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2h2v-2H8v-5a2 2 0 0 0-1-1.73A2 2 0 0 0 8 10V5h2V3H8zm8 0a2 2 0 0 1 2 2v4a2 2 0 0 0 2 2h1v2h-1a2 2 0 0 0-2 2v4a2 2 0 0 1-2 2h-2v-2h2v-5a2 2 0 0 1 1-1.73A2 2 0 0 1 16 10V5h-2V3h2z" />
                 </svg>
             ),
-            skills: ['C#', 'Java', 'JavaScript', 'SQL', 'HTML/CSS'],
+            skills: ['C#', 'Java', 'SQL'],
         },
         {
-            title: 'Frameworks & Tools',
+            title: t('contact.category.frameworks'),
             icon: (
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                     <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z" />
                 </svg>
             ),
-            skills: ['Unity 2D/3D', '.NET Framework', 'WinForms', 'React', 'Git'],
+            skills: ['Unity 2D/3D', '.NET Framework', 'WinForms', 'Git'],
         },
         {
-            title: 'Backend & Database',
+            title: t('contact.category.backend'),
             icon: (
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                     <path d="M12 3C7 3 3 4.79 3 7v10c0 2.21 4 4 9 4s9-1.79 9-4V7c0-2.21-4-4-9-4zm0 2c4.42 0 7 1.49 7 2s-2.58 2-7 2-7-1.49-7-2 2.58-2 7-2zM5 15.36V13.11c1.33.76 3.54 1.33 6 1.45v2.05c-2.66-.12-4.88-.73-6-1.25zm14 0c-1.12.52-3.34 1.13-6 1.25v-2.05c2.46-.12 4.67-.69 6-1.45v2.25zM5 11.36V9.11c1.33.76 3.54 1.33 6 1.45v2.05c-2.66-.12-4.88-.73-6-1.25zm14 0c-1.12.52-3.34 1.13-6 1.25V10.56c2.46-.12 4.67-.69 6-1.45v2.25z" />
@@ -99,7 +102,7 @@ export default function Contact() {
             skills: ['MSSQL', 'REST APIs', 'Entity Framework'],
         },
         {
-            title: 'Game Development',
+            title: t('contact.category.gamedev'),
             icon: (
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                     <path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
@@ -113,9 +116,9 @@ export default function Contact() {
         <section className="container section" id="contact">
             {/* Page Header */}
             <div className="contact-header">
-                <h1 className="contact-title">Let's Connect</h1>
+                <h1 className="contact-title">{t('contact.title')}</h1>
                 <p className="contact-subtitle">
-                    Have a project idea, want to collaborate, or just want to say hi? Feel free to reach out through any of these channels.
+                    {t('contact.subtitle')}
                 </p>
             </div>
 
@@ -142,7 +145,7 @@ export default function Contact() {
 
             {/* Personal Profiles */}
             <div className="personal-section">
-                <h2 className="section-title">Find Me Elsewhere</h2>
+                <h2 className="section-title">{t('contact.elsewhere')}</h2>
                 <div className="personal-links">
                     {personalLinks.map((link) => (
                         <a
@@ -165,7 +168,7 @@ export default function Contact() {
 
             {/* Skills Section */}
             <div className="skills-section">
-                <h2 className="section-title">Technical Skills</h2>
+                <h2 className="section-title">{t('contact.skills')}</h2>
                 <div className="skills-categories">
                     {skillCategories.map((category) => (
                         <div key={category.title} className="skill-category">
@@ -186,11 +189,11 @@ export default function Contact() {
             {/* CTA */}
             <div className="contact-cta">
                 <div className="contact-cta-content">
-                    <h2>Interested in working together?</h2>
-                    <p>Check out my projects to see what I've been building, or drop me a message!</p>
+                    <h2>{t('contact.ctaTitle')}</h2>
+                    <p>{t('contact.ctaDesc')}</p>
                 </div>
                 <Link to="/projects" className="contact-cta-btn">
-                    View Projects →
+                    {t('contact.ctaBtn')}
                 </Link>
             </div>
         </section>
