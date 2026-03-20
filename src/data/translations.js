@@ -125,6 +125,39 @@ export const translations = {
                     "Resource gathering mechanics (Mining, Woodcutting)",
                     "Inventory and item management logic"
                 ]
+            },
+            autoReq: {
+                subtitle: "Python / AI & NLP / Streamlit",
+                desc: "An automated software requirement analyzer that uses hybrid AI (NLP + LLM) to transform vague customer requirements into structured, industry-standard engineering documentation.",
+                learnings: [
+                    "Implementing Natural Language Processing (NLP) with spaCy and NLTK",
+                    "Integrating Large Language Models (LLM) for automated documentation",
+                    "Building interactive AI dashboards using Streamlit",
+                    "Applying Scrum Framework in an open-source development team",
+                    "Structuring complex data flows for requirement engineering"
+                ]
+            },
+            fileConverter: {
+                subtitle: "Python / Streamlit / AI & Desktop",
+                desc: "A cross-platform desktop application for file conversion, document viewing, media playback, and AI-powered document analysis. Built to handle diverse file formats offline with an elegant interface.",
+                learnings: [
+                    "Developing cross-platform desktop utilities with Python and Streamlit",
+                    "Building robust file conversion algorithms for multiple formats",
+                    "Integrating AI engines for document summarization and Q&A",
+                    "Managing multi-page application state and navigation",
+                    "Implementing localized (i18n) support for global users"
+                ]
+            },
+            financeTracker: {
+                subtitle: "Python / Streamlit / Data Visualization",
+                desc: "A personal finance management tool to track income, expenses, and budget. Built with Python to provide a simple and effective way to manage personal finances with detailed visualizations.",
+                learnings: [
+                    "Data visualization and analysis with Python libraries",
+                    "Building intuitive financial dashboards with Streamlit",
+                    "Implementing persistent data storage for personal records",
+                    "Designing user-friendly expense categorization systems",
+                    "Handling complex financial calculations and reporting"
+                ]
             }
         }
     },
@@ -253,6 +286,39 @@ export const translations = {
                     "FPS (Birinci Şahıs) kamera ve controller sistemini pürüzsüz çalışacak şekilde entegre etmek",
                     "Taş kırma, odun kesme gibi maden ve kaynak (resource) toplama mantığını kurmak",
                     "Envanter sisteminin arkasında çalışan slot bazlı veri mantıkları"
+                ]
+            },
+            autoReq: {
+                subtitle: "Python / Yapay Zeka & NLP / Streamlit",
+                desc: "Müşterilerden gelen belirsiz ham metinleri NLP ve LLM (GPT/Llama) modülleriyle analiz ederek endüstri standartlarına uygun yapılandırılmış mühendislik belgelerine dönüştüren hibrit bir yapay zeka aracı.",
+                learnings: [
+                    "spaCy ve NLTK kütüphaneleri ile Doğal Dil İşleme (NLP) uygulamaları",
+                    "Otomatik dökümantasyon için Büyük Dil Modelleri (LLM) entegrasyonu",
+                    "Streamlit kullanarak interaktif yapay zeka arayüzleri oluşturmak",
+                    "Açık kaynaklı bir geliştirme ekibinde Scrum Framework uygulamak",
+                    "Gereksinim mühendisliği için karmaşık veri akışlarını yapılandırmak"
+                ]
+            },
+            fileConverter: {
+                subtitle: "Python / Streamlit / Yapay Zeka & Masaüstü",
+                desc: "Dosya dönüştürme, belge görüntüleme, medya oynatma ve yapay zeka destekli belge analizini tek bir şık arayüzde birleştiren, platform bağımsız bir masaüstü uygulaması.",
+                learnings: [
+                    "Python ve Streamlit ile platform bağımsız masaüstü araçları geliştirmek",
+                    "Farklı formatlar için dayanıklı dosya dönüştürme algoritmaları oluşturmak",
+                    "Belge özetleme ve Soru-Cevap için yapay zeka motorları entegre etmek",
+                    "Çok sayfalı uygulama state'i ve navigasyon yönetimi",
+                    "Küresel kullanıcılar için yerelleştirme (i18n) desteği uygulamak"
+                ]
+            },
+            financeTracker: {
+                subtitle: "Python / Streamlit / Veri Görselleştirme",
+                desc: "Gelir, gider ve bütçe takibi yapmak için tasarlanmış kişisel finans yönetim aracı. Karmaşık finansal verileri basit ve etkili bir şekilde yönetmeyi ve görselleştirmeyi sağlar.",
+                learnings: [
+                    "Python kütüphaneleri ile veri görselleştirme ve analizi",
+                    "Streamlit kullanarak sezgisel finansal panolar oluşturmak",
+                    "Kişisel kayıtlar için kalıcı veri depolama uygulamak",
+                    "Kullanıcı dostu gider kategorizasyon sistemleri tasarlamak",
+                    "Karmaşık finansal hesaplamalar ve raporlama yönetimi"
                 ]
             }
         }

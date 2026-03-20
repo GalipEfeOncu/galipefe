@@ -22,6 +22,63 @@ export const projects = [
         ]
     },
     {
+        id: 6,
+        translationKey: "autoReq",
+        title: "AutoReq",
+        subtitle: "Python / AI & NLP / Streamlit",
+        status: "Work in Progress",
+        description: "An automated software requirement analyzer that uses hybrid AI (NLP + LLM) to transform vague customer requirements into structured, industry-standard engineering documentation.",
+        link: "https://github.com/AutoReq-DevTeam/AutoReq",
+        image: `${base}assets/images/AutoReq.png`,
+        icon: "🚀",
+        tags: ["Python", "NLP", "spaCy", "Streamlit", "LLM"],
+        learnings: [
+            "Implementing Natural Language Processing (NLP) with spaCy and NLTK",
+            "Integrating Large Language Models (LLM) for automated documentation",
+            "Building interactive AI dashboards using Streamlit",
+            "Applying Scrum Framework in an open-source development team",
+            "Structuring complex data flows for requirement engineering"
+        ]
+    },
+    {
+        id: 7,
+        translationKey: "fileConverter",
+        title: "Universal File Workstation",
+        subtitle: "Python / Streamlit / AI & Desktop",
+        status: "Work in Progress",
+        description: "A cross-platform desktop application for file conversion, document viewing, media playback, and AI-powered document analysis. Built to handle diverse file formats offline with an elegant interface.",
+        link: "https://github.com/GalipEfeOncu/file-converter",
+        image: `${base}assets/images/FileConverter.png`,
+        icon: "🗂️",
+        tags: ["Python", "Streamlit", "AI Engine", "Desktop UI"],
+        learnings: [
+            "Developing cross-platform desktop utilities with Python and Streamlit",
+            "Building robust file conversion algorithms for multiple formats",
+            "Integrating AI engines for document summarization and Q&A",
+            "Managing multi-page application state and navigation",
+            "Implementing localized (i18n) support for global users"
+        ]
+    },
+    {
+        id: 8,
+        translationKey: "financeTracker",
+        title: "Finance Tracker",
+        subtitle: "Python / Streamlit / Data Visualization",
+        status: "Work in Progress",
+        description: "A personal finance management tool to track income, expenses, and budget. Built with Python to provide a simple and effective way to manage personal finances with detailed visualizations.",
+        link: "https://github.com/GalipEfeOncu/finance-tracker",
+        image: `${base}assets/images/FinanceTracker.png`,
+        icon: "💰",
+        tags: ["Python", "Streamlit", "Finance", "Data Visualization"],
+        learnings: [
+            "Data visualization and analysis with Python libraries",
+            "Building intuitive financial dashboards with Streamlit",
+            "Implementing persistent data storage for personal records",
+            "Designing user-friendly expense categorization systems",
+            "Handling complex financial calculations and reporting"
+        ]
+    },
+    {
         id: 1,
         translationKey: "soulClaim",
         title: "Soul Claim Survivors",
