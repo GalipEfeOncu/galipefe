@@ -1,17 +1,21 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
+import { SKILLS } from '../data/profile';
 
 const base = import.meta.env.BASE_URL;
 
+function computeAge() {
+    const birth = new Date(2006, 8, 2);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+    return age;
+}
+
 export default function About() {
     const { t } = useLanguage();
-    const birthDate = new Date(2006, 8, 2); // September 2, 2006
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-    }
+    const age = computeAge();
 
     const interests = [
         { icon: '🎮', label: t('hero.interests.gaming') },
