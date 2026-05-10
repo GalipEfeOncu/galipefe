@@ -1,60 +1,70 @@
-import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 
-export default function Header() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const location = useLocation();
-    const { lang, toggleLang, t } = useLanguage();
+const navItems = [
+    { to: '/', label: 'About' },
+    { to: '/projects', label: 'Projects' },
+    { to: '/contact', label: 'Contact' },
+];
 
-    const navItems = [
-        { to: '/', label: t('nav.about') },
-        { to: '/projects', label: t('nav.projects') },
-        { to: '/contact', label: t('nav.contact') },
-    ];
+export default function Header({ theme, toggleTheme }) {
+    const location = useLocation();
+    const { lang, toggleLang } = useLanguage();
 
     return (
-        <header className="header">
-            <div className="container header-content">
-                <Link to="/" className="logo" onClick={() => setIsMenuOpen(false)}>
-                    <span className="logo-dot"></span>
-                    Galip Efe Öncü
-                </Link>
+        <div style={{ position: 'sticky', top: 8, zIndex: 50, padding: '8px 0 10px' }}>
+            <div className="dock-wrapper" style={{ padding: '0 48px', display: 'grid', placeItems: 'center' }}>
+                <div style={{ display: 'flex', gap: 4, padding: 5, background: 'var(--panel)', border: '1px solid var(--border)', borderRadius: 14, boxShadow: '0 6px 24px rgba(0,0,0,.28)', backdropFilter: 'blur(8px)' }}>
+                    <Link
+                        to="/"
+                        style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 12px', borderRadius: 10, background: 'var(--accent-soft)', color: 'var(--accent)', fontFamily: 'var(--mono)', fontSize: 12, textDecoration: 'none' }}
+                    >
+                        <div style={{ width: 18, height: 18, background: 'var(--accent)', borderRadius: 4, color: '#0a1414', display: 'grid', placeItems: 'center', fontWeight: 800, fontSize: 11 }}>G</div>
+                        galipefe
+                    </Link>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <div style={{ width: 1, background: 'var(--border)', margin: '4px 4px' }} />
+
+                    <nav className="dock-nav" style={{ display: 'flex', gap: 2 }}>
+                        {navItems.map(({ to, label }) => (
+                            <Link
+                                key={to}
+                                to={to}
+                                style={{
+                                    padding: '6px 18px',
+                                    borderRadius: 10,
+                                    color: location.pathname === to ? 'var(--text)' : 'var(--muted)',
+                                    fontSize: 13,
+                                    background: location.pathname === to ? 'var(--card)' : 'transparent',
+                                    transition: 'all .15s',
+                                    textDecoration: 'none',
+                                    display: 'block',
+                                }}
+                            >
+                                {label}
+                            </Link>
+                        ))}
+                    </nav>
+
+                    <div style={{ width: 1, background: 'var(--border)', margin: '4px 4px' }} />
+
                     <button
                         onClick={toggleLang}
-                        style={{
-                            background: 'transparent', border: '1px solid var(--border-color)',
-                            color: 'var(--text-color)', cursor: 'pointer', padding: '0.4rem 0.8rem',
-                            borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold'
-                        }}
+                        style={{ padding: '6px 12px', borderRadius: 10, color: 'var(--text-2)', fontFamily: 'var(--mono)', fontSize: 11, display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', background: 'transparent', border: 'none' }}
                     >
-                        {lang === 'en' ? 'TR 🔄' : 'EN 🔄'}
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', display: 'inline-block' }} />
+                        {lang.toUpperCase()}
                     </button>
 
                     <button
-                        className="menu-toggle"
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        aria-label="Toggle menu"
+                        onClick={toggleTheme}
+                        style={{ padding: '6px 12px', borderRadius: 10, color: 'var(--text-2)', fontFamily: 'var(--mono)', fontSize: 11, cursor: 'pointer', background: 'transparent', border: 'none' }}
+                        title={theme === 'dark' ? 'Switch to light' : 'Switch to dark'}
                     >
-                        {isMenuOpen ? '✕' : '☰'}
+                        {theme === 'dark' ? '◑' : '◐'}
                     </button>
                 </div>
-
-                <nav className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
-                    {navItems.map((item) => (
-                        <Link
-                            key={item.to}
-                            to={item.to}
-                            className={location.pathname === item.to ? 'nav-active' : ''}
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            {item.label}
-                        </Link>
-                    ))}
-                </nav>
             </div>
-        </header>
+        </div>
     );
 }
