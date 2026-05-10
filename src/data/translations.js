@@ -285,7 +285,7 @@ export const translations = {
             viewDetails: "aç →"
         },
         modal: {
-            keyTakeaways: "// ÖĞRENDIKLERIM",
+            keyTakeaways: "// ÖĞRENDİKLERİM",
             stack: "STACK",
             repo: "⎇ Repo",
             liveDemo: "▶ Canlı Demo",
@@ -297,19 +297,18 @@ export const translations = {
         },
         contact: {
             title: "İletişim",
-            subtitle: "Bir proje fikrin mi var, birlikte bir şey mi yapalım, yoksa sadece yazılımdan mı konuşalım? Her halükarda buradayım.",
+            subtitle: "Bir proje fikrin mi var, birlikte bir şey mi yapalım, yoksa sadece yazılımdan mı konuşalım? Her durumda buradayım.",
             elsewhere: "Diğer Platformlar",
-            skills: "Teknik Yetenekler",
+            skills: "Kullandığım Araçlar",
             category: {
                 lang: "Diller",
-                frameworks: "Frameworkler & Araçlar",
+                frameworks: "Framework'ler & Araçlar",
                 backend: "Backend & Veritabanı",
                 gamedev: "Oyun Geliştirme"
             },
             ctaTitle: "Aklında bir şey mi döndü?",
             ctaDesc: "Neler yaptığıma bakabilir ya da direkt yazabilirsin.",
             ctaBtn: "projelerime bak →",
-            heading: "Selam de.",
             primaryChannels: "buradan ulaşabilirsin",
             elsewherePanel: "internetteki diğer adreslerim",
             projectCTA: "Aklında bir proje mi var?",
@@ -328,9 +327,10 @@ export const translations = {
             interest2: "Modern web — React, akıcı etkileşimler, sade UX",
             interest3: "İnsanlara gerçekten zaman kazandıran araçlar",
             githubDesc: "Kodlarımın büyük çoğunluğu burada",
-            linkedinDesc: "Daha kurumsal bir bağlantı için",
+            linkedinDesc: "Profesyonel bağlantı için",
             emailDesc: "Bana ulaşmanın en hızlı yolu",
             viewProjects: "projelerime bak →"
+            heading: "Selam de.",
         },
         projectData: {
             chaosTyping: {
