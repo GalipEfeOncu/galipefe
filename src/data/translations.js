@@ -158,6 +158,16 @@ export const translations = {
                     "Designing user-friendly expense categorization systems",
                     "Handling complex financial calculations and reporting"
                 ]
+            },
+            kadeh: {
+                subtitle: "React & Vite / Tailwind CSS / Web App",
+                desc: "A comprehensive Turkish-language alcohol guide for beginners and enthusiasts, featuring drink histories, production processes, tasting profiles, and serving recommendations — all in a premium dark magazine UI.",
+                learnings: [
+                    "Building content-rich static SPAs with React and Vite",
+                    "Designing premium dark UI themes with Tailwind CSS",
+                    "Structuring large static datasets as JS/JSON data files",
+                    "Implementing fast, accessible filtering and search UX"
+                ]
             }
         }
     },
@@ -319,6 +329,16 @@ export const translations = {
                     "Kişisel kayıtlar için kalıcı veri depolama uygulamak",
                     "Kullanıcı dostu gider kategorizasyon sistemleri tasarlamak",
                     "Karmaşık finansal hesaplamalar ve raporlama yönetimi"
+                ]
+            },
+            kadeh: {
+                subtitle: "React & Vite / Tailwind CSS / Web Uygulaması",
+                desc: "Başlangıç seviyesinden meraklılara kadar herkese yönelik kapsamlı bir Türkçe alkol rehberi; içkilerin tarihi, üretim süreçleri, tadım profilleri ve servis önerileri premium karanlık bir dergi arayüzüyle sunuluyor.",
+                learnings: [
+                    "React ve Vite ile içerik ağırlıklı statik SPA geliştirmek",
+                    "Tailwind CSS ile premium karanlık tema tasarlamak",
+                    "Büyük statik veri setlerini JS/JSON dosyaları olarak yapılandırmak",
+                    "Hızlı ve erişilebilir filtreleme ve arama UX'i uygulamak"
                 ]
             }
         }

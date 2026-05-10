@@ -1,6 +1,6 @@
 # Architecture
 
-Deeper reference. Read only when `AGENTS.md` is not enough.
+Deeper reference. Read only when `CLAUDE.md` is not enough.
 
 ## Render tree
 
