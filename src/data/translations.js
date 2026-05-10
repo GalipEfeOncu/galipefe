@@ -225,20 +225,20 @@ export const translations = {
         hero: {
             role: "Yazılım Mühendisliği Öğrencisi",
             status: "yeni fırsatlara açık",
-            desc: "Çalışan, iyi hissettiren ve bozulmayan şeyler yapıyorum. Oyunlar, araçlar, web uygulamaları — kod çözüyorsa, ben zaten düşünüyorum.",
+            desc: "Çalışan, iyi hissettiren ve bozulmayan şeyler yapıyorum. Oyunlar, araçlar, web uygulamaları — kodla çözülüyorsa, kafam zaten orada.",
             interests: {
                 gaming: "Oyun",
                 walking: "Yürüyüş",
                 reading: "Okuma",
                 fitness: "Fitness"
             },
-            quote: "\"Bu hayatta ne yaparsan yap, arkadaşların bunu görecek kadar yanında değilse; efsanevi değildir.\""
+            quote: "\"Bu hayatta ne yaparsan yap — arkadaşların orada değilse efsane olmaz.\""
         },
         about: {
             title: "Hakkımda",
             bio1: "Ben <strong>{age} yaşındayım</strong>, <strong>Konya</strong>'dan geliyorum. Şu an Elazığ'da <strong>Fırat Üniversitesi</strong> Yazılım Mühendisliği'nde ikinci sınıfı okuyorum.",
             bio2: "Üniversiteye başlamadan önce <strong>Adilkaraağaç Mesleki ve Teknik Anadolu Lisesi</strong>'nin Bilişim Teknolojileri bölümünü bitirdim. Teknik temeli orada attım, gerçekten işe yaradı.",
-            bio3: "Unity'de roguelike geliştirmekten React ile web uygulaması çıkarmaya kadar her şeyle ilgileniyorum. İlginç bir problem varsa zaten içine giriyorum. Ekran başında olmadığımda genelde yürüyüşteyim, bir kitabın içindeyim ya da spordayım.",
+            bio3: "Unity'de roguelike yazmaktan React'la web uygulaması geliştirmeye kadar her şeye giriyorum. İlginç bir problem varsa zaten içine giriyorum. Ekran başında olmadığımda genelde yürüyüşteyim, bir kitabın içindeyim ya da spordayım.",
             facts: {
                 location: "Konum",
                 locationVal: "Konya, Türkiye",
@@ -252,12 +252,12 @@ export const translations = {
             cta: {
                 projectsTitle: "Yaptıklarım",
                 projectsDesc: "Oyunlar, araçlar, web şeyleri — bir göz at.",
-                contactTitle: "Selam de",
+                contactTitle: "Selam ver",
                 contactDesc: "Bir soru mu var, birlikte bir şey mi inşa edelim? Buradayım.",
                 projectsCount: "9 proje · oyunlar, araçlar, web",
                 contactChannels: "3 farklı yoldan ulaşabilirsin"
             },
-            heading: "Merhaba, ben Galip. Çalışan ve hissettiren şeyler yazıyorum.",
+            heading: "Merhaba, ben Galip. Kod yazıyorum, işe yarayan şeyler yapıyorum.",
             interestsPanel: "ilgi alanları",
             stackPanel: "stack · çalıştığım teknolojiler",
             kvLocation: "konum",
