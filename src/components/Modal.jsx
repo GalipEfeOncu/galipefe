@@ -1,118 +1,120 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 
+function ModalImage({ project }) {
+    const [failed, setFailed] = useState(false);
+    if (project.image && !failed) {
+        return (
+            <img
+                src={project.image}
+                alt={project.title}
+                onError={() => setFailed(true)}
+                style={{ width: '100%', height: 220, objectFit: 'cover', borderRadius: 4, marginBottom: 18 }}
+            />
+        );
+    }
+    return (
+        <div className="sketchy-img" style={{ height: 220, marginBottom: 18 }}>
+            [hero screenshot — {project.title}]
+        </div>
+    );
+}
+
 export default function Modal({ project, onClose }) {
-    const modalRef = useRef(null);
     const { t } = useLanguage();
 
     useEffect(() => {
-        const handleEsc = (e) => {
-            if (e.key === 'Escape') onClose();
-        };
-
-        if (project) {
-            document.body.style.overflow = 'hidden';
-            window.addEventListener('keydown', handleEsc);
-        }
-
+        const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+        window.addEventListener('keydown', onKey);
+        document.body.style.overflow = 'hidden';
         return () => {
-            document.body.style.overflow = 'unset';
-            window.removeEventListener('keydown', handleEsc);
+            window.removeEventListener('keydown', onKey);
+            document.body.style.overflow = '';
         };
-    }, [project, onClose]);
+    }, [onClose]);
 
     if (!project) return null;
 
-    const handleOverlayClick = (e) => {
-        if (e.target === e.currentTarget) onClose();
-    };
-
-    const getStatusClass = (status) => {
-        switch (status) {
-            case 'Completed': return 'status-completed';
-            case 'Work in Progress': return 'status-wip';
-            case 'Discontinued': return 'status-discontinued';
-            default: return '';
-        }
-    };
-
-    // Helper to get translated status
-    const translateStatus = (statusStr) => {
-        switch (statusStr) {
-            case 'All': return t('projects.filters.all');
-            case 'Completed': return t('projects.filters.completed');
-            case 'Work in Progress': return t('projects.filters.wip');
-            case 'Discontinued': return t('projects.filters.discontinued');
-            default: return statusStr;
-        }
-    };
-
-    const projectData = t(`projectData.${project.translationKey}`) || {};
-    const subtitle = projectData.subtitle || project.subtitle;
-    const description = projectData.desc || project.description;
-    const learnings = projectData.learnings || project.learnings;
+    const subtitle = t(`projectData.${project.translationKey}.subtitle`) || project.subtitle;
+    const desc = t(`projectData.${project.translationKey}.desc`) || project.description;
+    const learnings = t(`projectData.${project.translationKey}.learnings`) || project.learnings || [];
 
     return (
-        <div className="modal-overlay" onClick={handleOverlayClick}>
-            <div className="modal-content" role="dialog" aria-modal="true" ref={modalRef}>
-                <button className="modal-close" onClick={onClose} aria-label="Close modal">×</button>
+        <div
+            onClick={onClose}
+            style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)', display: 'grid', placeItems: 'center', padding: 24 }}
+        >
+            <div
+                onClick={e => e.stopPropagation()}
+                style={{ width: '100%', maxWidth: 980, maxHeight: '92vh', background: 'var(--panel)', border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 20px 80px rgba(0,0,0,.6)' }}
+            >
+                {/* Title bar */}
+                <div style={{ padding: '10px 14px', background: 'var(--bg-2)', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'var(--mono)', fontSize: 12, flexShrink: 0 }}>
+                    <span style={{ color: 'var(--dim)' }}>~/projects/</span>
+                    <span style={{ color: 'var(--accent)' }}>{project.translationKey}</span>
+                    <button
+                        onClick={onClose}
+                        style={{ marginLeft: 'auto', color: 'var(--muted)', cursor: 'pointer', padding: '2px 8px', borderRadius: 4, background: 'transparent', border: 'none', fontFamily: 'var(--mono)', fontSize: 12 }}
+                    >
+                        {t('modal.close')}
+                    </button>
+                </div>
 
-                {/* 1. Project Image at the top */}
-                {project.image && (
-                    <div className="modal-image-container">
-                        <img src={project.image} alt={project.title} className="modal-image" />
-                    </div>
-                )}
-
-                <div className="modal-body-container">
-                    {/* 2. Project Title & Subtitle */}
-                    <div className="modal-header-content">
-                        {project.status && (
-                            <span className={`modal-status ${getStatusClass(project.status)}`}>
-                                {translateStatus(project.status)}
-                            </span>
-                        )}
-                        <h2 className="modal-title-large">{project.title}</h2>
-                        <span className="modal-subtitle-text">{subtitle}</span>
-                    </div>
-
-                    {/* 3. Description */}
-                    <div className="modal-section">
-                        <h3 className="modal-section-title">{t('projects.modal.about')}</h3>
-                        <p className="modal-text">{description}</p>
-                    </div>
-
-                    {/* 4. Learnings (Bullet points) */}
-                    {learnings && learnings.length > 0 && (
-                        <div className="modal-section">
-                            <h3 className="modal-section-title">{t('projects.modal.learnings')}</h3>
-                            <ul className="modal-learnings-list">
-                                {learnings.map((item, index) => (
-                                    <li key={index} className="modal-learning-item">
-                                        <span className="bullet-point">•</span>
-                                        {item}
-                                    </li>
-                                ))}
-                            </ul>
+                {/* Body */}
+                <div className="modal-inner" style={{ flex: 1, display: 'flex', minHeight: 0 }}>
+                    {/* Sidebar */}
+                    <div className="scroll-y modal-sidebar" style={{ width: 240, borderRight: '1px solid var(--border)', background: 'var(--bg-2)', padding: 16, display: 'flex', flexDirection: 'column', gap: 16, flexShrink: 0 }}>
+                        <div style={{ width: 56, height: 56, borderRadius: 8, background: 'var(--accent-soft)', border: '1px solid var(--accent-line)', display: 'grid', placeItems: 'center', fontSize: 26 }}>
+                            {project.icon || '◇'}
                         </div>
-                    )}
-
-                    {(project.link || project.demoLink) && (
-                        <div className="modal-footer" style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '1.5rem', width: '100%' }}>
+                        <dl className="kv" style={{ fontSize: 11.5 }}>
+                            <dt>{t('modal.idLabel')}</dt><dd>#{project.id}</dd>
+                            <dt>{t('modal.statusLabel')}</dt><dd className="accent">{project.status}</dd>
+                            <dt>{t('modal.repoLabel')}</dt>
+                            <dd>
+                                {project.link
+                                    ? <a href={project.link} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)' }}>{t('modal.github')}</a>
+                                    : <span className="muted">—</span>
+                                }
+                            </dd>
+                        </dl>
+                        <div>
+                            <div className="mono muted" style={{ fontSize: 10, letterSpacing: '0.14em', marginBottom: 6 }}>{t('modal.stack')}</div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                                {project.tags.map(tag => <span key={tag} className="tag" style={{ alignSelf: 'flex-start' }}>{tag}</span>)}
+                            </div>
+                        </div>
+                        <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 6 }}>
                             {project.link && (
-                                <a href={project.link} target="_blank" rel="noopener noreferrer" className="modal-secondary-btn" style={{ flex: 1, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                                    <span>{t('projects.modal.githubRepo')}</span>
-                                    <span style={{ fontSize: '1.2em' }}>💻</span>
+                                <a href={project.link} target="_blank" rel="noopener noreferrer" className="btn" style={{ justifyContent: 'center' }}>
+                                    {t('modal.repo')}
                                 </a>
                             )}
                             {project.demoLink && (
-                                <a href={project.demoLink} target="_blank" rel="noopener noreferrer" className="modal-cta-btn" style={{ flex: 1, textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                                    <span>{t('projects.modal.liveDemo')}</span>
-                                    <span style={{ fontSize: '1.2em' }}>🚀</span>
+                                <a href={project.demoLink} target="_blank" rel="noopener noreferrer" className="btn primary" style={{ justifyContent: 'center' }}>
+                                    {t('modal.liveDemo')}
                                 </a>
                             )}
                         </div>
-                    )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="scroll-y" style={{ flex: 1, padding: 24 }}>
+                        <div style={{ fontSize: 26, fontWeight: 600 }}>{project.title}</div>
+                        <div className="mono muted" style={{ fontSize: 12, marginBottom: 16 }}>{subtitle}</div>
+                        <ModalImage project={project} />
+                        <p style={{ margin: 0, fontSize: 14, lineHeight: 1.65, color: 'var(--text-2)' }}>{desc}</p>
+                        <hr className="divider" style={{ margin: '20px 0' }} />
+                        <div className="mono muted" style={{ fontSize: 10, letterSpacing: '0.16em', marginBottom: 10 }}>{t('modal.keyTakeaways')}</div>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                            {learnings.map((l, i) => (
+                                <div key={i} style={{ padding: '10px 12px', background: 'var(--bg-2)', borderRadius: 4, border: '1px solid var(--border-soft)', display: 'flex', gap: 8 }}>
+                                    <span className="mono" style={{ color: 'var(--accent)', fontSize: 11, flexShrink: 0 }}>{String(i + 1).padStart(2, '0')}</span>
+                                    <span style={{ fontSize: 12, color: 'var(--text-2)', lineHeight: 1.5 }}>{l}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
