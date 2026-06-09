@@ -13,6 +13,18 @@ function computeAge() {
     return age;
 }
 
+function formatSafeHTML(text) {
+    if (!text) return '';
+    const parts = text.split(/(<strong>.*?<\/strong>)/g);
+    return parts.map((part, index) => {
+        if (part.startsWith('<strong>') && part.endsWith('</strong>')) {
+            const innerText = part.replace(/<\/?strong>/g, '');
+            return <strong key={index}>{innerText}</strong>;
+        }
+        return part;
+    });
+}
+
 export default function About() {
     const { t } = useLanguage();
     const age = computeAge();
@@ -33,7 +45,7 @@ export default function About() {
                     <div className="panel">
                         <div className="panel-b" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 10, padding: 28 }}>
                             <img
-                                src={`${base}assets/images/pp.png`}
+                                src={`${base}assets/images/pp.webp`}
                                 alt="Galip Efe Öncü"
                                 className="avatar"
                                 width={120}
@@ -43,7 +55,7 @@ export default function About() {
                                     const ph = document.createElement('div');
                                     ph.className = 'avatar-placeholder';
                                     ph.style.cssText = 'width:120px;height:120px;font-size:11px;';
-                                    ph.textContent = 'profile.png';
+                                    ph.textContent = 'profile.webp';
                                     e.target.parentNode.insertBefore(ph, e.target);
                                 }}
                             />
@@ -77,9 +89,9 @@ export default function About() {
                     </div>
 
                     <div style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--text-2)', display: 'flex', flexDirection: 'column', gap: 12 }}>
-                        <p style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: t('about.bio1').replace('{age}', age) }} />
-                        <p style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: t('about.bio2') }} />
-                        <p style={{ margin: 0 }} dangerouslySetInnerHTML={{ __html: t('about.bio3') }} />
+                        <p style={{ margin: 0 }}>{formatSafeHTML(t('about.bio1').replace('{age}', age))}</p>
+                        <p style={{ margin: 0 }}>{formatSafeHTML(t('about.bio2'))}</p>
+                        <p style={{ margin: 0 }}>{formatSafeHTML(t('about.bio3'))}</p>
                     </div>
 
                     <div className="panel">

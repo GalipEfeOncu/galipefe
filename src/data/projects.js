@@ -10,7 +10,7 @@ export const projects = [
         description: "A chaotic, fast-paced typing and tower-defense game. The interface actively tries to troll the player with distractions like fake Windows errors, screen tilt, blur effects, and WhatsApp notifications. Features a dynamic vocabulary pool to test focus under pressure and a global leaderboard powered by Firebase.",
         link: "https://github.com/GalipEfeOncu/chaos-typing",
         demoLink: "https://galipefeoncu.github.io/chaos-typing/",
-        image: `${base}assets/images/ChaosTyping.png`,
+        image: `${base}assets/images/ChaosTyping.webp`,
         icon: "⚔️",
         tags: ["React", "Vite", "Firebase", "Game Dev"],
         learnings: [
@@ -29,7 +29,7 @@ export const projects = [
         status: "Work in Progress",
         description: "An automated software requirement analyzer that uses hybrid AI (NLP + LLM) to transform vague customer requirements into structured, industry-standard engineering documentation.",
         link: "https://github.com/AutoReq-DevTeam/AutoReq",
-        image: `${base}assets/images/AutoReq.png`,
+        image: `${base}assets/images/AutoReq.webp`,
         icon: "🚀",
         tags: ["Python", "NLP", "spaCy", "Streamlit", "LLM"],
         learnings: [
@@ -48,7 +48,7 @@ export const projects = [
         status: "Work in Progress",
         description: "A cross-platform desktop application for file conversion, document viewing, media playback, and AI-powered document analysis. Built to handle diverse file formats offline with an elegant interface.",
         link: "https://github.com/GalipEfeOncu/file-converter",
-        image: `${base}assets/images/FileConverter.png`,
+        image: `${base}assets/images/FileConverter.webp`,
         icon: "🗂️",
         tags: ["Python", "Streamlit", "AI Engine", "Desktop UI"],
         learnings: [
@@ -67,7 +67,7 @@ export const projects = [
         status: "Work in Progress",
         description: "A personal finance management tool to track income, expenses, and budget. Built with Python to provide a simple and effective way to manage personal finances with detailed visualizations.",
         link: "https://github.com/GalipEfeOncu/finance-tracker",
-        image: `${base}assets/images/FinanceTracker.png`,
+        image: `${base}assets/images/FinanceTracker.webp`,
         icon: "💰",
         tags: ["Python", "Streamlit", "Finance", "Data Visualization"],
         learnings: [
@@ -104,7 +104,7 @@ export const projects = [
         status: "Work in Progress",
         description: "A chaotic, fast-paced action game inspired by the Vampire Survivors genre. Built entirely in Unity with C#, it features a robust Entity Component System (ECS) approach for performance optimization. I implemented a custom Object Pooling system to handle hundreds of enemies on screen simultaneously without frame drops.",
         link: "https://github.com/GalipEfeOncu/soul-claim-survivors",
-        image: `${base}assets/images/SoulClaim.png`,
+        image: `${base}assets/images/SoulClaim.webp`,
         icon: null,
         tags: ["Unity", "C#", "DOTween"],
         learnings: [
@@ -123,7 +123,7 @@ export const projects = [
         status: "Completed",
         description: "GameTracker is a sophisticated desktop application designed for gamers to organize their collections. Unlike standard CRUD apps, this tool integrates Google's Gemini AI to provide personalized game recommendations based on your library. The backend is powered by MSSQL for reliable data storage.",
         link: "https://github.com/GalipEfeOncu/gametracker",
-        image: `${base}assets/images/GameTracker.png`,
+        image: `${base}assets/images/GameTracker.webp`,
         icon: "⚡",
         tags: ["WinForms", "MSSQL", "Gemini AI"],
         learnings: [
@@ -143,7 +143,7 @@ export const projects = [
         description: "A sleek and modern web application to track prayer times. It features automatic location detection, a countdown timer to the next prayer, and highlights religious days. Built with React and Vite for high performance, focusing on a clean and responsive user interface.",
         link: "https://github.com/GalipEfeOncu/prayer-time",
         demoLink: "https://galipefeoncu.github.io/prayer-time/",
-        image: `${base}assets/images/PrayerTime.png`,
+        image: `${base}assets/images/PrayerTime.webp`,
         icon: "🕌",
         tags: ["React", "Vite", "REST API", "Tailwind CSS"],
         learnings: [
@@ -162,7 +162,7 @@ export const projects = [
         status: "Discontinued",
         description: "A technically ambitious first-person survival game featuring a custom Procedural Landmass Generator. This generator creates unique, infinite terrains using Perlin Noise and Mesh Generation techniques, which was the most challenging aspect of development. The game also includes resource gathering, inventory management, and survival mechanics.",
         link: "https://github.com/Eferene/survival-game",
-        image: `${base}assets/images/SurvivalGame.png`,
+        image: `${base}assets/images/SurvivalGame.webp`,
         icon: "🌲",
         tags: ["Unity 3D", "Procedural Generation", "C#"],
         learnings: [

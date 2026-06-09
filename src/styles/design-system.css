@@ -297,12 +297,22 @@ ul { list-style: none; }
   transform: translateY(-2px);
 }
 
+.dock-mobile-toggle {
+  display: none;
+}
+.dock-nav a:hover,
+.dock-mobile-dropdown a:hover {
+  background: var(--card-hover) !important;
+  color: var(--text) !important;
+}
+
 /* ===== Mobile breakpoints ===== */
 @media (max-width: 768px) {
   .dock-nav { display: none; }
-  .dock-mobile-nav {
+  .dock-mobile-toggle {
     display: flex !important;
-    gap: 2px;
+    align-items: center;
+    justify-content: center;
   }
   .about-grid {
     grid-template-columns: 1fr !important;

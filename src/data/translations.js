@@ -329,7 +329,7 @@ export const translations = {
             githubDesc: "Kodlarımın büyük çoğunluğu burada",
             linkedinDesc: "Profesyonel bağlantı için",
             emailDesc: "Bana ulaşmanın en hızlı yolu",
-            viewProjects: "projelerime bak →"
+            viewProjects: "projelerime bak →",
             heading: "Selam de.",
         },
         projectData: {
