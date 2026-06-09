@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { SKILLS } from '../data/profile';
@@ -26,9 +27,38 @@ function formatSafeHTML(text) {
     });
 }
 
+function Typewriter({ text, delay = 40 }) {
+    const [displayedText, setDisplayedText] = useState('');
+
+    useEffect(() => {
+        setDisplayedText('');
+        let i = 0;
+        const timer = setInterval(() => {
+            if (i < text.length) {
+                setDisplayedText(text.substring(0, i + 1));
+                i++;
+            } else {
+                clearInterval(timer);
+            }
+        }, delay);
+        return () => clearInterval(timer);
+    }, [text, delay]);
+
+    return (
+        <span>
+            {displayedText}
+            <span className="typewriter-cursor" />
+        </span>
+    );
+}
+
 export default function About() {
     const { t } = useLanguage();
     const age = computeAge();
+
+    useEffect(() => {
+        document.title = `${t('about.title')} | Galip Efe Öncü`;
+    }, [t]);
 
     const interests = [
         { icon: '🎮', label: t('hero.interests.gaming') },
@@ -86,7 +116,7 @@ export default function About() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
                     <div>
                         <div className="mono" style={{ color: 'var(--accent)', fontSize: 11, letterSpacing: '0.18em', marginBottom: 6 }}>~/about</div>
-                        <h1 style={{ fontSize: 36, margin: 0, lineHeight: 1.1, fontWeight: 700 }}>{t('about.heading')}</h1>
+                        <h1 style={{ fontSize: 36, margin: 0, lineHeight: 1.1, fontWeight: 700 }}><Typewriter text={t('about.heading')} /></h1>
                     </div>
 
                     <div style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--text-2)', display: 'flex', flexDirection: 'column', gap: 12 }}>

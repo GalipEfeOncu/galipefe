@@ -377,3 +377,63 @@ button.panel {
   display: block;
 }
 
+.scroll-to-top:hover {
+  background: var(--card-hover) !important;
+  border-color: var(--accent) !important;
+  transform: translateY(-2px);
+}
+
+/* Typewriter Cursor */
+.typewriter-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background-color: var(--accent);
+  margin-left: 2px;
+  animation: typewriter-blink 0.75s step-end infinite;
+  vertical-align: middle;
+}
+@keyframes typewriter-blink {
+  from, to { background-color: transparent }
+  50% { background-color: var(--accent) }
+}
+
+/* Contact Form Styles */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.form-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-input {
+  font-family: var(--sans);
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: var(--r);
+  font-size: 13.5px;
+  transition: all 0.15s;
+  width: 100%;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+textarea.form-input {
+  resize: vertical;
+  min-height: 100px;
+}
+

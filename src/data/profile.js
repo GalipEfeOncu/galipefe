@@ -25,7 +25,7 @@ export const CONTACTS = [
 export const SOCIALS = [
     { name: 'Steam', value: '/id/knover', url: 'https://steamcommunity.com/id/knover/' },
     { name: 'Instagram', value: '@galipefe75', url: 'https://www.instagram.com/galipefe75/' },
-    { name: 'Monkeytype', value: 'monkeytype', url: 'https://monkeytype.com/account' },
+    { name: 'Monkeytype', value: 'knover', url: 'https://monkeytype.com/profile/knover' },
 ];
 
 export const SKILLS = [

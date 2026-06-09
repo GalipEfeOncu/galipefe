@@ -1,9 +1,52 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { CONTACTS, SOCIALS } from '../data/profile';
 
+// Replace with your Formspree Form ID to enable live submissions (e.g. 'mqkvwzqv')
+const FORMSPREE_FORM_ID = '';
+
 export default function Contact() {
     const { t } = useLanguage();
+    const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+    const [status, setStatus] = useState({ submitted: false, error: false, loading: false });
+
+    useEffect(() => {
+        document.title = `${t('contact.title')} | Galip Efe Öncü`;
+    }, [t]);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setStatus({ submitted: false, error: false, loading: true });
+
+        if (!FORMSPREE_FORM_ID) {
+            // Simulated submission delay for demo purposes
+            setTimeout(() => {
+                setStatus({ submitted: true, error: false, loading: false });
+                setFormData({ name: '', email: '', message: '' });
+            }, 1000);
+            return;
+        }
+
+        try {
+            const response = await fetch(`https://formspree.io/f/${FORMSPREE_FORM_ID}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            if (response.ok) {
+                setStatus({ submitted: true, error: false, loading: false });
+                setFormData({ name: '', email: '', message: '' });
+            } else {
+                setStatus({ submitted: false, error: true, loading: false });
+            }
+        } catch {
+            setStatus({ submitted: false, error: true, loading: false });
+        }
+    };
 
     return (
         <div className="page">
@@ -59,6 +102,73 @@ export default function Contact() {
                                     <div className="mono muted" style={{ fontSize: 11, marginTop: 2 }}>{s.value}</div>
                                 </a>
                             ))}
+                        </div>
+                    </div>
+
+                    {/* Contact Form */}
+                    <div className="panel">
+                        <div className="panel-h"><span className="dot" />{t('contact.formTitle')}</div>
+                        <div className="panel-b">
+                            {status.submitted ? (
+                                <div style={{ padding: '20px 0', textAlign: 'center', color: 'var(--good)' }}>
+                                    <div style={{ fontSize: 24, marginBottom: 8 }}>✓</div>
+                                    <div style={{ fontSize: 14, fontWeight: 600 }}>{t('contact.formSuccess')}</div>
+                                </div>
+                            ) : (
+                                <form onSubmit={handleSubmit}>
+                                    <div className="form-group">
+                                        <label htmlFor="name" className="form-label">{t('contact.formName')}</label>
+                                        <input
+                                            type="text"
+                                            id="name"
+                                            name="name"
+                                            required
+                                            className="form-input"
+                                            value={formData.name}
+                                            onChange={e => setFormData({ ...formData, name: e.target.value })}
+                                            disabled={status.loading}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="email" className="form-label">{t('contact.formEmail')}</label>
+                                        <input
+                                            type="email"
+                                            id="email"
+                                            name="email"
+                                            required
+                                            className="form-input"
+                                            value={formData.email}
+                                            onChange={e => setFormData({ ...formData, email: e.target.value })}
+                                            disabled={status.loading}
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="message" className="form-label">{t('contact.formMessage')}</label>
+                                        <textarea
+                                            id="message"
+                                            name="message"
+                                            required
+                                            className="form-input"
+                                            value={formData.message}
+                                            onChange={e => setFormData({ ...formData, message: e.target.value })}
+                                            disabled={status.loading}
+                                        />
+                                    </div>
+                                    {status.error && (
+                                        <div style={{ color: 'var(--bad)', fontSize: 13, marginBottom: 12 }}>
+                                            {t('contact.formError')}
+                                        </div>
+                                    )}
+                                    <button
+                                        type="submit"
+                                        className="btn primary"
+                                        style={{ width: '100%', justifyContent: 'center' }}
+                                        disabled={status.loading}
+                                    >
+                                        {status.loading ? t('contact.formSubmitting') : t('contact.formSubmit')}
+                                    </button>
+                                </form>
+                            )}
                         </div>
                     </div>
 
