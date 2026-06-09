@@ -49,7 +49,7 @@ function App() {
         <>
             <ScrollToTop />
             <Header theme={theme} toggleTheme={toggleTheme} />
-            <main style={{ padding: '24px 48px 80px' }}>
+            <main>
                 <Routes>
                     <Route path="/" element={<About />} />
                     <Route path="/projects" element={<Projects onOpenModal={setSelectedProject} />} />

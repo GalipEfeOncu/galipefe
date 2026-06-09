@@ -167,6 +167,9 @@ export default function Contact() {
                                     >
                                         {status.loading ? t('contact.formSubmitting') : t('contact.formSubmit')}
                                     </button>
+                                    <div style={{ marginTop: 10, textAlign: 'center', fontSize: 11, color: 'var(--muted)' }}>
+                                        {FORMSPREE_FORM_ID ? t('contact.formInfoLive') : t('contact.formInfoDemo')}
+                                    </div>
                                 </form>
                             )}
                         </div>
@@ -201,7 +204,12 @@ export default function Contact() {
                                 <dt>{t('contact.responseLabel')}</dt><dd>{t('contact.responseVal')}</dd>
                                 <dt>{t('contact.timezoneLabel')}</dt><dd>{t('contact.timezoneVal')}</dd>
                                 <dt>{t('about.facts.languages')}</dt><dd>{t('about.facts.languagesVal')}</dd>
-                                <dt>{t('contact.preferredLabel')}</dt><dd className="accent">{t('contact.preferredVal')}</dd>
+                                <dt>{t('contact.preferredLabel')}</dt>
+                                <dd className="accent">
+                                    <a href="mailto:galipefe75@gmail.com" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
+                                        galipefe75@gmail.com
+                                    </a>
+                                </dd>
                             </dl>
                         </div>
                     </div>

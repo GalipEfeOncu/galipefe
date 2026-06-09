@@ -131,8 +131,8 @@ export default function Modal({ project, onClose }) {
                         </dl>
                         <div>
                             <div className="mono muted" style={{ fontSize: 10, letterSpacing: '0.14em', marginBottom: 6 }}>{t('modal.stack')}</div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                                {project.tags.map(tag => <span key={tag} className="tag" style={{ alignSelf: 'flex-start' }}>{tag}</span>)}
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                                {project.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
                             </div>
                         </div>
                         <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 6 }}>
