@@ -59,62 +59,74 @@ export default function Projects({ onOpenModal }) {
 
             <div className="row" style={{ gap: 8, marginBottom: 18, flexWrap: 'wrap' }}>
                 {filters.map(f => (
-                    <span
+                    <button
                         key={f.key}
                         onClick={() => setFilter(f.key)}
                         className={`pill ${filter === f.key ? 'accent' : ''}`}
-                        style={{ cursor: 'pointer' }}
+                        style={{ cursor: 'pointer', border: 'none', font: 'inherit' }}
+                        aria-pressed={filter === f.key}
                     >
                         {f.label}
                         <span className="muted" style={{ marginLeft: 4, fontSize: 10 }}>{f.count}</span>
-                    </span>
+                    </button>
                 ))}
                 <span style={{ flex: 1 }} />
                 <span className="mono muted" style={{ fontSize: 11 }}>{t('projects.sortLabel')}</span>
             </div>
 
             {featured && (
-                <div className="panel proj-featured" onClick={() => onOpenModal(featured)} style={{ marginBottom: 18, cursor: 'pointer' }}>
-                    <div className="projects-featured-grid" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr' }}>
-                        <div className="projects-featured-img" style={{ borderRight: '1px solid var(--border-soft)' }}>
+                <button
+                    className="panel proj-featured"
+                    onClick={() => onOpenModal(featured)}
+                    style={{ marginBottom: 18, cursor: 'pointer', width: '100%', border: 'none', padding: 0, display: 'block', background: 'none', font: 'inherit', color: 'inherit' }}
+                    aria-label={`${featured.title} - ${t('projects.viewDetails')}`}
+                >
+                    <span className="projects-featured-grid" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', width: '100%', textAlign: 'left' }}>
+                        <span className="projects-featured-img" style={{ borderRight: '1px solid var(--border-soft)' }}>
                             <ProjectImage project={featured} height={280} style={{ borderRadius: 0, border: 'none' }} />
-                        </div>
-                        <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                        </span>
+                        <span style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 10 }}>
                             <span className="mono" style={{ fontSize: 10, color: 'var(--accent)', letterSpacing: '0.2em' }}>{t('projects.featuredLabel')}</span>
-                            <div style={{ fontSize: 24, fontWeight: 600 }}>{featured.title}</div>
-                            <div className="mono muted" style={{ fontSize: 12 }}>{getSubtitle(featured)}</div>
-                            <p style={{ fontSize: 13.5, color: 'var(--text-2)', lineHeight: 1.55, margin: 0 }}>{getDesc(featured)}</p>
-                            <div className="row" style={{ gap: 6, flexWrap: 'wrap' }}>
+                            <span style={{ fontSize: 24, fontWeight: 600, display: 'block' }}>{featured.title}</span>
+                            <span className="mono muted" style={{ fontSize: 12, display: 'block' }}>{getSubtitle(featured)}</span>
+                            <span style={{ fontSize: 13.5, color: 'var(--text-2)', lineHeight: 1.55, margin: 0, display: 'block' }}>{getDesc(featured)}</span>
+                            <span className="row" style={{ gap: 6, flexWrap: 'wrap', display: 'flex' }}>
                                 {featured.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
-                            </div>
-                            <div className="row" style={{ gap: 8, marginTop: 'auto' }}>
+                            </span>
+                            <span className="row" style={{ gap: 8, marginTop: 'auto', display: 'flex', alignItems: 'center' }}>
                                 <StatusBadge status={featured.status} />
                                 <span style={{ flex: 1 }} />
                                 <span className="mono" style={{ color: 'var(--accent)', fontSize: 13 }}>{t('projects.viewDetails')}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            </span>
+                        </span>
+                    </span>
+                </button>
             )}
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 14 }}>
                 {rest.map(p => (
-                    <div key={p.id} className="panel proj-card" onClick={() => onOpenModal(p)} style={{ cursor: 'pointer' }}>
-                        <div style={{ borderBottom: '1px solid var(--border-soft)' }}>
+                    <button
+                        key={p.id}
+                        className="panel proj-card"
+                        onClick={() => onOpenModal(p)}
+                        style={{ cursor: 'pointer', border: 'none', padding: 0, display: 'flex', flexDirection: 'column', width: '100%', background: 'none', font: 'inherit', color: 'inherit', textAlign: 'left' }}
+                        aria-label={`${p.title} - ${t('projects.viewDetails')}`}
+                    >
+                        <span style={{ borderBottom: '1px solid var(--border-soft)', width: '100%', display: 'block' }}>
                             <ProjectImage project={p} height={140} />
-                        </div>
-                        <div style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                            <div className="row">
-                                <div style={{ fontSize: 15, fontWeight: 600, flex: 1 }}>{p.title}</div>
+                        </span>
+                        <span style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 6, width: '100%', flex: 1 }}>
+                            <span className="row" style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                                <span style={{ fontSize: 15, fontWeight: 600, flex: 1 }}>{p.title}</span>
                                 {p.icon && <span style={{ fontSize: 16 }}>{p.icon}</span>}
-                            </div>
-                            <div className="mono muted" style={{ fontSize: 11 }}>{getSubtitle(p)}</div>
-                            <div className="row" style={{ gap: 4, flexWrap: 'wrap', marginTop: 4 }}>
+                            </span>
+                            <span className="mono muted" style={{ fontSize: 11, display: 'block' }}>{getSubtitle(p)}</span>
+                            <span className="row" style={{ gap: 4, flexWrap: 'wrap', marginTop: 4, display: 'flex' }}>
                                 {p.tags.slice(0, 3).map(tag => <span key={tag} className="tag" style={{ fontSize: 10 }}>{tag}</span>)}
-                            </div>
-                            <div style={{ marginTop: 8 }}><StatusBadge status={p.status} /></div>
-                        </div>
-                    </div>
+                            </span>
+                            <span style={{ marginTop: 8, display: 'block' }}><StatusBadge status={p.status} /></span>
+                        </span>
+                    </button>
                 ))}
             </div>
         </div>

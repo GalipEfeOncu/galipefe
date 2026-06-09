@@ -15,7 +15,14 @@ function ScrollToTop() {
 
 function App() {
     const [selectedProject, setSelectedProject] = useState(null);
-    const [theme, setTheme] = useState(() => localStorage.getItem('site_theme') || 'dark');
+    const [theme, setTheme] = useState(() => {
+        const saved = localStorage.getItem('site_theme');
+        const validThemes = ['dark', 'light'];
+        if (saved && validThemes.includes(saved)) return saved;
+
+        // Dynamic fallback based on prefers-color-scheme
+        return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    });
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme);

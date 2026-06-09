@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 
 function ModalImage({ project }) {
@@ -22,13 +22,52 @@ function ModalImage({ project }) {
 
 export default function Modal({ project, onClose }) {
     const { t } = useLanguage();
+    const modalRef = useRef(null);
 
     useEffect(() => {
         const onKey = (e) => { if (e.key === 'Escape') onClose(); };
         window.addEventListener('keydown', onKey);
         document.body.style.overflow = 'hidden';
+
+        const modalElement = modalRef.current;
+        let handleFocusTrap = null;
+
+        if (modalElement) {
+            const focusableSelectors = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+            handleFocusTrap = (e) => {
+                if (e.key !== 'Tab') return;
+                const focusables = modalElement.querySelectorAll(focusableSelectors);
+                if (focusables.length === 0) return;
+                const firstElement = focusables[0];
+                const lastElement = focusables[focusables.length - 1];
+
+                if (e.shiftKey) {
+                    if (document.activeElement === firstElement) {
+                        lastElement.focus();
+                        e.preventDefault();
+                    }
+                } else {
+                    if (document.activeElement === lastElement) {
+                        firstElement.focus();
+                        e.preventDefault();
+                    }
+                }
+            };
+
+            // Focus close button on mount
+            const focusables = modalElement.querySelectorAll(focusableSelectors);
+            if (focusables.length > 0) {
+                focusables[0].focus();
+            }
+
+            window.addEventListener('keydown', handleFocusTrap);
+        }
+
         return () => {
             window.removeEventListener('keydown', onKey);
+            if (handleFocusTrap) {
+                window.removeEventListener('keydown', handleFocusTrap);
+            }
             document.body.style.overflow = '';
         };
     }, [onClose]);
@@ -38,6 +77,14 @@ export default function Modal({ project, onClose }) {
     const subtitle = t(`projectData.${project.translationKey}.subtitle`) || project.subtitle;
     const desc = t(`projectData.${project.translationKey}.desc`) || project.description;
     const learnings = t(`projectData.${project.translationKey}.learnings`) || project.learnings || [];
+    
+    const statusLabel = t(
+        project.status === 'Completed'
+            ? 'projects.filters.completed'
+            : project.status === 'Discontinued'
+            ? 'projects.filters.discontinued'
+            : 'projects.filters.wip'
+    );
 
     return (
         <div
@@ -45,7 +92,11 @@ export default function Modal({ project, onClose }) {
             style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)', display: 'grid', placeItems: 'center', padding: 24 }}
         >
             <div
+                ref={modalRef}
                 onClick={e => e.stopPropagation()}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="modal-title"
                 style={{ width: '100%', maxWidth: 980, maxHeight: '92vh', background: 'var(--panel)', border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 20px 80px rgba(0,0,0,.6)' }}
             >
                 {/* Title bar */}
@@ -69,7 +120,7 @@ export default function Modal({ project, onClose }) {
                         </div>
                         <dl className="kv" style={{ fontSize: 11.5 }}>
                             <dt>{t('modal.idLabel')}</dt><dd>#{project.id}</dd>
-                            <dt>{t('modal.statusLabel')}</dt><dd className="accent">{project.status}</dd>
+                            <dt>{t('modal.statusLabel')}</dt><dd className="accent">{statusLabel}</dd>
                             <dt>{t('modal.repoLabel')}</dt>
                             <dd>
                                 {project.link
@@ -100,7 +151,7 @@ export default function Modal({ project, onClose }) {
 
                     {/* Content */}
                     <div className="scroll-y" style={{ flex: 1, padding: 24 }}>
-                        <div style={{ fontSize: 26, fontWeight: 600 }}>{project.title}</div>
+                        <h2 id="modal-title" style={{ fontSize: 26, fontWeight: 600, margin: 0 }}>{project.title}</h2>
                         <div className="mono muted" style={{ fontSize: 12, marginBottom: 16 }}>{subtitle}</div>
                         <ModalImage project={project} />
                         <p style={{ margin: 0, fontSize: 14, lineHeight: 1.65, color: 'var(--text-2)' }}>{desc}</p>

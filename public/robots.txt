@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://galipefeoncu.github.io/galipefe/sitemap.xml

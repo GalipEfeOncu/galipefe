@@ -4,14 +4,20 @@ import { translations } from '../data/translations';
 const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
-    // Check localStorage for saved lang, otherwise default to 'tr' or 'en', you want user to have choices.
+    // Check localStorage for saved lang, otherwise default to 'tr' or 'en', validating input.
     const [lang, setLang] = useState(() => {
         const saved = localStorage.getItem('site_lang');
-        return saved ? saved : 'en';
+        const validLangs = ['en', 'tr'];
+        if (saved && validLangs.includes(saved)) return saved;
+
+        // Dynamic fallback based on browser preferences
+        const browserLang = navigator.language || navigator.userLanguage || '';
+        return browserLang.startsWith('tr') ? 'tr' : 'en';
     });
 
     useEffect(() => {
         localStorage.setItem('site_lang', lang);
+        document.documentElement.lang = lang;
     }, [lang]);
 
     const toggleLang = () => {

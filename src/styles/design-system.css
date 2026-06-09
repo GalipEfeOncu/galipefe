@@ -357,3 +357,23 @@ ul { list-style: none; }
     padding: 0 16px !important;
   }
 }
+
+/* Accessibility & Focus-visible Styles */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+button.panel {
+  font: inherit;
+  color: inherit;
+  background: var(--card);
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  padding: 0;
+  border: 1px solid var(--border);
+  display: block;
+}
+

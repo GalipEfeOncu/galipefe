@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { SKILLS } from '../data/profile';
+import { projects } from '../data/projects';
 
 const base = import.meta.env.BASE_URL;
 
@@ -124,7 +125,7 @@ export default function About() {
                         <Link to="/projects" className="cta-card">
                             <div>
                                 <div style={{ fontSize: 15, fontWeight: 600 }}>{t('about.cta.projectsTitle')}</div>
-                                <div className="mono muted" style={{ fontSize: 11.5, marginTop: 2 }}>{t('about.cta.projectsCount')}</div>
+                                <div className="mono muted" style={{ fontSize: 11.5, marginTop: 2 }}>{t('about.cta.projectsCount').replace('{count}', projects.length)}</div>
                             </div>
                             <span style={{ color: 'var(--accent)', fontSize: 18, marginLeft: 'auto' }}>→</span>
                         </Link>

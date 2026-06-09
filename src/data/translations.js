@@ -37,7 +37,7 @@ export const translations = {
                 projectsDesc: "Games, tools, web stuff — take a look.",
                 contactTitle: "Say hello",
                 contactDesc: "Got a question or want to build something together? I'm around.",
-                projectsCount: "9 projects · games, tools, web",
+                projectsCount: "{count} projects · games, tools, web",
                 contactChannels: "3 ways to reach me"
             },
             heading: "Hi, I'm Galip. I write code and build things people actually use.",
@@ -254,7 +254,7 @@ export const translations = {
                 projectsDesc: "Oyunlar, araçlar, web şeyleri — bir göz at.",
                 contactTitle: "Selam ver",
                 contactDesc: "Bir soru mu var, birlikte bir şey mi inşa edelim? Buradayım.",
-                projectsCount: "9 proje · oyunlar, araçlar, web",
+                projectsCount: "{count} proje · oyunlar, araçlar, web",
                 contactChannels: "3 farklı yoldan ulaşabilirsin"
             },
             heading: "Merhaba, ben Galip. Kod yazıyorum, işe yarayan şeyler yapıyorum.",
