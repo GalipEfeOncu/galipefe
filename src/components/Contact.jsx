@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { CONTACTS, SOCIALS } from '../data/profile';
 
 // Replace with your Formspree Form ID to enable live submissions (e.g. 'mqkvwzqv')
-const FORMSPREE_FORM_ID = '';
+const FORMSPREE_FORM_ID = 'xlgknokn';
 
 export default function Contact() {
     const { t } = useLanguage();
