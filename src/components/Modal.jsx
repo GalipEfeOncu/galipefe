@@ -10,6 +10,7 @@ function ModalImage({ project }) {
                 alt={project.title}
                 onError={() => setFailed(true)}
                 className="modal-image"
+                decoding="async"
                 style={{ width: '100%', height: 260, objectFit: 'cover', borderRadius: 'var(--r-md)', display: 'block' }}
             />
         );

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { SKILLS } from '../data/profile';
 import { projects } from '../data/projects';
-import InteractiveCanvas from './InteractiveCanvas';
+import TypingGame from './TypingGame';
 
 const base = import.meta.env.BASE_URL;
 
@@ -96,9 +96,9 @@ export default function About() {
                             </div>
                         </div>
 
-                        {/* Hero Right Interactive Canvas */}
+                        {/* Hero Right Typing Mini Game */}
                         <div className="hero-right">
-                            <InteractiveCanvas />
+                            <TypingGame />
                         </div>
 
                     </div>

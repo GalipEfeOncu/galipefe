@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { projects } from '../data/projects';
 
+// Prefetch Modal chunk on first card hover to eliminate lazy-load delay
+const prefetchModal = () => import('./Modal');
+let modalPrefetched = false;
+
 function StatusBadge({ status }) {
     const cls = status === 'Completed' ? 'completed' : status === 'Discontinued' ? 'disc' : 'wip';
     return (
@@ -21,6 +25,8 @@ function ProjectImage({ project, height = 140, className = '' }) {
                 alt={project.title}
                 onError={() => setFailed(true)}
                 className={className}
+                loading="lazy"
+                decoding="async"
                 style={{ height, width: '100%', objectFit: 'cover', display: 'block' }}
             />
         );
@@ -35,6 +41,13 @@ function ProjectImage({ project, height = 140, className = '' }) {
 export default function Projects({ onOpenModal }) {
     const { t } = useLanguage();
     const [filter, setFilter] = useState('All');
+
+    const handleCardMouseEnter = () => {
+        if (!modalPrefetched) {
+            modalPrefetched = true;
+            prefetchModal();
+        }
+    };
 
     useEffect(() => {
         document.title = `${t('projects.title')} | Galip Efe Öncü`;
@@ -175,6 +188,7 @@ export default function Projects({ onOpenModal }) {
                                 key={p.id}
                                 className="proj-grid-card"
                                 onClick={() => onOpenModal(p)}
+                                onMouseEnter={handleCardMouseEnter}
                                 aria-label={`${p.title} - ${t('projects.viewDetails')}`}
                             >
                                 <span className="proj-grid-img-wrap">

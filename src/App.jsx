@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense, useRef } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
-import About from './components/About';
-import Projects from './components/Projects';
-import Contact from './components/Contact';
 import Footer from './components/Footer';
-import Modal from './components/Modal';
+
+const About = lazy(() => import('./components/About'));
+const Projects = lazy(() => import('./components/Projects'));
+const Contact = lazy(() => import('./components/Contact'));
+const Modal = lazy(() => import('./components/Modal'));
 
 function ScrollToTop() {
     const { pathname } = useLocation();
@@ -32,12 +33,20 @@ function App() {
     const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark');
 
     const [showScrollTop, setShowScrollTop] = useState(false);
+    const tickingRef = useRef(false);
 
     useEffect(() => {
         const handleScroll = () => {
-            setShowScrollTop(window.scrollY > 400);
+            if (!tickingRef.current) {
+                tickingRef.current = true;
+                requestAnimationFrame(() => {
+                    const shouldShow = window.scrollY > 400;
+                    setShowScrollTop(prev => prev !== shouldShow ? shouldShow : prev);
+                    tickingRef.current = false;
+                });
+            }
         };
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
@@ -50,43 +59,47 @@ function App() {
             <ScrollToTop />
             <Header theme={theme} toggleTheme={toggleTheme} />
             <main>
-                <Routes>
-                    <Route path="/" element={<About />} />
-                    <Route path="/projects" element={<Projects onOpenModal={setSelectedProject} />} />
-                    <Route path="/contact" element={<Contact />} />
-                </Routes>
+                <Suspense fallback={null}>
+                    <Routes>
+                        <Route path="/" element={<About />} />
+                        <Route path="/projects" element={<Projects onOpenModal={setSelectedProject} />} />
+                        <Route path="/contact" element={<Contact />} />
+                    </Routes>
+                </Suspense>
             </main>
             <Footer />
             {selectedProject && (
-                <Modal project={selectedProject} onClose={() => setSelectedProject(null)} />
+                <Suspense fallback={null}>
+                    <Modal project={selectedProject} onClose={() => setSelectedProject(null)} />
+                </Suspense>
             )}
-            {showScrollTop && (
-                <button
-                    onClick={scrollToTop}
-                    className="scroll-to-top"
-                    aria-label="Scroll to top"
-                    style={{
-                        position: 'fixed',
-                        bottom: 24,
-                        right: 24,
-                        width: 40,
-                        height: 40,
-                        borderRadius: '50%',
-                        background: 'var(--panel)',
-                        border: '1px solid var(--border)',
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                        color: 'var(--accent)',
-                        fontSize: 18,
-                        cursor: 'pointer',
-                        display: 'grid',
-                        placeItems: 'center',
-                        zIndex: 90,
-                        transition: 'all 0.2s',
-                    }}
-                >
-                    ↑
-                </button>
-            )}
+            <button
+                onClick={scrollToTop}
+                className="scroll-to-top"
+                aria-label="Scroll to top"
+                style={{
+                    position: 'fixed',
+                    bottom: 24,
+                    right: 24,
+                    width: 40,
+                    height: 40,
+                    borderRadius: '50%',
+                    background: 'var(--panel)',
+                    border: '1px solid var(--border)',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                    color: 'var(--accent)',
+                    fontSize: 18,
+                    cursor: 'pointer',
+                    display: 'grid',
+                    placeItems: 'center',
+                    zIndex: 90,
+                    opacity: showScrollTop ? 1 : 0,
+                    pointerEvents: showScrollTop ? 'auto' : 'none',
+                    transform: showScrollTop ? 'translateY(0)' : 'translateY(8px)',
+                }}
+            >
+                ↑
+            </button>
         </>
     );
 }
