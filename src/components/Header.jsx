@@ -52,8 +52,7 @@ export default function Header({ theme, toggleTheme }) {
                                 height: 6, 
                                 borderRadius: '50%', 
                                 background: 'var(--accent)', 
-                                display: 'inline-block',
-                                boxShadow: '0 0 6px var(--accent)'
+                                display: 'inline-block'
                             }} />
                             {lang.toUpperCase()}
                         </button>

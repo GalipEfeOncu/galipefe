@@ -73,7 +73,7 @@ export default function InteractiveCanvas() {
         // Get colors dynamically from CSS variables
         const getColors = () => {
             const style = getComputedStyle(document.documentElement);
-            const accent = style.getPropertyValue('--accent').trim() || '#14b8a6';
+            const accent = style.getPropertyValue('--accent').trim() || '#d97757';
             return { accent };
         };
 
@@ -133,7 +133,7 @@ export default function InteractiveCanvas() {
                             ? hexToRgba(accent, alpha)
                             : accent.includes('rgba') 
                                 ? accent.replace(/[\d.]+\)$/, `${alpha})`) 
-                                : `rgba(20, 184, 166, ${alpha})`;
+                                : `rgba(217, 119, 87, ${alpha})`;
                         ctx.lineWidth = 0.8;
                         ctx.beginPath();
                         ctx.moveTo(p1.x, p1.y);
@@ -151,7 +151,7 @@ export default function InteractiveCanvas() {
                         const alpha = (1 - distToMouse / mouseMaxDist) * 0.22;
                         ctx.strokeStyle = accent.startsWith('#')
                             ? hexToRgba(accent, alpha)
-                            : `rgba(20, 184, 166, ${alpha})`;
+                            : `rgba(217, 119, 87, ${alpha})`;
                         ctx.lineWidth = 1;
                         ctx.beginPath();
                         ctx.moveTo(p1.x, p1.y);
