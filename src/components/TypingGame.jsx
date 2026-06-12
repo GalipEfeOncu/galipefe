@@ -76,6 +76,7 @@ export default function TypingGame() {
     const [hasPlayed, setHasPlayed] = useState(false);
     const [wpm, setWpm] = useState(0);
     const [wordStatuses, setWordStatuses] = useState([]); // 'correct' | 'wrong' | ''
+    const [timerStarted, setTimerStarted] = useState(false);
 
     const inputRef = useRef(null);
     const timerRef = useRef(null);
@@ -89,9 +90,9 @@ export default function TypingGame() {
         }
     }, [lang, phase]);
 
-    /* Timer logic */
+    /* Timer logic - starts only when timerStarted is true */
     useEffect(() => {
-        if (phase !== 'playing') return;
+        if (phase !== 'playing' || !timerStarted) return;
         timerRef.current = setInterval(() => {
             setTimeLeft(t => {
                 if (t <= 1) {
@@ -104,7 +105,7 @@ export default function TypingGame() {
         }, 1000);
         return () => clearInterval(timerRef.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [phase]);
+    }, [phase, timerStarted]);
 
     /* Scroll active word into view */
     useEffect(() => {
@@ -157,6 +158,7 @@ export default function TypingGame() {
     const startGame = () => {
         if (hasPlayed) return;
         setPhase('playing');
+        setTimerStarted(false);
         setTyped('');
         setCurrentWordIdx(0);
         setTimeLeft(DURATION);
@@ -167,6 +169,11 @@ export default function TypingGame() {
     const handleInput = (e) => {
         if (phase !== 'playing') return;
         const val = e.target.value;
+
+        // Start timer on first character typed
+        if (!timerStarted && val.length > 0) {
+            setTimerStarted(true);
+        }
 
         // Space = confirm word
         if (val.endsWith(' ')) {
