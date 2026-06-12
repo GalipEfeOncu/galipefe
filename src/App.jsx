@@ -7,6 +7,7 @@ const About = lazy(() => import('./components/About'));
 const Projects = lazy(() => import('./components/Projects'));
 const Contact = lazy(() => import('./components/Contact'));
 const Modal = lazy(() => import('./components/Modal'));
+const Admin = lazy(() => import('./components/Admin'));
 
 function ScrollToTop() {
     const { pathname } = useLocation();
@@ -64,6 +65,7 @@ function App() {
                         <Route path="/" element={<About />} />
                         <Route path="/projects" element={<Projects onOpenModal={setSelectedProject} />} />
                         <Route path="/contact" element={<Contact />} />
+                        <Route path="/admin" element={<Admin />} />
                     </Routes>
                 </Suspense>
             </main>

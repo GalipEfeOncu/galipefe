@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { SKILLS } from '../data/profile';
-import { projects } from '../data/projects';
+import { projects as staticProjects } from '../data/projects';
+import { projectService } from '../services/projectService';
 import TypingGame from './TypingGame';
 
 const base = import.meta.env.BASE_URL;
@@ -32,6 +33,19 @@ export default function About() {
     const { t } = useLanguage();
     const age = computeAge();
     const detailsSectionRef = useRef(null);
+    const [projectCount, setProjectCount] = useState(staticProjects.length);
+
+    useEffect(() => {
+        let active = true;
+        async function fetchCount() {
+            const data = await projectService.getProjects();
+            if (active && data && data.length > 0) {
+                setProjectCount(data.length);
+            }
+        }
+        fetchCount();
+        return () => { active = false; };
+    }, []);
     const containerRef = useRef(null);
     const isScrollingRef = useRef(false);
 
@@ -222,7 +236,7 @@ export default function About() {
                                 <div className="cta-banner-content">
                                     <span className="cta-banner-title">{t('about.cta.projectsTitle')}</span>
                                     <span className="cta-banner-desc">
-                                        {t('about.cta.projectsCount').replace('{count}', projects.length)}
+                                        {t('about.cta.projectsCount').replace('{count}', projectCount)}
                                     </span>
                                 </div>
                                 <span className="cta-banner-arrow">→</span>

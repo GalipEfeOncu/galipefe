@@ -2,6 +2,25 @@ const base = import.meta.env.BASE_URL;
 
 export const projects = [
     {
+        id: 9,
+        translationKey: "kadeh",
+        title: "Kadeh",
+        subtitle: "React & Vite / Tailwind CSS / Web App",
+        status: "Work in Progress",
+        description: "A comprehensive Turkish-language alcohol guide for beginners and enthusiasts, featuring drink histories, production processes, tasting profiles, and serving recommendations.",
+        link: "https://github.com/GalipEfeOncu/kadeh",
+        demoLink: "https://kadeh.vercel.app/",
+        image: null,
+        icon: "🥂",
+        tags: ["React", "Vite", "Tailwind CSS"],
+        learnings: [
+            "Building content-rich static SPAs with React and Vite",
+            "Designing premium dark UI themes with Tailwind CSS",
+            "Structuring large static datasets as JS/JSON data files",
+            "Implementing fast, accessible filtering and search UX"
+        ]
+    },
+    {
         id: 5,
         translationKey: "chaosTyping",
         title: "Chaos Typing",
@@ -76,24 +95,6 @@ export const projects = [
             "Implementing persistent data storage for personal records",
             "Designing user-friendly expense categorization systems",
             "Handling complex financial calculations and reporting"
-        ]
-    },
-    {
-        id: 9,
-        translationKey: "kadeh",
-        title: "Kadeh",
-        subtitle: "React & Vite / Tailwind CSS / Web App",
-        status: "Work in Progress",
-        description: "A comprehensive Turkish-language alcohol guide for beginners and enthusiasts, featuring drink histories, production processes, tasting profiles, and serving recommendations.",
-        link: "https://github.com/GalipEfeOncu/kadeh",
-        image: null,
-        icon: "🥂",
-        tags: ["React", "Vite", "Tailwind CSS"],
-        learnings: [
-            "Building content-rich static SPAs with React and Vite",
-            "Designing premium dark UI themes with Tailwind CSS",
-            "Structuring large static datasets as JS/JSON data files",
-            "Implementing fast, accessible filtering and search UX"
         ]
     },
     {

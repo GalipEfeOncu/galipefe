@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { projects } from '../data/projects';
+import { projects as staticProjects } from '../data/projects';
+import { projectService } from '../services/projectService';
 
 // Prefetch Modal chunk on first card hover to eliminate lazy-load delay
 const prefetchModal = () => import('./Modal');
@@ -39,8 +40,10 @@ function ProjectImage({ project, height = 140, className = '' }) {
 }
 
 export default function Projects({ onOpenModal }) {
-    const { t } = useLanguage();
+    const { t, lang } = useLanguage();
     const [filter, setFilter] = useState('All');
+    const [projectList, setProjectList] = useState(staticProjects);
+    const [loading, setLoading] = useState(true);
 
     const handleCardMouseEnter = () => {
         if (!modalPrefetched) {
@@ -53,20 +56,62 @@ export default function Projects({ onOpenModal }) {
         document.title = `${t('projects.title')} | Galip Efe Öncü`;
     }, [t]);
 
+    useEffect(() => {
+        let active = true;
+        async function fetchProjects() {
+            setLoading(true);
+            const data = await projectService.getProjects();
+            if (active) {
+                if (data && data.length > 0) {
+                    setProjectList(data);
+                } else {
+                    setProjectList(staticProjects);
+                }
+                setLoading(false);
+            }
+        }
+        fetchProjects();
+        return () => { active = false; };
+    }, []);
+
     const filters = [
-        { key: 'All', label: t('projects.filters.all'), count: projects.length },
-        { key: 'Completed', label: t('projects.filters.completed'), count: projects.filter(p => p.status === 'Completed').length },
-        { key: 'Work in Progress', label: t('projects.filters.wip'), count: projects.filter(p => p.status === 'Work in Progress').length },
-        { key: 'Discontinued', label: t('projects.filters.discontinued'), count: projects.filter(p => p.status === 'Discontinued').length },
+        { key: 'All', label: t('projects.filters.all'), count: projectList.length },
+        { key: 'Completed', label: t('projects.filters.completed'), count: projectList.filter(p => p.status === 'Completed').length },
+        { key: 'Work in Progress', label: t('projects.filters.wip'), count: projectList.filter(p => p.status === 'Work in Progress').length },
+        { key: 'Discontinued', label: t('projects.filters.discontinued'), count: projectList.filter(p => p.status === 'Discontinued').length },
     ];
 
-    const list = filter === 'All' ? projects : projects.filter(p => p.status === filter);
+    const list = filter === 'All' ? projectList : projectList.filter(p => p.status === filter);
     const featured = list[0];
     const rest = list.slice(1);
 
-    const getSubtitle = (p) => t(`projectData.${p.translationKey}.subtitle`) || p.subtitle;
-    const getDesc = (p) => t(`projectData.${p.translationKey}.desc`) || p.description;
-    const getLearnings = (p) => t(`projectData.${p.translationKey}.learnings`) || p.learnings || [];
+    const getSubtitle = (p) => {
+        if (p.subtitleEn || p.subtitleTr) {
+            return lang === 'tr' ? (p.subtitleTr || p.subtitle) : (p.subtitleEn || p.subtitle);
+        }
+        const key = `projectData.${p.translationKey}.subtitle`;
+        const val = t(key);
+        return val === key ? p.subtitle : val;
+    };
+    
+    const getDesc = (p) => {
+        if (p.descriptionEn || p.descriptionTr) {
+            return lang === 'tr' ? (p.descriptionTr || p.description) : (p.descriptionEn || p.description);
+        }
+        const key = `projectData.${p.translationKey}.desc`;
+        const val = t(key);
+        return val === key ? p.description : val;
+    };
+    
+    const getLearnings = (p) => {
+        if (p.learningsEn || p.learningsTr) {
+            const list = lang === 'tr' ? p.learningsTr : p.learningsEn;
+            return Array.isArray(list) ? list : (p.learnings || []);
+        }
+        const key = `projectData.${p.translationKey}.learnings`;
+        const val = t(key);
+        return val === key ? (p.learnings || []) : val;
+    };
 
     return (
         <div className="page projects-page-container container">
@@ -91,7 +136,11 @@ export default function Projects({ onOpenModal }) {
                 <span className="projects-sort">{t('projects.sortLabel')}</span>
             </div>
 
-            {list.length === 0 ? (
+            {loading ? (
+                <div style={{ textAlign: 'center', padding: 80, color: 'var(--muted)', fontFamily: 'var(--mono)', fontSize: 14 }}>
+                    {lang === 'tr' ? 'Projeler yükleniyor...' : 'Loading projects...'}
+                </div>
+            ) : list.length === 0 ? (
                 <div className="projects-empty">
                     <div className="projects-empty-icon">🔍</div>
                     <div className="projects-empty-title">{t('projects.emptyStateTitle')}</div>
