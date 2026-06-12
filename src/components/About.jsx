@@ -32,10 +32,46 @@ export default function About() {
     const { t } = useLanguage();
     const age = computeAge();
     const detailsSectionRef = useRef(null);
+    const containerRef = useRef(null);
+    const isScrollingRef = useRef(false);
 
     useEffect(() => {
         document.title = `${t('about.title')} | Galip Efe Öncü`;
     }, [t]);
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        const handleWheel = (e) => {
+            if (isScrollingRef.current) {
+                e.preventDefault();
+                return;
+            }
+
+            const scrollTop = container.scrollTop;
+            const detailsTop = detailsSectionRef.current?.offsetTop || window.innerHeight;
+            const threshold = 50;
+            
+            // On hero section, scrolling down
+            if (scrollTop <= threshold && e.deltaY > 0) {
+                e.preventDefault();
+                isScrollingRef.current = true;
+                detailsSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => { isScrollingRef.current = false; }, 800);
+            }
+            // On details section top, scrolling up
+            else if (scrollTop > threshold && scrollTop <= detailsTop + threshold && e.deltaY < 0) {
+                e.preventDefault();
+                isScrollingRef.current = true;
+                container.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => { isScrollingRef.current = false; }, 800);
+            }
+        };
+
+        container.addEventListener('wheel', handleWheel, { passive: false });
+        return () => container.removeEventListener('wheel', handleWheel);
+    }, []);
 
     const handleScrollDown = () => {
         detailsSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -49,7 +85,7 @@ export default function About() {
     ];
 
     return (
-        <div className="scroll-container">
+        <div className="scroll-container" ref={containerRef}>
             
             {/* 1. 100vh Hero Landing Section (Snap Start) */}
             <section className="hero-section scroll-section">
