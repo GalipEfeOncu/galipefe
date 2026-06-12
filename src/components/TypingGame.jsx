@@ -52,7 +52,7 @@ function getComment(wpm, lang, myWpm) {
 }
 
 /* ── Generate a word line ────────────────────────────────────── */
-function generateWords(pool, count = 28) {
+function generateWords(pool, count = 60) {
     const shuffled = [...pool].sort(() => Math.random() - 0.5);
     const arr = [];
     while (arr.length < count) arr.push(...shuffled);
