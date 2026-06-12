@@ -12,7 +12,7 @@ function StatusBadge({ status }) {
     );
 }
 
-function ProjectImage({ project, height = 140, style = {} }) {
+function ProjectImage({ project, height = 140, className = '' }) {
     const [failed, setFailed] = useState(false);
     if (project.image && !failed) {
         return (
@@ -20,12 +20,13 @@ function ProjectImage({ project, height = 140, style = {} }) {
                 src={project.image}
                 alt={project.title}
                 onError={() => setFailed(true)}
-                style={{ width: '100%', height, objectFit: 'cover', display: 'block', ...style }}
+                className={className}
+                style={{ height, width: '100%', objectFit: 'cover', display: 'block' }}
             />
         );
     }
     return (
-        <div className="sketchy-img" style={{ height, borderRadius: 0, border: 'none', ...style }}>
+        <div className="sketchy-img" style={{ height, width: '100%', display: 'grid', placeItems: 'center', background: 'var(--bg-2)' }}>
             [{project.icon || '◇'} {project.title}]
         </div>
     );
@@ -52,12 +53,13 @@ export default function Projects({ onOpenModal }) {
 
     const getSubtitle = (p) => t(`projectData.${p.translationKey}.subtitle`) || p.subtitle;
     const getDesc = (p) => t(`projectData.${p.translationKey}.desc`) || p.description;
+    const getLearnings = (p) => t(`projectData.${p.translationKey}.learnings`) || p.learnings || [];
 
     return (
-        <div className="page">
-            <div className="projects-header">
-                <h1 className="projects-title">{t('projects.title')}</h1>
-                <p className="projects-subtitle">{t('projects.subtitle')}</p>
+        <div className="page projects-page-container container">
+            <div className="page-header">
+                <h1 className="page-title">{t('projects.title')}</h1>
+                <p className="page-subtitle">{t('projects.subtitle')}</p>
             </div>
 
             <div className="projects-filters">
@@ -65,7 +67,7 @@ export default function Projects({ onOpenModal }) {
                     <button
                         key={f.key}
                         onClick={() => setFilter(f.key)}
-                        className={`pill projects-filter-btn ${filter === f.key ? 'accent' : ''}`}
+                        className={`projects-filter-btn ${filter === f.key ? 'active' : ''}`}
                         aria-pressed={filter === f.key}
                     >
                         {f.label}
@@ -77,60 +79,125 @@ export default function Projects({ onOpenModal }) {
             </div>
 
             {list.length === 0 ? (
-                <div className="panel projects-empty">
+                <div className="projects-empty">
                     <div className="projects-empty-icon">🔍</div>
                     <div className="projects-empty-title">{t('projects.emptyStateTitle')}</div>
                     <div className="projects-empty-desc">{t('projects.emptyStateDesc')}</div>
                 </div>
             ) : (
                 <>
+                    {/* Featured Project - Enlarge Showcase Container */}
                     {featured && (
-                        <button
-                            className="panel proj-featured proj-featured-btn"
-                            onClick={() => onOpenModal(featured)}
-                            aria-label={`${featured.title} - ${t('projects.viewDetails')}`}
-                        >
-                            <span>
-                                <ProjectImage project={featured} height={260} style={{ borderRadius: 0 }} />
-                            </span>
-                            <span className="proj-featured-content">
-                                <span className="proj-featured-label">{t('projects.featuredLabel')}</span>
-                                <span className="proj-featured-title">{featured.title}</span>
-                                <span className="proj-featured-subtitle">{getSubtitle(featured)}</span>
-                                <span className="proj-featured-desc">{getDesc(featured)}</span>
-                                <span className="proj-featured-tags">
-                                    {featured.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
-                                </span>
-                                <span className="proj-featured-footer">
-                                    <StatusBadge status={featured.status} />
-                                    <span style={{ flex: 1 }} />
-                                    <span className="proj-featured-view">{t('projects.viewDetails')}</span>
-                                </span>
-                            </span>
-                        </button>
+                        <div className="featured-project-container">
+                            <div className="proj-featured-card">
+                                
+                                {/* Left Column: Title, Subtitle, Image Box, Buttons */}
+                                <div className="proj-featured-left-col">
+                                    <span className="proj-featured-label">{t('projects.featuredLabel')}</span>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                                        <h2 className="proj-featured-title" style={{ fontSize: 28 }}>{featured.title}</h2>
+                                        <span className="proj-featured-subtitle">{getSubtitle(featured)}</span>
+                                    </div>
+                                    
+                                    {/* Image Box */}
+                                    <div className="proj-featured-img-wrap">
+                                        <ProjectImage 
+                                            project={featured} 
+                                            height="100%" 
+                                            className="proj-featured-img" 
+                                        />
+                                    </div>
+
+                                    {/* Buttons */}
+                                    <div className="proj-featured-footer" style={{ border: 'none', padding: 0, marginTop: 4 }}>
+                                        {featured.link && (
+                                            <a 
+                                                href={featured.link} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer" 
+                                                className="btn"
+                                                style={{ flex: 1 }}
+                                            >
+                                                {t('modal.repo')} ↗
+                                            </a>
+                                        )}
+                                        {featured.demoLink && (
+                                            <a 
+                                                href={featured.demoLink} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer" 
+                                                className="btn primary"
+                                                style={{ flex: 1 }}
+                                            >
+                                                {t('modal.liveDemo')} ↗
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Right Column: Status, Description, Tags, Learnings */}
+                                <div className="proj-featured-right-col">
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                                        <div>
+                                            <StatusBadge status={featured.status} />
+                                        </div>
+                                        <p className="proj-featured-desc">{getDesc(featured)}</p>
+                                    </div>
+
+                                    <div className="proj-featured-tags">
+                                        {featured.tags.map(tag => (
+                                            <span key={tag} className="tag">{tag}</span>
+                                        ))}
+                                    </div>
+
+                                    {/* Inline key learnings / takeaways showcase */}
+                                    {getLearnings(featured).length > 0 && (
+                                        <div className="proj-featured-learnings-box" style={{ marginTop: 0 }}>
+                                            <span className="proj-featured-learnings-title">{t('modal.keyTakeaways')}</span>
+                                            {getLearnings(featured).slice(0, 3).map((l, i) => (
+                                                <div key={i} className="proj-featured-learning-item">
+                                                    <span className="proj-featured-learning-num">{String(i + 1).padStart(2, '0')}</span>
+                                                    <span>{l}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+
+                            </div>
+                        </div>
                     )}
 
+                    {/* Standard Grid Cards */}
                     <div className="projects-grid">
                         {rest.map(p => (
                             <button
                                 key={p.id}
-                                className="panel proj-card proj-card-btn"
+                                className="proj-grid-card"
                                 onClick={() => onOpenModal(p)}
                                 aria-label={`${p.title} - ${t('projects.viewDetails')}`}
                             >
-                                <span className="proj-card-img-wrap">
-                                    <ProjectImage project={p} height={140} />
+                                <span className="proj-grid-img-wrap">
+                                    <ProjectImage 
+                                        project={p} 
+                                        height={195} 
+                                        className="proj-grid-img" 
+                                    />
                                 </span>
-                                <span className="proj-card-body">
-                                    <span className="proj-card-header">
-                                        <span className="proj-card-title">{p.title}</span>
-                                        {p.icon && <span className="proj-card-icon">{p.icon}</span>}
+                                <span className="proj-grid-body">
+                                    <span className="proj-grid-header">
+                                        <span className="proj-grid-title">{p.title}</span>
+                                        {p.icon && <span className="proj-grid-icon">{p.icon}</span>}
                                     </span>
-                                    <span className="proj-card-subtitle">{getSubtitle(p)}</span>
-                                    <span className="proj-card-tags">
-                                        {p.tags.slice(0, 3).map(tag => <span key={tag} className="tag">{tag}</span>)}
+                                    <span className="proj-grid-subtitle">{getSubtitle(p)}</span>
+                                    <span className="proj-grid-tags">
+                                        {p.tags.slice(0, 3).map(tag => (
+                                            <span key={tag} className="tag">{tag}</span>
+                                        ))}
                                     </span>
-                                    <span className="proj-card-status"><StatusBadge status={p.status} /></span>
+                                    <span className="proj-grid-footer">
+                                        <StatusBadge status={p.status} />
+                                    </span>
                                 </span>
                             </button>
                         ))}

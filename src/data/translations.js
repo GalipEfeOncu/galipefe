@@ -6,27 +6,28 @@ export const translations = {
             contact: "Contact"
         },
         hero: {
+            welcome: "Hi there, I'm",
             role: "Software Engineering Student",
             status: "open to work",
-            desc: "I build things that run, feel good, and don't break. Games, tools, web apps — if code can solve it, I'm already thinking about it.",
+            desc: "I build things that run, feel good, and don't break. Games, tools, web apps - if code can solve it, I'm already thinking about it.",
             interests: {
                 gaming: "Gaming",
                 walking: "Walking",
                 reading: "Reading",
                 fitness: "Fitness"
             },
-            quote: "\"Whatever you do in this life, it's not legendary, unless your friends are there to see it.\""
+            quote: "\"Life is brilliant. Beautiful. It enchants us, to the point of obsession.\""
         },
         about: {
             title: "About Me",
-            bio1: "I'm <strong>{age}</strong> and studying Software Engineering at <strong>Fırat University</strong> in Elazığ — second year in. Grew up in <strong>Konya</strong>, Turkey.",
-            bio2: "Before university I spent four years at <strong>Adilkaraağaç Vocational High School</strong>, IT department — that's where I got serious about how things actually work under the hood.",
-            bio3: "I'm into building things that feel alive — Unity roguelikes, React apps, whatever. If there's an interesting problem, I'll dig into it. Outside of coding you'll usually find me out on a walk, reading, or at the gym.",
+            bio1: "I'm <strong>{age}</strong> and studying Software Engineering at <strong>Fırat University</strong> in Elazığ - second year in. Grew up in <strong>Konya</strong>, Turkey.",
+            bio2: "Before university I spent four years at <strong>Adilkaraağaç Vocational High School</strong>, IT department - that's where I got serious about how things actually work under the hood.",
+            bio3: "I'm into building things that feel alive - Unity roguelikes, React apps, whatever. If there's an interesting problem, I'll dig into it. Outside of coding you'll usually find me out on a walk, reading, or at the gym.",
             facts: {
                 location: "Location",
                 locationVal: "Konya, Turkey",
                 university: "University",
-                universityVal: "Fırat University — Software Eng. (2nd year)",
+                universityVal: "Fırat University - Software Eng. (2nd year)",
                 languages: "Languages",
                 languagesVal: "Turkish (Native) · English (B2)",
                 game: "Favorite Game",
@@ -34,7 +35,7 @@ export const translations = {
             },
             cta: {
                 projectsTitle: "What I've built",
-                projectsDesc: "Games, tools, web stuff — take a look.",
+                projectsDesc: "Games, tools, web stuff - take a look.",
                 contactTitle: "Say hello",
                 contactDesc: "Got a question or want to build something together? I'm around.",
                 projectsCount: "{count} projects · games, tools, web",
@@ -50,7 +51,7 @@ export const translations = {
         },
         projects: {
             title: "Projects",
-            subtitle: "Games, desktop apps, web tools — stuff I built because I wanted to see if I could.",
+            subtitle: "Games, desktop apps, web tools - stuff I built because I wanted to see if I could.",
             filters: {
                 all: "All",
                 completed: "Completed",
@@ -65,7 +66,7 @@ export const translations = {
                 liveDemo: "Live Demo",
                 githubRepo: "GitHub Repo"
             },
-            featuredLabel: "★ FEATURED",
+            featuredLabel: "★ MY FAVORITE PROJECT",
             sortLabel: "sort: recent ↓",
             viewDetails: "open →"
         },
@@ -92,7 +93,7 @@ export const translations = {
                 gamedev: "Game Development"
             },
             ctaTitle: "Got something cooking?",
-            ctaDesc: "Take a look at what I've been building — or just message me directly.",
+            ctaDesc: "Take a look at what I've been building - or just message me directly.",
             ctaBtn: "See my work →",
             heading: "Say hi.",
             primaryChannels: "reach me here",
@@ -106,7 +107,7 @@ export const translations = {
             formError: "Oops! There was a problem submitting your message. Please try mail directly.",
             formTitle: "Send a Message",
             projectCTA: "Got something in mind?",
-            projectCTADesc: "Send a message — I usually get back the same day.",
+            projectCTADesc: "Send a message - I usually get back the same day.",
             availabilityPanel: "status",
             availabilityStatus: "open to work",
             availabilityTypes: "full-time · freelance · side projects",
@@ -117,8 +118,8 @@ export const translations = {
             preferredLabel: "best way",
             preferredVal: "email →",
             whatImInto: "what I'm into",
-            interest1: "Game dev — the feel, the systems, the tiny details that make it click",
-            interest2: "Modern web — React, smooth interactions, clean UX",
+            interest1: "Game dev - the feel, the systems, the tiny details that make it click",
+            interest2: "Modern web - React, smooth interactions, clean UX",
             interest3: "Tools that actually save people time",
             githubDesc: "Where most of my code lives",
             linkedinDesc: "If you're the professional type",
@@ -130,7 +131,7 @@ export const translations = {
         projectData: {
             chaosTyping: {
                 subtitle: "React & Vite / Web Browser Game",
-                desc: "A typing game that actively fights you. Fake Windows errors, screen tilts, blur effects, WhatsApp pop-ups — the UI is trying to make you lose. There's also a dynamic word pool to test focus under pressure and a real-time global leaderboard backed by Firebase.",
+                desc: "A typing game that actively fights you. Fake Windows errors, screen tilts, blur effects, WhatsApp pop-ups - the UI is trying to make you lose. There's also a dynamic word pool to test focus under pressure and a real-time global leaderboard backed by Firebase.",
                 learnings: [
                     "High-performance game loops in React with requestAnimationFrame",
                     "Complex state management across Context and Refs",
@@ -143,7 +144,7 @@ export const translations = {
                 subtitle: "Unity 2D / Action Roguelike",
                 desc: "A fast and chaotic action game in the Vampire Survivors vein, built from scratch in Unity with C#. I designed it around an ECS approach for performance and wrote a custom Object Pooling system so hundreds of enemies can be on screen at once without any frame drops.",
                 learnings: [
-                    "ECS architecture — what it actually means in practice",
+                    "ECS architecture - what it actually means in practice",
                     "Object Pooling to keep memory in check under heavy entity counts",
                     "ScriptableObjects for clean, tweak-friendly data structures",
                     "Event-driven design with the Observer pattern",
@@ -152,7 +153,7 @@ export const translations = {
             },
             gameTracker: {
                 subtitle: ".NET WinForms Desktop App",
-                desc: "A desktop app for organizing your game library — not just CRUD, but smart. It pulls game data from the RAWG API and uses Google Gemini AI to recommend new games based on what's already in your collection. Data is stored locally in MSSQL.",
+                desc: "A desktop app for organizing your game library - not just CRUD, but smart. It pulls game data from the RAWG API and uses Google Gemini AI to recommend new games based on what's already in your collection. Data is stored locally in MSSQL.",
                 learnings: [
                     "Building a non-standard, polished UI in C# WinForms",
                     "Relational database management with MSSQL and ADO.NET",
@@ -174,7 +175,7 @@ export const translations = {
             },
             survivalGame: {
                 subtitle: "Unity 3D / First Person Survival",
-                desc: "A first-person survival game with no pre-made maps — terrain is generated on the fly using Perlin Noise and custom mesh generation. The world keeps building itself as you explore. Also includes resource gathering, an inventory system, and core survival mechanics.",
+                desc: "A first-person survival game with no pre-made maps - terrain is generated on the fly using Perlin Noise and custom mesh generation. The world keeps building itself as you explore. Also includes resource gathering, an inventory system, and core survival mechanics.",
                 learnings: [
                     "Procedural terrain generation with Perlin Noise algorithms",
                     "Real-time mesh generation and runtime optimization",
@@ -185,7 +186,7 @@ export const translations = {
             },
             autoReq: {
                 subtitle: "Python / AI & NLP / Streamlit",
-                desc: "A tool that takes messy, vague customer requirements and turns them into clean, structured engineering docs. It uses a hybrid AI pipeline — NLP for parsing structure, LLMs for generating readable output — built on top of spaCy, NLTK, and Streamlit.",
+                desc: "A tool that takes messy, vague customer requirements and turns them into clean, structured engineering docs. It uses a hybrid AI pipeline - NLP for parsing structure, LLMs for generating readable output - built on top of spaCy, NLTK, and Streamlit.",
                 learnings: [
                     "NLP in practice with spaCy and NLTK",
                     "Integrating LLMs into a real processing pipeline",
@@ -196,7 +197,7 @@ export const translations = {
             },
             fileConverter: {
                 subtitle: "Python / Streamlit / AI & Desktop",
-                desc: "A cross-platform desktop app that brings together file conversion, document viewing, media playback, and AI-powered document analysis — all in one place, all offline. Built to handle a wide range of formats without needing an internet connection.",
+                desc: "A cross-platform desktop app that brings together file conversion, document viewing, media playback, and AI-powered document analysis - all in one place, all offline. Built to handle a wide range of formats without needing an internet connection.",
                 learnings: [
                     "Cross-platform desktop utilities with Python and Streamlit",
                     "File conversion pipelines for multiple formats",
@@ -207,7 +208,7 @@ export const translations = {
             },
             financeTracker: {
                 subtitle: "Python / Streamlit / Data Visualization",
-                desc: "A personal finance tracker to keep income, expenses, and budget in check. Built to be genuinely useful — quick to log, clear to read, with visualizations that actually help you understand where your money's going.",
+                desc: "A personal finance tracker to keep income, expenses, and budget in check. Built to be genuinely useful - quick to log, clear to read, with visualizations that actually help you understand where your money's going.",
                 learnings: [
                     "Data visualization with Python (Matplotlib, Plotly)",
                     "Building clean financial dashboards in Streamlit",
@@ -218,7 +219,7 @@ export const translations = {
             },
             kadeh: {
                 subtitle: "React & Vite / Tailwind CSS / Web App",
-                desc: "A Turkish-language guide to alcoholic drinks — histories, production methods, tasting notes, serving tips — designed for curious beginners and enthusiasts alike. The UI leans into a premium dark magazine feel.",
+                desc: "A Turkish-language guide to alcoholic drinks - histories, production methods, tasting notes, serving tips - designed for curious beginners and enthusiasts alike. The UI leans into a premium dark magazine feel.",
                 learnings: [
                     "Content-heavy static SPA architecture with React and Vite",
                     "Premium dark UI design with Tailwind CSS",
@@ -235,6 +236,7 @@ export const translations = {
             contact: "İletişim"
         },
         hero: {
+            welcome: "Merhaba, ben",
             role: "Yazılım Mühendisliği Öğrencisi",
             status: "yeni fırsatlara açık",
             desc: "Kullanıcı deneyimi yüksek, kararlı çalışan ve optimize edilmiş yazılımlar geliştiriyorum. Oyunlar, pratik araçlar ya da web uygulamaları... Eğer bir problem kodla çözülebiliyorsa, çözüm yolları üretmekten heyecan duyuyorum.",
@@ -244,7 +246,7 @@ export const translations = {
                 reading: "Okuma",
                 fitness: "Fitness"
             },
-            quote: "\"Bu hayatta ne yaparsan yap — arkadaşların orada değilse efsane olmaz.\""
+            quote: "\"Hayat harika. Güzel. Bizi büyüleyip kendine takıntı derecesinde bağlıyor.\""
         },
         about: {
             title: "Hakkımda",
@@ -255,7 +257,7 @@ export const translations = {
                 location: "Konum",
                 locationVal: "Konya, Türkiye",
                 university: "Üniversite",
-                universityVal: "Fırat Üni. — Yazılım Müh. (2. Sınıf)",
+                universityVal: "Fırat Üni. - Yazılım Müh. (2. Sınıf)",
                 languages: "Diller",
                 languagesVal: "Türkçe (Anadil) · İngilizce (B2)",
                 game: "Favori Oyun",
@@ -279,7 +281,7 @@ export const translations = {
         },
         projects: {
             title: "Projeler",
-            subtitle: "Oyunlar, masaüstü uygulamaları, web araçları — merak ettiğim teknolojileri ve fikirleri denemek için geliştirdiğim projeler.",
+            subtitle: "Oyunlar, masaüstü uygulamaları, web araçları - merak ettiğim teknolojileri ve fikirleri denemek için geliştirdiğim projeler.",
             filters: {
                 all: "Tümü",
                 completed: "Tamamlanan",
@@ -294,7 +296,7 @@ export const translations = {
                 liveDemo: "Canlı Demo",
                 githubRepo: "GitHub Repo"
             },
-            featuredLabel: "★ ÖNE ÇIKAN",
+            featuredLabel: "★ FAVORİ PROJEM",
             sortLabel: "sıralama: en yeni ↓",
             viewDetails: "incele →"
         },
@@ -334,7 +336,7 @@ export const translations = {
             formError: "Bir hata oluştu ve mesajınız iletilemedi. Lütfen doğrudan e-posta adresim üzerinden ulaşmayı deneyin.",
             formTitle: "Mesaj İletin",
             projectCTA: "Aklınızda bir proje mi var?",
-            projectCTADesc: "Bana yazın — genellikle aynı gün içerisinde geri dönüş yaparım.",
+            projectCTADesc: "Bana yazın - genellikle aynı gün içerisinde geri dönüş yaparım.",
             availabilityPanel: "durum",
             availabilityStatus: "yeni fırsatlara açık",
             availabilityTypes: "tam zamanlı · freelance · yan proje",
@@ -345,9 +347,9 @@ export const translations = {
             preferredLabel: "en hızlı yol",
             preferredVal: "e-posta →",
             whatImInto: "ilgi duyduğum alanlar",
-            interest1: "Oyun Geliştirme — oyun hissi, sistem tasarımları ve bütünü oluşturan küçük detaylar",
-            interest2: "Modern Web — React, akıcı kullanıcı etkileşimleri ve sade, işlevsel arayüzler",
-            interest3: "Verimlilik Araçları — insanların günlük işlerini kolaylaştıran ve zaman kazandıran yazılımlar",
+            interest1: "Oyun Geliştirme - oyun hissi, sistem tasarımları ve bütünü oluşturan küçük detaylar",
+            interest2: "Modern Web - React, akıcı kullanıcı etkileşimleri ve sade, işlevsel arayüzler",
+            interest3: "Verimlilik Araçları - insanların günlük işlerini kolaylaştıran ve zaman kazandıran yazılımlar",
             githubDesc: "Açık kaynaklı projelerimin ve kodlarımın yer aldığı platform",
             linkedinDesc: "Profesyonel ağım ve kariyer geçmişim",
             emailDesc: "Benimle iletişime geçebileceğiniz en doğrudan kanal",

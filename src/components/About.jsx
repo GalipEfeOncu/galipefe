@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { SKILLS } from '../data/profile';
 import { projects } from '../data/projects';
+import InteractiveCanvas from './InteractiveCanvas';
 
 const base = import.meta.env.BASE_URL;
 
@@ -27,38 +28,18 @@ function formatSafeHTML(text) {
     });
 }
 
-function Typewriter({ text, delay = 40 }) {
-    const [displayedText, setDisplayedText] = useState('');
-
-    useEffect(() => {
-        setDisplayedText('');
-        let i = 0;
-        const timer = setInterval(() => {
-            if (i < text.length) {
-                setDisplayedText(text.substring(0, i + 1));
-                i++;
-            } else {
-                clearInterval(timer);
-            }
-        }, delay);
-        return () => clearInterval(timer);
-    }, [text, delay]);
-
-    return (
-        <span>
-            {displayedText}
-            <span className="typewriter-cursor" />
-        </span>
-    );
-}
-
 export default function About() {
     const { t } = useLanguage();
     const age = computeAge();
+    const detailsSectionRef = useRef(null);
 
     useEffect(() => {
         document.title = `${t('about.title')} | Galip Efe Öncü`;
     }, [t]);
+
+    const handleScrollDown = () => {
+        detailsSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
 
     const interests = [
         { icon: '🎮', label: t('hero.interests.gaming') },
@@ -68,118 +49,162 @@ export default function About() {
     ];
 
     return (
-        <div className="page">
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 48 }}>
-
-                {/* Hero: avatar + name + role + status */}
-                <div>
-                    <div className="about-hero">
-                        <img
-                            src={`${base}assets/images/pp.webp`}
-                            alt="Galip Efe Öncü"
-                            className="avatar"
-                            width={80}
-                            height={80}
-                            onError={(e) => {
-                                e.target.style.display = 'none';
-                                const ph = document.createElement('div');
-                                ph.className = 'avatar-placeholder';
-                                ph.style.cssText = 'width:80px;height:80px;font-size:11px;';
-                                ph.textContent = 'profile.webp';
-                                e.target.parentNode.insertBefore(ph, e.target);
-                            }}
-                        />
-                        <div className="about-hero-info">
-                            <div className="about-hero-name">Galip Efe Öncü</div>
-                            <div className="about-hero-role mono">{t('hero.role')}</div>
-                            <span className="pill accent">
-                                <span className="led" />
-                                {t('hero.status')}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Meta info row */}
-                <div className="about-meta">
-                    <div className="about-meta-item">
-                        <span className="about-meta-label">{t('about.kvLocation')}</span>
-                        <span>{t('about.facts.locationVal')}</span>
-                    </div>
-                    <div className="about-meta-item">
-                        <span className="about-meta-label">{t('about.kvEdu')}</span>
-                        <span>{t('about.facts.universityVal')}</span>
-                    </div>
-                    <div className="about-meta-item">
-                        <span className="about-meta-label">{t('about.kvLang')}</span>
-                        <span>{t('about.facts.languagesVal')}</span>
-                    </div>
-                    <div className="about-meta-item">
-                        <span className="about-meta-label">{t('about.kvFocus')}</span>
-                        <span className="accent">{t('about.facts.gameVal')}</span>
-                    </div>
-                </div>
-
-                {/* Heading with Typewriter */}
-                <h1 className="about-heading"><Typewriter text={t('about.heading')} /></h1>
-
-                {/* Bio paragraphs */}
-                <div className="about-bio">
-                    <p>{formatSafeHTML(t('about.bio1').replace('{age}', age))}</p>
-                    <p>{formatSafeHTML(t('about.bio2'))}</p>
-                    <p>{formatSafeHTML(t('about.bio3'))}</p>
-                </div>
-
-                {/* Interests */}
-                <div className="section-block">
-                    <div className="section-label">{t('about.interestsPanel')}</div>
-                    <div className="about-interests-grid">
-                        {interests.map(i => (
-                            <div key={i.label} className="about-interest-chip">
-                                <span>{i.icon}</span>
-                                <span>{i.label}</span>
+        <div className="scroll-container">
+            
+            {/* 1. 100vh Hero Landing Section (Snap Start) */}
+            <section className="hero-section scroll-section">
+                <div className="container">
+                    <div className="hero-grid">
+                        
+                        {/* Hero Left Info Panel */}
+                        <div className="hero-left">
+                            <div className="hero-avatar-wrap">
+                                <img
+                                    src={`${base}assets/images/pp.webp`}
+                                    alt="Galip Efe Öncü"
+                                    className="hero-avatar"
+                                    width={90}
+                                    height={90}
+                                    onError={(e) => {
+                                        e.target.style.display = 'none';
+                                        const ph = document.createElement('div');
+                                        ph.className = 'avatar-placeholder';
+                                        ph.style.cssText = 'width:90px;height:90px;font-size:11px;border-radius:20px;';
+                                        ph.textContent = 'profile.webp';
+                                        e.target.parentNode.insertBefore(ph, e.target);
+                                    }}
+                                />
                             </div>
-                        ))}
-                    </div>
-                </div>
 
-                {/* Stack */}
-                <div className="section-block">
-                    <div className="section-label">{t('about.stackPanel')}</div>
-                    {SKILLS.map(cat => (
-                        <div key={cat.title} className="about-stack-category">
-                            <div className="about-stack-label">{cat.title.toUpperCase()}</div>
-                            <div className="about-stack-tags">
-                                {cat.items.map(s => <span key={s} className="tag">{s}</span>)}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                                <span className="hero-intro">{t('hero.welcome')}</span>
+                                <h1 className="hero-title-main">Galip Efe Öncü</h1>
+                                <h2 className="hero-role">{t('hero.role')}</h2>
+                            </div>
+
+                            <p className="hero-desc-text">
+                                {t('hero.desc')}
+                            </p>
+
+                            <div style={{ display: 'flex', gap: 12, marginTop: 12 }}>
+                                <button onClick={handleScrollDown} className="btn primary">
+                                    {t('about.title')} ↓
+                                </button>
+                                <Link to="/projects" className="btn ghost">
+                                    {t('about.cta.projectsTitle')} →
+                                </Link>
                             </div>
                         </div>
-                    ))}
+
+                        {/* Hero Right Interactive Canvas */}
+                        <div className="hero-right">
+                            <InteractiveCanvas />
+                        </div>
+
+                    </div>
                 </div>
 
-                {/* CTA grid */}
-                <div className="about-cta-grid">
-                    <Link to="/projects" className="cta-card">
-                        <div>
-                            <div className="about-cta-title">{t('about.cta.projectsTitle')}</div>
-                            <div className="about-cta-desc mono">{t('about.cta.projectsCount').replace('{count}', projects.length)}</div>
-                        </div>
-                        <span className="about-cta-arrow">→</span>
-                    </Link>
-                    <Link to="/contact" className="cta-card">
-                        <div>
-                            <div className="about-cta-title">{t('about.cta.contactTitle')}</div>
-                            <div className="about-cta-desc mono">{t('about.cta.contactChannels')}</div>
-                        </div>
-                        <span className="about-cta-arrow">→</span>
-                    </Link>
+                {/* Animated Mouse indicator */}
+                <div className="scroll-indicator" onClick={handleScrollDown}>
+                    <span>{t('about.title').toLowerCase()}</span>
+                    <div className="scroll-indicator-mouse">
+                        <div className="scroll-indicator-wheel" />
+                    </div>
                 </div>
+            </section>
 
-                {/* Quote */}
-                <blockquote className="about-quote">
-                    {t('hero.quote')}
-                </blockquote>
+            {/* 2. Detailed Profile Section (Snap Start) */}
+            <section ref={detailsSectionRef} className="about-details scroll-section section-padding">
+                <div className="container">
+                    <div className="about-grid-flow">
+                        
+                        {/* 3 Facts Cards Grid */}
+                        <div className="about-metadata-grid">
+                            <div className="metadata-card">
+                                <span className="metadata-card-label">{t('about.kvLocation')}</span>
+                                <span className="metadata-card-value">{t('about.facts.locationVal')}</span>
+                            </div>
+                            <div className="metadata-card">
+                                <span className="metadata-card-label">{t('about.kvEdu')}</span>
+                                <span className="metadata-card-value">{t('about.facts.universityVal')}</span>
+                            </div>
+                            <div className="metadata-card">
+                                <span className="metadata-card-label">{t('about.kvLang')}</span>
+                                <span className="metadata-card-value">{t('about.facts.languagesVal')}</span>
+                            </div>
+                        </div>
 
-            </div>
+                        {/* Biography / Story (quote placed directly below description) */}
+                        <div className="about-biography">
+                            <div>
+                                <h3 className="about-bio-heading">{t('about.title')}</h3>
+                            </div>
+                            <div className="about-bio-text">
+                                <p>{formatSafeHTML(t('about.bio1').replace('{age}', age))}</p>
+                                <p>{formatSafeHTML(t('about.bio2'))}</p>
+                                <p>{formatSafeHTML(t('about.bio3'))}</p>
+                            </div>
+                        </div>
+
+                        {/* Skills / Expertise */}
+                        <div className="skills-section">
+                            <div>
+                                <h3 className="about-bio-heading">{t('about.stackPanel')}</h3>
+                            </div>
+                            <div className="skills-categories">
+                                {SKILLS.map(cat => (
+                                    <div key={cat.title} className="skills-category-box">
+                                        <span className="skills-category-title">{cat.title}</span>
+                                        <div className="skills-tags-wrap">
+                                            {cat.items.map(s => (
+                                                <span key={s} className="tag">{s}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Hobbies / Interests */}
+                        <div className="interests-section">
+                            <div>
+                                <h3 className="about-bio-heading">{t('about.interestsPanel')}</h3>
+                            </div>
+                            <div className="interests-grid">
+                                {interests.map(i => (
+                                    <div key={i.label} className="interest-card">
+                                        <span className="interest-icon">{i.icon}</span>
+                                        <span className="interest-name">{i.label}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* CTA buttons */}
+                        <div className="home-cta-links">
+                            <Link to="/projects" className="cta-banner-link">
+                                <div className="cta-banner-content">
+                                    <span className="cta-banner-title">{t('about.cta.projectsTitle')}</span>
+                                    <span className="cta-banner-desc">
+                                        {t('about.cta.projectsCount').replace('{count}', projects.length)}
+                                    </span>
+                                </div>
+                                <span className="cta-banner-arrow">→</span>
+                            </Link>
+                            <Link to="/contact" className="cta-banner-link">
+                                <div className="cta-banner-content">
+                                    <span className="cta-banner-title">{t('about.cta.contactTitle')}</span>
+                                    <span className="cta-banner-desc">
+                                        {t('about.cta.contactChannels')}
+                                    </span>
+                                </div>
+                                <span className="cta-banner-arrow">→</span>
+                            </Link>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
         </div>
     );
 }

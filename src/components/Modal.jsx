@@ -10,12 +10,13 @@ function ModalImage({ project }) {
                 alt={project.title}
                 onError={() => setFailed(true)}
                 className="modal-image"
+                style={{ width: '100%', height: 260, objectFit: 'cover', borderRadius: 'var(--r-md)', display: 'block' }}
             />
         );
     }
     return (
-        <div className="sketchy-img" style={{ height: 220, marginBottom: 20 }}>
-            [hero screenshot — {project.title}]
+        <div className="sketchy-img" style={{ height: 220, display: 'grid', placeItems: 'center', background: 'var(--bg-2)' }}>
+            [hero screenshot - {project.title}]
         </div>
     );
 }
@@ -54,7 +55,6 @@ export default function Modal({ project, onClose }) {
                 }
             };
 
-            // Focus close button on mount
             const focusables = modalElement.querySelectorAll(focusableSelectors);
             if (focusables.length > 0) {
                 focusables[0].focus();
@@ -98,10 +98,9 @@ export default function Modal({ project, onClose }) {
                 aria-labelledby="modal-title"
                 className="modal-container"
             >
-                {/* Title bar */}
+                {/* Title bar (Removing the legacy path prefix) */}
                 <div className="modal-titlebar">
-                    <span className="modal-titlebar-path">~/projects/</span>
-                    <span className="modal-titlebar-key">{project.translationKey}</span>
+                    <span className="modal-titlebar-key">{project.title}</span>
                     <button onClick={onClose} className="modal-close-btn">
                         {t('modal.close')}
                     </button>
@@ -109,57 +108,66 @@ export default function Modal({ project, onClose }) {
 
                 {/* Body */}
                 <div className="modal-body">
-                    <div className="modal-hero">
-                        <div className="modal-icon">{project.icon || '◇'}</div>
-                        <div>
-                            <h2 className="modal-title" id="modal-title">{project.title}</h2>
-                            <div className="modal-subtitle">{subtitle}</div>
-                        </div>
-                    </div>
-
-                    <div className="modal-meta">
-                        <span className={`status ${statusCls}`}><span className="led" />{statusLabel}</span>
-                        <span className="modal-meta-id">id: #{project.id}</span>
-                        <span className="modal-meta-repo">
-                            repo:{' '}
-                            {project.link
-                                ? <a href={project.link} target="_blank" rel="noopener noreferrer">github↗</a>
-                                : '—'
-                            }
-                        </span>
-                    </div>
-
-                    <ModalImage project={project} />
-
-                    <p className="modal-desc">{desc}</p>
-
-                    <div className="modal-tags">
-                        {project.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
-                    </div>
-
-                    <hr className="section-divider" style={{ margin: '20px 0' }} />
-
-                    <div className="modal-takeaways-label">{t('modal.keyTakeaways')}</div>
-                    <div>
-                        {learnings.map((l, i) => (
-                            <div key={i} className="modal-takeaway-item">
-                                <span className="modal-takeaway-num">{String(i + 1).padStart(2, '0')}</span>
-                                <span className="modal-takeaway-text">{l}</span>
+                    <div className="modal-grid">
+                        
+                        {/* Left Column: Image, Metadata & CTAs */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                            <ModalImage project={project} />
+                            
+                            <div className="modal-meta" style={{ border: 'none', padding: 0, margin: 0 }}>
+                                <span className={`status ${statusCls}`}><span className="led" />{statusLabel}</span>
+                                <span className="modal-meta-id">id: #{project.id}</span>
                             </div>
-                        ))}
-                    </div>
+                            
+                            <div className="modal-actions" style={{ border: 'none', padding: 0, marginTop: 8 }}>
+                                {project.link && (
+                                    <a href={project.link} target="_blank" rel="noopener noreferrer" className="btn">
+                                        {t('modal.repo')} ↗
+                                    </a>
+                                )}
+                                {project.demoLink && (
+                                    <a href={project.demoLink} target="_blank" rel="noopener noreferrer" className="btn primary">
+                                        {t('modal.liveDemo')} ↗
+                                    </a>
+                                )}
+                            </div>
+                        </div>
 
-                    <div className="modal-actions">
-                        {project.link && (
-                            <a href={project.link} target="_blank" rel="noopener noreferrer" className="btn">
-                                {t('modal.repo')}
-                            </a>
-                        )}
-                        {project.demoLink && (
-                            <a href={project.demoLink} target="_blank" rel="noopener noreferrer" className="btn primary">
-                                {t('modal.liveDemo')}
-                            </a>
-                        )}
+                        {/* Right Column: Heading, Description, Learnings */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                            <div className="modal-hero">
+                                <div className="modal-icon">{project.icon || '◇'}</div>
+                                <div className="modal-title-wrap">
+                                    <h2 className="modal-title" id="modal-title">{project.title}</h2>
+                                    <div className="modal-subtitle">{subtitle}</div>
+                                </div>
+                            </div>
+
+                            <p className="modal-desc">{desc}</p>
+
+                            <div className="modal-tags">
+                                {project.tags.map(tag => (
+                                    <span key={tag} className="tag">{tag}</span>
+                                ))}
+                            </div>
+
+                            {/* Takeaways Section */}
+                            {learnings.length > 0 && (
+                                <div className="modal-takeaways-section">
+                                    <hr className="section-divider" style={{ margin: '8px 0 16px' }} />
+                                    <div className="modal-takeaways-label">{t('modal.keyTakeaways')}</div>
+                                    <div>
+                                        {learnings.map((l, i) => (
+                                            <div key={i} className="modal-takeaway-item">
+                                                <span className="modal-takeaway-num">{String(i + 1).padStart(2, '0')}</span>
+                                                <span className="modal-takeaway-text">{l}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
                     </div>
                 </div>
             </div>

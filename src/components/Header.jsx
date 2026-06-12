@@ -14,96 +14,93 @@ export default function Header({ theme, toggleTheme }) {
     ];
 
     return (
-        <div style={{ position: 'sticky', top: 8, zIndex: 50, padding: '8px 0 10px' }}>
-            <div className="dock-wrapper" style={{ padding: '0 48px', display: 'grid', placeItems: 'center' }}>
-                <div style={{ position: 'relative', display: 'flex', gap: 4, padding: 5, background: 'var(--panel)', border: '1px solid var(--border)', borderRadius: 14, boxShadow: '0 6px 24px rgba(0,0,0,.28)', backdropFilter: 'blur(8px)' }}>
-                    <Link
-                        to="/"
-                        style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 12px', borderRadius: 10, background: 'var(--accent-soft)', color: 'var(--accent)', fontFamily: 'var(--mono)', fontSize: 12, textDecoration: 'none' }}
-                    >
-                        <div style={{ width: 18, height: 18, background: 'var(--accent)', borderRadius: 4, color: '#0a1414', display: 'grid', placeItems: 'center', fontWeight: 800, fontSize: 11 }}>G</div>
-                        galipefe
-                    </Link>
+        <header style={{ position: 'fixed', top: 12, left: 0, right: 0, zIndex: 100, padding: '0 16px' }}>
+            <div className="dock-wrapper">
+                <div className="dock-container">
+                    
+                    {/* Left Group: Logo */}
+                    <div className="dock-group-left">
+                        <Link to="/" className="dock-logo" onClick={() => setIsMobileMenuOpen(false)}>
+                            <div className="dock-logo-box">G</div>
+                            galipefe
+                        </Link>
+                    </div>
 
-                    <div className="dock-nav-separator" style={{ width: 1, background: 'var(--border)', margin: '4px 4px' }} />
-
-                    <nav className="dock-nav" style={{ display: 'flex', gap: 2 }}>
+                    {/* Center Group: Desktop Navigation */}
+                    <nav className="dock-nav">
                         {navItems.map(({ to, label }) => (
                             <Link
                                 key={to}
                                 to={to}
-                                style={{
-                                    padding: '6px 18px',
-                                    borderRadius: 10,
-                                    color: location.pathname === to ? 'var(--text)' : 'var(--muted)',
-                                    fontSize: 13,
-                                    background: location.pathname === to ? 'var(--card)' : 'transparent',
-                                    transition: 'all .15s',
-                                    textDecoration: 'none',
-                                    display: 'block',
-                                }}
+                                className={`dock-nav-link ${location.pathname === to ? 'active' : ''}`}
                             >
                                 {label}
                             </Link>
                         ))}
                     </nav>
 
-                    <button
-                        className="dock-mobile-toggle"
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        aria-label="Toggle navigation menu"
-                        style={{
-                            padding: '6px 12px',
-                            borderRadius: 10,
-                            color: 'var(--text-2)',
-                            fontFamily: 'var(--mono)',
-                            fontSize: 14,
-                            cursor: 'pointer',
-                            background: 'transparent',
-                            border: 'none',
-                        }}
-                    >
-                        {isMobileMenuOpen ? '✕' : '☰'}
-                    </button>
+                    {/* Right Group: Action Controls */}
+                    <div className="dock-group-right">
+                        {/* Language Switch Button */}
+                        <button
+                            onClick={toggleLang}
+                            className="dock-btn"
+                            aria-label={lang === 'en' ? 'Switch language to Turkish' : 'Switch language to English'}
+                        >
+                            <span style={{ 
+                                width: 6, 
+                                height: 6, 
+                                borderRadius: '50%', 
+                                background: 'var(--accent)', 
+                                display: 'inline-block',
+                                boxShadow: '0 0 6px var(--accent)'
+                            }} />
+                            {lang.toUpperCase()}
+                        </button>
 
-                    <div className="dock-nav-separator" style={{ width: 1, background: 'var(--border)', margin: '4px 4px' }} />
+                        <div className="dock-separator" />
 
-                    <button
-                        onClick={toggleLang}
-                        style={{ padding: '6px 12px', borderRadius: 10, color: 'var(--text-2)', fontFamily: 'var(--mono)', fontSize: 11, display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', background: 'transparent', border: 'none' }}
-                        aria-label={lang === 'en' ? 'Switch language to Turkish' : 'Switch language to English'}
-                    >
-                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', display: 'inline-block' }} />
-                        {lang.toUpperCase()}
-                    </button>
+                        {/* Theme Toggle Button */}
+                        <button
+                            onClick={toggleTheme}
+                            className="dock-btn"
+                            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                        >
+                            {theme === 'dark' ? '◑' : '◐'}
+                        </button>
 
-                    <button
-                        onClick={toggleTheme}
-                        style={{ padding: '6px 12px', borderRadius: 10, color: 'var(--text-2)', fontFamily: 'var(--mono)', fontSize: 11, cursor: 'pointer', background: 'transparent', border: 'none' }}
-                        title={theme === 'dark' ? 'Switch to light' : 'Switch to dark'}
-                        aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-                    >
-                        {theme === 'dark' ? '◑' : '◐'}
-                    </button>
+                        {/* Mobile Menu Toggle Button (Controlled via CSS display queries) */}
+                        <button
+                            className="dock-mobile-toggle dock-btn"
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            aria-label="Toggle navigation menu"
+                        >
+                            {isMobileMenuOpen ? '✕' : '☰'}
+                        </button>
+                    </div>
 
+                    {/* Mobile Navigation Dropdown */}
                     {isMobileMenuOpen && (
                         <div
                             className="dock-mobile-dropdown"
                             style={{
                                 position: 'absolute',
                                 top: '100%',
-                                left: 0,
-                                right: 0,
+                                left: 6,
+                                right: 6,
                                 marginTop: 8,
                                 background: 'var(--panel)',
                                 border: '1px solid var(--border)',
-                                borderRadius: 12,
+                                borderRadius: 'var(--r-md)',
                                 padding: 6,
-                                boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+                                boxShadow: 'var(--shadow-lg)',
                                 display: 'flex',
                                 flexDirection: 'column',
-                                gap: 2,
-                                zIndex: 100
+                                gap: 4,
+                                zIndex: 110,
+                                backdropFilter: 'blur(20px)',
+                                WebkitBackdropFilter: 'blur(20px)'
                             }}
                         >
                             {navItems.map(({ to, label }) => (
@@ -111,14 +108,13 @@ export default function Header({ theme, toggleTheme }) {
                                     key={to}
                                     to={to}
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    style={{
+                                    className={`dock-nav-link ${location.pathname === to ? 'active' : ''}`}
+                                    style={{ 
+                                        width: '100%', 
+                                        display: 'block', 
+                                        textAlign: 'left', 
                                         padding: '10px 16px',
-                                        borderRadius: 8,
-                                        color: location.pathname === to ? 'var(--text)' : 'var(--muted)',
-                                        background: location.pathname === to ? 'var(--card)' : 'transparent',
-                                        fontSize: 13,
-                                        textDecoration: 'none',
-                                        transition: 'all 0.15s',
+                                        background: location.pathname === to ? 'var(--card-hover)' : 'transparent'
                                     }}
                                 >
                                     {label}
@@ -126,8 +122,9 @@ export default function Header({ theme, toggleTheme }) {
                             ))}
                         </div>
                     )}
+
                 </div>
             </div>
-        </div>
+        </header>
     );
 }

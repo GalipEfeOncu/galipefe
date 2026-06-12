@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { CONTACTS, SOCIALS } from '../data/profile';
 
-// Replace with your Formspree Form ID to enable live submissions (e.g. 'mqkvwzqv')
 const FORMSPREE_FORM_ID = 'xlgknokn';
 
 export default function Contact() {
@@ -20,7 +19,6 @@ export default function Contact() {
         setStatus({ submitted: false, error: false, loading: true });
 
         if (!FORMSPREE_FORM_ID) {
-            // Simulated submission delay for demo purposes
             setTimeout(() => {
                 setStatus({ submitted: true, error: false, loading: false });
                 setFormData({ name: '', email: '', message: '' });
@@ -49,15 +47,17 @@ export default function Contact() {
     };
 
     return (
-        <div className="page">
+        <div className="page contact-page-container container">
             {/* Header */}
-            <div className="contact-header">
-                <h1 className="contact-heading">{t('contact.heading')}</h1>
-                <p className="contact-subtitle">{t('contact.subtitle')}</p>
+            <div className="page-header">
+                <h1 className="page-title">{t('contact.heading')}</h1>
+                <p className="page-subtitle">{t('contact.subtitle')}</p>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
-                {/* Availability status */}
+            {/* Stacked Layout Container */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 48 }}>
+                
+                {/* 1. Availability Status Banner */}
                 <div>
                     <div className="contact-availability">
                         <span className="contact-avail-dot" />
@@ -66,47 +66,49 @@ export default function Contact() {
                             <div className="contact-avail-types">{t('contact.availabilityTypes')}</div>
                         </div>
                     </div>
-                    <div className="contact-avail-meta">
-                        <div className="contact-avail-meta-item">
-                            <span className="contact-avail-meta-label">{t('contact.responseLabel')}</span>
+
+                    {/* Avail Meta Information List */}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px 24px', fontSize: 13, color: 'var(--text-2)', marginTop: 16 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <span style={{ color: 'var(--muted)' }}>{t('contact.responseLabel')}:</span>
                             <span>{t('contact.responseVal')}</span>
                         </div>
-                        <div className="contact-avail-meta-item">
-                            <span className="contact-avail-meta-label">{t('contact.timezoneLabel')}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <span style={{ color: 'var(--muted)' }}>{t('contact.timezoneLabel')}:</span>
                             <span>{t('contact.timezoneVal')}</span>
                         </div>
-                        <div className="contact-avail-meta-item">
-                            <span className="contact-avail-meta-label">{t('about.facts.languages')}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <span style={{ color: 'var(--muted)' }}>{t('about.facts.languages')}:</span>
                             <span>{t('about.facts.languagesVal')}</span>
                         </div>
-                        <div className="contact-avail-meta-item">
-                            <span className="contact-avail-meta-label">{t('contact.preferredLabel')}</span>
-                            <a href="mailto:galipefe75@gmail.com" className="accent">galipefe75@gmail.com</a>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <span style={{ color: 'var(--muted)' }}>{t('contact.preferredLabel')}:</span>
+                            <a href="mailto:galipefe75@gmail.com" style={{ color: 'var(--accent)', fontWeight: 500 }}>galipefe75@gmail.com</a>
                         </div>
                     </div>
                 </div>
 
                 <hr className="section-divider" />
 
-                {/* Reach me here */}
+                {/* 2. Primary Contact Channels */}
                 <div>
-                    <div className="section-label">{t('contact.primaryChannels')}</div>
-                    <div>
+                    <span className="section-label">{t('contact.primaryChannels')}</span>
+                    <div className="contact-channels">
                         {CONTACTS.map(c => (
                             <a
                                 key={c.name}
                                 href={c.url}
                                 target={c.url.startsWith('mailto') ? '_self' : '_blank'}
                                 rel="noopener noreferrer"
-                                className="contact-channel-link"
+                                className="contact-channel-card"
                             >
                                 <div className="contact-channel-icon">
                                     {c.icon}
                                 </div>
                                 <div className="contact-channel-info">
-                                    <div className="contact-channel-name">{c.name}</div>
-                                    <div className="contact-channel-value">{c.value}</div>
-                                    <div className="contact-channel-desc">{t(c.descKey)}</div>
+                                    <span className="contact-channel-name">{c.name}</span>
+                                    <span className="contact-channel-value">{c.value}</span>
+                                    <span className="contact-channel-desc">{t(c.descKey)}</span>
                                 </div>
                                 <span className="contact-channel-arrow">→</span>
                             </a>
@@ -116,9 +118,9 @@ export default function Contact() {
 
                 <hr className="section-divider" />
 
-                {/* Elsewhere */}
-                <div>
-                    <div className="section-label">{t('contact.elsewherePanel')}</div>
+                {/* 3. Socials Elsewhere */}
+                <div className="contact-socials-wrapper">
+                    <span className="contact-socials-label">{t('contact.elsewherePanel')}</span>
                     <div className="contact-socials-grid">
                         {SOCIALS.map(s => (
                             <a
@@ -126,10 +128,10 @@ export default function Contact() {
                                 href={s.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="contact-social-link"
+                                className="contact-social-card"
                             >
-                                <div className="contact-social-name">{s.name}</div>
-                                <div className="contact-social-value">{s.value}</div>
+                                <span className="contact-social-name">{s.name}</span>
+                                <span className="contact-social-value">{s.value}</span>
                             </a>
                         ))}
                     </div>
@@ -137,13 +139,17 @@ export default function Contact() {
 
                 <hr className="section-divider" />
 
-                {/* Send a Message */}
-                <div>
-                    <div className="section-label">{t('contact.formTitle')}</div>
+                {/* 4. Send a Message (Form Card) */}
+                <div className="contact-form-container">
+                    <h2 className="contact-form-title">{t('contact.formTitle')}</h2>
+                    <p className="contact-form-subtitle">
+                        {FORMSPREE_FORM_ID ? t('contact.formInfoLive') : t('contact.formInfoDemo')}
+                    </p>
+
                     {status.submitted ? (
-                        <div style={{ padding: '20px 0', textAlign: 'center', color: 'var(--good)' }}>
-                            <div style={{ fontSize: 24, marginBottom: 8 }}>✓</div>
-                            <div style={{ fontSize: 14, fontWeight: 600 }}>{t('contact.formSuccess')}</div>
+                        <div style={{ padding: '32px 0', textAlign: 'center', color: 'var(--good)' }}>
+                            <div style={{ fontSize: 32, marginBottom: 12 }}>✓</div>
+                            <div style={{ fontSize: 15, fontWeight: 600 }}>{t('contact.formSuccess')}</div>
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit}>
@@ -158,6 +164,7 @@ export default function Contact() {
                                     value={formData.name}
                                     onChange={e => setFormData({ ...formData, name: e.target.value })}
                                     disabled={status.loading}
+                                    placeholder="e.g. John Doe"
                                 />
                             </div>
                             <div className="form-group">
@@ -171,6 +178,7 @@ export default function Contact() {
                                     value={formData.email}
                                     onChange={e => setFormData({ ...formData, email: e.target.value })}
                                     disabled={status.loading}
+                                    placeholder="e.g. john@example.com"
                                 />
                             </div>
                             <div className="form-group">
@@ -183,6 +191,7 @@ export default function Contact() {
                                     value={formData.message}
                                     onChange={e => setFormData({ ...formData, message: e.target.value })}
                                     disabled={status.loading}
+                                    placeholder="Write your message here..."
                                 />
                             </div>
                             {status.error && (
@@ -193,43 +202,50 @@ export default function Contact() {
                             <button
                                 type="submit"
                                 className="btn primary"
-                                style={{ width: '100%', justifyContent: 'center' }}
+                                style={{ width: '100%', justifyContent: 'center', marginTop: 8 }}
                                 disabled={status.loading}
                             >
                                 {status.loading ? t('contact.formSubmitting') : t('contact.formSubmit')}
                             </button>
-                            <div style={{ marginTop: 10, textAlign: 'center', fontSize: 11, color: 'var(--muted)' }}>
-                                {FORMSPREE_FORM_ID ? t('contact.formInfoLive') : t('contact.formInfoDemo')}
-                            </div>
                         </form>
                     )}
                 </div>
 
                 <hr className="section-divider" />
 
-                {/* What I'm into */}
+                {/* 5. Hobbies / What I'm Into List */}
                 <div>
-                    <div className="section-label">{t('contact.whatImInto')}</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    <span className="section-label">{t('contact.whatImInto')}</span>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                         {[1, 2, 3].map(n => (
-                            <div key={n} className="contact-interest-row">
-                                <span className="contact-interest-num">0{n}</span>
+                            <div key={n} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, fontSize: 14, color: 'var(--text-2)' }}>
+                                <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--accent)', paddingTop: 3, fontWeight: 500 }}>0{n}</span>
                                 <span>{t(`contact.interest${n}`)}</span>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                <hr className="section-divider" />
-
-                {/* CTA banner */}
-                <div className="contact-cta-banner">
-                    <div style={{ flex: 1 }}>
-                        <div className="contact-cta-title">{t('contact.projectCTA')}</div>
-                        <div className="contact-cta-desc">{t('contact.projectCTADesc')}</div>
+                {/* 6. Projects Redirect Callout */}
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: 16,
+                    background: 'var(--accent-soft)',
+                    border: '1px solid var(--accent-line)',
+                    borderRadius: 'var(--r-md)',
+                    padding: '24px 32px',
+                    boxShadow: 'var(--shadow)'
+                }}>
+                    <div style={{ flex: 1, minWidth: 260 }}>
+                        <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--accent)' }}>{t('contact.projectCTA')}</div>
+                        <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>{t('contact.projectCTADesc')}</div>
                     </div>
                     <Link to="/projects" className="btn primary">{t('contact.viewProjects')}</Link>
                 </div>
+
             </div>
         </div>
     );
