@@ -147,30 +147,45 @@ export default function Admin() {
                 img.src = event.target.result;
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 600;
-                    const MAX_HEIGHT = 400;
-                    let width = img.width;
-                    let height = img.height;
+                    
+                    // 16:9 Crop math
+                    const targetRatio = 16 / 9;
+                    let sourceX = 0;
+                    let sourceY = 0;
+                    let sourceWidth = img.width;
+                    let sourceHeight = img.height;
 
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
+                    if (img.width / img.height > targetRatio) {
+                        // Image is wider than 16:9, crop sides
+                        sourceWidth = img.height * targetRatio;
+                        sourceX = (img.width - sourceWidth) / 2;
+                    } else if (img.width / img.height < targetRatio) {
+                        // Image is taller than 16:9, crop top and bottom
+                        sourceHeight = img.width / targetRatio;
+                        sourceY = (img.height - sourceHeight) / 2;
                     }
 
-                    canvas.width = width;
-                    canvas.height = height;
+                    // Set target canvas resolution (max 1200px width)
+                    const canvasWidth = Math.min(1200, sourceWidth);
+                    const canvasHeight = Math.round(canvasWidth / targetRatio);
+
+                    canvas.width = canvasWidth;
+                    canvas.height = canvasHeight;
                     const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
                     
-                    // Compress to jpeg with 0.75 quality for low file size
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+                    // Enable high-quality image smoothing
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                    
+                    // Draw cropped portion onto target canvas
+                    ctx.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, canvasWidth, canvasHeight);
+                    
+                    // Compress to WebP with 0.85 quality for extremely good visuals & low size.
+                    // Fallback to JPEG if WebP is not supported by the browser.
+                    let dataUrl = canvas.toDataURL('image/webp', 0.85);
+                    if (!dataUrl.startsWith('data:image/webp')) {
+                        dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                    }
                     resolve(dataUrl);
                 };
                 img.onerror = reject;
@@ -603,6 +618,9 @@ export default function Admin() {
                                     alt="Önizleme" 
                                     style={{ maxHeight: 150, maxWidth: 300, objectFit: 'cover', borderRadius: 'var(--r)', border: '1px solid var(--border)' }} 
                                 />
+                                <span style={{ fontSize: '11px', color: 'var(--text-2)', fontFamily: 'var(--mono)' }}>
+                                    Sıkıştırılmış Boyut: {getImageSizeString(imagePreview)}
+                                </span>
                             </div>
                         )}
 
@@ -703,6 +721,26 @@ export default function Admin() {
             )}
         </div>
     );
+}
+
+// Helper to calculate and format base64 image size
+function getImageSizeString(imageStr) {
+    if (!imageStr) return '';
+    if (imageStr.startsWith('http')) return 'Uzak Görsel (URL)';
+    try {
+        const base64Content = imageStr.split(',')[1] || '';
+        const sizeInBytes = Math.floor((base64Content.length * 3) / 4);
+        const sizeInKB = (sizeInBytes / 1024).toFixed(1);
+        if (sizeInBytes > 1024 * 1024) {
+            return `${(sizeInBytes / (1024 * 1024)).toFixed(2)} MB ⚠️ (Firestore 1MB limitini aşıyor!)`;
+        }
+        if (sizeInBytes > 800 * 1024) {
+            return `${sizeInKB} KB ⚠️ (Firestore 1MB limitine çok yakın!)`;
+        }
+        return `${sizeInKB} KB`;
+    } catch {
+        return '';
+    }
 }
 
 // Styling Constants

@@ -11,12 +11,12 @@ function ModalImage({ project }) {
                 onError={() => setFailed(true)}
                 className="modal-image"
                 decoding="async"
-                style={{ width: '100%', height: 260, objectFit: 'cover', borderRadius: 'var(--r-md)', display: 'block' }}
+                style={{ width: '100%', aspectRatio: '16/9', height: 'auto', objectFit: 'cover', borderRadius: 'var(--r-md)', display: 'block' }}
             />
         );
     }
     return (
-        <div className="sketchy-img" style={{ height: 220, display: 'grid', placeItems: 'center', background: 'var(--bg-2)' }}>
+        <div className="sketchy-img" style={{ aspectRatio: '16/9', width: '100%', height: 'auto', display: 'grid', placeItems: 'center', background: 'var(--bg-2)', borderRadius: 'var(--r-md)' }}>
             [hero screenshot - {project.title}]
         </div>
     );

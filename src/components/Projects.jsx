@@ -243,7 +243,7 @@ export default function Projects({ onOpenModal }) {
                                 <span className="proj-grid-img-wrap">
                                     <ProjectImage 
                                         project={p} 
-                                        height={195} 
+                                        height="100%" 
                                         className="proj-grid-img" 
                                     />
                                 </span>
