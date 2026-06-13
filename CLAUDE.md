@@ -5,7 +5,7 @@
 ## Commands
 
 ```bash
-npm run dev      # http://localhost:5173/galipefe/
+npm run dev      # http://localhost:5173/
 npm run build    # outputs to dist/
 npm run lint
 npm run preview
@@ -16,11 +16,11 @@ npm run preview
 | Layer | Tech |
 |---|---|
 | Runtime | React 19, react-dom 19 |
-| Router | react-router-dom 7 — **HashRouter** (required for GitHub Pages, do not change) |
-| Build | Vite 7, base path `/galipefe/` |
+| Router | react-router-dom 7 — **BrowserRouter** (uses `vercel.json` rewrites for SPA routing) |
+| Build | Vite 7, base path `/` |
 | Styling | Vanilla CSS — `src/index.css` only (`App.css` is unused legacy, do not edit) |
 | i18n | Custom Context, no library — `useLanguage()` → `{ lang, toggleLang, t }` |
-| Deploy | Push to `main` → GitHub Actions → GitHub Pages (automatic) |
+| Deploy | Push to `main` → Vercel (automatic) |
 
 ## File map
 
@@ -69,7 +69,7 @@ galipefe/
 - Every project needs matching `projectData.<translationKey>` in **both** `en` and `tr` in `translations.js`. Missing keys render as raw dot-paths.
 - Asset URLs: always `` `${base}assets/images/...` `` with `const base = import.meta.env.BASE_URL`. Never hardcode `/assets/...` — the `/galipefe/` base breaks it.
 - All user-visible strings via `t('...')`. No inline TR/EN literals in JSX.
-- Never switch from `HashRouter` — GitHub Pages has no SPA fallback.
+- Never switch from `BrowserRouter` — Vercel utilizes rewrites in `vercel.json` for SPA routing fallback.
 - Never commit `dist/` or `node_modules/`.
 - No new dependencies unless truly required.
 

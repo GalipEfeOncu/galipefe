@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { projects as staticProjects } from '../data/projects';
 import { projectService } from '../services/projectService';
+import useSEO from '../hooks/useSEO';
 
 // Prefetch Modal chunk on first card hover to eliminate lazy-load delay
 const prefetchModal = () => import('./Modal');
@@ -52,9 +53,7 @@ export default function Projects({ onOpenModal }) {
         }
     };
 
-    useEffect(() => {
-        document.title = `${t('projects.title')} | Galip Efe Öncü`;
-    }, [t]);
+    useSEO({ titleKey: 'projects.title', descriptionKey: 'seo.projectsDesc' });
 
     useEffect(() => {
         let active = true;

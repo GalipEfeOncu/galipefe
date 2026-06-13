@@ -146,7 +146,7 @@
 - **Image error handling** — `ProjectImage` and `ModalImage` both have `onError` fallbacks to the sketchy placeholder. The `About.jsx` profile picture also has a DOM-level fallback.
 - **Mobile layout** — All grids (`about-grid`, `projects-featured-grid`, `contact-grid`, `modal-inner`) have `@media (max-width: 768px)` overrides in `design-system.css`. These work correctly — don't touch them without testing mobile.
 - **`computeAge()` in `About.jsx`** — Correctly accounts for birthday not yet passed in the current year. Don't replace with a hardcoded number.
-- **HashRouter** — Required for GitHub Pages (no SPA fallback). Never switch to `BrowserRouter`.
+- **BrowserRouter** — Integrated for Vercel deployment with rewrite rules in `vercel.json`.
 - **`projectData.*` fallback chain** — `Modal.jsx` and `Projects.jsx` fall back to `project.subtitle`/`project.description` from `projects.js` if a translation key is missing. Keep this pattern when adding projects.
 - **`base = import.meta.env.BASE_URL`** — All image paths use this. Never hardcode `/assets/...` — it breaks under the `/galipefe/` Vite base path.
 - **Escape key closes modal + body overflow lock** — `Modal.jsx` useEffect handles both. Don't remove.
@@ -157,7 +157,7 @@
 
 ## Notes for the next agent
 
-**Stack:** React 19, react-router-dom 7 (HashRouter — do NOT change), Vite 7, vanilla CSS only. No UI library, no Tailwind, no styled-components.
+**Stack:** React 19, react-router-dom 7 (BrowserRouter), Vite 7, vanilla CSS only. No UI library, no Tailwind, no styled-components.
 
 **Styles:** Everything is in `src/styles/design-system.css`. The file `src/index.css` exists but is empty (just a comment). `src/App.css` is legacy dead code — don't edit it.
 
@@ -165,7 +165,7 @@
 
 **Data flow:** Project list lives in `src/data/projects.js` (named export `projects`). Translated content lives in `translations.js` under `projectData.<translationKey>`. The `translationKey` in `projects.js` must exactly match the key in `translations.projectData.*`.
 
-**Deploy:** Push to `main` → GitHub Actions → GitHub Pages automatically. Never commit `dist/`. The live URL is `https://galipefeoncu.github.io/galipefe/`.
+**Deploy:** Push to `main` → Vercel deployment automatically. Never commit `dist/`. The live URL is `https://galipefe.vercel.app/`.
 
 **Featured project logic:** Currently `list[0]` — the first entry in the filtered array. In `projects.js` the array order is intentional (Chaos Typing first), not sorted by `id`. The `featured: true` task above proposes making this explicit.
 

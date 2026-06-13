@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { CONTACTS, SOCIALS } from '../data/profile';
+import useSEO from '../hooks/useSEO';
 
 const FORMSPREE_FORM_ID = 'xlgknokn';
 
@@ -9,9 +10,7 @@ export default function Contact() {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
     const [status, setStatus] = useState({ submitted: false, error: false, loading: false });
 
-    useEffect(() => {
-        document.title = `${t('contact.title')} | Galip Efe Öncü`;
-    }, [t]);
+    useSEO({ titleKey: 'contact.title', descriptionKey: 'seo.contactDesc' });
 
     const handleSubmit = async (e) => {
         e.preventDefault();

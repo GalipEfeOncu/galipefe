@@ -5,6 +5,7 @@ import { SKILLS } from '../data/profile';
 import { projects as staticProjects } from '../data/projects';
 import { projectService } from '../services/projectService';
 import TypingGame from './TypingGame';
+import useSEO from '../hooks/useSEO';
 
 const base = import.meta.env.BASE_URL;
 
@@ -49,9 +50,7 @@ export default function About() {
     const containerRef = useRef(null);
     const isScrollingRef = useRef(false);
 
-    useEffect(() => {
-        document.title = `${t('about.title')} | Galip Efe Öncü`;
-    }, [t]);
+    useSEO({ titleKey: 'about.title', descriptionKey: 'seo.aboutDesc' });
 
     useEffect(() => {
         const container = containerRef.current;

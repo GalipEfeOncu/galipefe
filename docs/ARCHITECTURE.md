@@ -7,7 +7,7 @@ Deeper reference. Read only when `CLAUDE.md` is not enough.
 ```
 main.jsx
 └── <React.StrictMode>
-    └── <HashRouter>
+    └── <BrowserRouter>
         └── <LanguageProvider>           lang state + t() from Context
             └── <App>
                 ├── <ScrollToTop/>       resets window.scrollY on path change
@@ -51,9 +51,9 @@ No Redux, no Zustand, no server state. React Context + `useState` cover everythi
 
 ## Routing & deployment
 
-- `HashRouter` required: GitHub Pages serves only `index.html` for the base path; hash-based routing avoids 404s on refresh.
-- `vite.config.js` sets `base: '/galipefe/'`. Every asset path must use `import.meta.env.BASE_URL` to respect this.
-- Workflow: `.github/workflows/static.yml` — push to `main` → `npm ci && npm run build` → upload `dist/` → deploy. No manual steps.
+- `BrowserRouter` is used: standard clean URLs (e.g. `/projects`). SPA routing on reload is handled by rewrite rules in `vercel.json`.
+- `vite.config.js` sets `base: '/'`. Every asset path must use `import.meta.env.BASE_URL` to respect this.
+- Workflow: Push to `main` → Vercel automatically builds and deploys.
 
 ## CSS
 
