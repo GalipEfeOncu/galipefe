@@ -1477,7 +1477,7 @@ textarea.form-input {
 
 .modal-container {
   width: 100%;
-  max-width: 850px;
+  max-width: 1200px;
   max-height: 90vh;
   background: var(--panel);
   border: 1px solid var(--border);
@@ -1533,8 +1533,8 @@ textarea.form-input {
 /* Modal Grid layout */
 .modal-grid {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 32px;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 36px;
   align-items: start;
 }
 
@@ -1658,6 +1658,8 @@ footer {
   .modal-container { max-width: 100%; }
   .modal-hero { flex-direction: column; text-align: center; }
   .modal-actions { flex-direction: column; }
+  .modal-grid { grid-template-columns: 1fr; gap: 24px; }
+  .proj-featured-card { grid-template-columns: 1fr; padding: 24px; gap: 24px; }
 }
 
 @media (max-width: 600px) {

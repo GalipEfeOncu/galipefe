@@ -111,16 +111,20 @@ export default function Modal({ project, onClose }) {
                 <div className="modal-body">
                     <div className="modal-grid">
                         
-                        {/* Left Column: Image, Metadata & CTAs */}
+                        {/* Left Column: Hero, Image Box & CTAs */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginBottom: 4 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                                    <h2 className="proj-featured-title" style={{ fontSize: 28, margin: 0 }}>{project.title}</h2>
+                                    <span className={`status ${statusCls}`}><span className="led" />{statusLabel}</span>
+                                    <span className="modal-meta-id" style={{ fontSize: 11, opacity: 0.6, marginLeft: 'auto' }}>#{project.id}</span>
+                                </div>
+                                <span className="proj-featured-subtitle">{subtitle}</span>
+                            </div>
+
                             <ModalImage project={project} />
                             
-                            <div className="modal-meta" style={{ border: 'none', padding: 0, margin: 0 }}>
-                                <span className={`status ${statusCls}`}><span className="led" />{statusLabel}</span>
-                                <span className="modal-meta-id">id: #{project.id}</span>
-                            </div>
-                            
-                            <div className="modal-actions" style={{ border: 'none', padding: 0, marginTop: 8 }}>
+                            <div className="modal-actions" style={{ border: 'none', padding: 0, margin: 0, marginTop: 4 }}>
                                 {project.link && (
                                     <a href={project.link} target="_blank" rel="noopener noreferrer" className="btn">
                                         {t('modal.repo')} ↗
@@ -134,19 +138,11 @@ export default function Modal({ project, onClose }) {
                             </div>
                         </div>
 
-                        {/* Right Column: Heading, Description, Learnings */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                            <div className="modal-hero">
-                                <div className="modal-icon">{project.icon || '◇'}</div>
-                                <div className="modal-title-wrap">
-                                    <h2 className="modal-title" id="modal-title">{project.title}</h2>
-                                    <div className="modal-subtitle">{subtitle}</div>
-                                </div>
-                            </div>
+                        {/* Right Column: Description, Tags, Learnings */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                            <p className="modal-desc" style={{ margin: 0 }}>{desc}</p>
 
-                            <p className="modal-desc">{desc}</p>
-
-                            <div className="modal-tags">
+                            <div className="modal-tags" style={{ marginTop: 0 }}>
                                 {project.tags.map(tag => (
                                     <span key={tag} className="tag">{tag}</span>
                                 ))}
@@ -154,17 +150,14 @@ export default function Modal({ project, onClose }) {
 
                             {/* Takeaways Section */}
                             {learnings.length > 0 && (
-                                <div className="modal-takeaways-section">
-                                    <hr className="section-divider" style={{ margin: '8px 0 16px' }} />
-                                    <div className="modal-takeaways-label">{t('modal.keyTakeaways')}</div>
-                                    <div>
-                                        {learnings.map((l, i) => (
-                                            <div key={i} className="modal-takeaway-item">
-                                                <span className="modal-takeaway-num">{String(i + 1).padStart(2, '0')}</span>
-                                                <span className="modal-takeaway-text">{l}</span>
-                                            </div>
-                                        ))}
-                                    </div>
+                                <div className="proj-featured-learnings-box" style={{ marginTop: 0 }}>
+                                    <span className="proj-featured-learnings-title">{t('modal.keyTakeaways')}</span>
+                                    {learnings.map((l, i) => (
+                                        <div key={i} className="proj-featured-learning-item">
+                                            <span className="proj-featured-learning-num">{String(i + 1).padStart(2, '0')}</span>
+                                            <span>{l}</span>
+                                        </div>
+                                    ))}
                                 </div>
                             )}
                         </div>

@@ -157,7 +157,10 @@ export default function Projects({ onOpenModal }) {
                                 <div className="proj-featured-left-col">
                                     <span className="proj-featured-label">{t('projects.featuredLabel')}</span>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                                        <h2 className="proj-featured-title" style={{ fontSize: 28 }}>{featured.title}</h2>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                                            <h2 className="proj-featured-title" style={{ fontSize: 28, margin: 0 }}>{featured.title}</h2>
+                                            <StatusBadge status={featured.status} />
+                                        </div>
                                         <span className="proj-featured-subtitle">{getSubtitle(featured)}</span>
                                     </div>
                                     
@@ -197,13 +200,10 @@ export default function Projects({ onOpenModal }) {
                                     </div>
                                 </div>
 
-                                {/* Right Column: Status, Description, Tags, Learnings */}
+                                {/* Right Column: Description, Tags, Learnings */}
                                 <div className="proj-featured-right-col">
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                                        <div>
-                                            <StatusBadge status={featured.status} />
-                                        </div>
-                                        <p className="proj-featured-desc">{getDesc(featured)}</p>
+                                        <p className="proj-featured-desc" style={{ marginTop: 0 }}>{getDesc(featured)}</p>
                                     </div>
 
                                     <div className="proj-featured-tags">
