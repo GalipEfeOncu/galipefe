@@ -1,5 +1,6 @@
 {
   "cleanUrls": true,
+  "trailingSlash": false,
   "headers": [
     {
       "source": "/admin",
@@ -9,6 +10,9 @@
     }
   ],
   "rewrites": [
+    { "source": "/admin", "destination": "/index.html" },
+    { "source": "/projects", "destination": "/index.html" },
+    { "source": "/contact", "destination": "/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
