@@ -1,105 +1,61 @@
 # Galip Efe Öncü — Portfolio
 
-Personal portfolio website showcasing my projects in game development, desktop applications, and web development.
+Oyun geliştirme, web uygulamaları ve geliştirici araçları üzerine çalışmalarımı sergileyen iki dilli kişisel portfolyo.
 
-**🔗 Live:** [galipefeoncu.github.io/galipefe](https://galipefeoncu.github.io/galipefe/)
-
-## Tech Stack
-
-- React 19 + Vite 7
-- React Router 7 (HashRouter, for GitHub Pages)
-- Vanilla CSS (single file, CSS variables)
-- Custom i18n (EN / TR)
-- GitHub Pages (CI/CD with GitHub Actions)
-
-## Featured Projects
-
-| Project | Tech | Status |
-|---------|------|--------|
-| **Chaos Typing** | React, Vite, Firebase | ✅ Completed |
-| **AutoReq** | Python, NLP, spaCy, Streamlit, LLM | 🟡 In Progress |
-| **Universal File Workstation** | Python, Streamlit, AI | 🟡 In Progress |
-| **Finance Tracker** | Python, Streamlit | 🟡 In Progress |
-| **Soul Claim Survivors** | Unity, C#, DOTween | 🟡 In Progress |
-| **GameTracker** | .NET WinForms, MSSQL, Gemini AI | ✅ Completed |
-| **Prayer Time** | React, Vite, Tailwind CSS | ✅ Completed |
-| **Survival Game** | Unity 3D, Procedural Generation | 🔴 Discontinued |
-
-## Run Locally
-
-```bash
-npm install
-npm run dev      # http://localhost:5173/galipefe/
-npm run build    # production build → dist/
-npm run lint
-```
-
-Deployment is automatic: push to `main` triggers `.github/workflows/static.yml` which builds and publishes to GitHub Pages.
-
-## Documentation
-
-This repo ships with an **AI-agent-friendly documentation ecosystem** so any model (or human) can make changes without reading the full source:
-
-- **[`AGENTS.md`](./AGENTS.md)** — primary entry point. Stack, file map, data schemas, conventions, task routing.
-- **[`docs/`](./docs/)** — deeper architecture (`ARCHITECTURE.md`) and step-by-step recipes:
-  - [`docs/recipes/add-project.md`](./docs/recipes/add-project.md) — add a new project card
-  - [`docs/recipes/add-translation.md`](./docs/recipes/add-translation.md) — add / rename i18n keys
-  - [`docs/recipes/add-skill.md`](./docs/recipes/add-skill.md) — edit skills / contact / socials
-  - [`docs/recipes/update-bio.md`](./docs/recipes/update-bio.md) — bio, age, facts, quote, interests
-- **[`.cursor/rules/project-guide.mdc`](./.cursor/rules/project-guide.mdc)** — auto-loaded rule for Cursor.
-
-For AI tools that don't auto-load rules (Antigravity, Windsurf, Cline, Claude Code, etc.), start any session with: *"Read `AGENTS.md` first, then follow its task routing."*
-
----
-
-# Galip Efe Öncü — Portfolyo
-
-Oyun geliştirme, masaüstü uygulamalar ve web geliştirme alanlarındaki projelerimi sergileyen kişisel portfolyo websitesi.
-
-**🔗 Canlı:** [galipefeoncu.github.io/galipefe](https://galipefeoncu.github.io/galipefe/)
+Canlı site: [galipefe.vercel.app](https://galipefe.vercel.app/)
 
 ## Teknolojiler
 
-- React 19 + Vite 7
-- React Router 7 (GitHub Pages için HashRouter)
-- Vanilla CSS (tek dosya, CSS değişkenleri)
-- Özel i18n (EN / TR)
-- GitHub Pages (GitHub Actions ile CI/CD)
+- React 19, React Router 7, Vite 7
+- Vanilla CSS tasarım sistemi; koyu/açık tema
+- Özel TR/EN i18n context'i
+- Opsiyonel Firebase Authentication + Firestore proje yönetimi
+- Formspree destekli iletişim formu
+- Vercel Analytics, Speed Insights ve Vercel deployment
 
-## Öne Çıkan Projeler
-
-| Proje | Teknoloji | Durum |
-|-------|-----------|-------|
-| **Chaos Typing** | React, Vite, Firebase | ✅ Tamamlandı |
-| **AutoReq** | Python, NLP, spaCy, Streamlit, LLM | 🟡 Devam Ediyor |
-| **Universal File Workstation** | Python, Streamlit, Yapay Zeka | 🟡 Devam Ediyor |
-| **Finance Tracker** | Python, Streamlit | 🟡 Devam Ediyor |
-| **Soul Claim Survivors** | Unity, C#, DOTween | 🟡 Devam Ediyor |
-| **GameTracker** | .NET WinForms, MSSQL, Gemini AI | ✅ Tamamlandı |
-| **Prayer Time** | React, Vite, Tailwind CSS | ✅ Tamamlandı |
-| **Survival Game** | Unity 3D, Prosedürel Üretim | 🔴 Durduruldu |
-
-## Yerelde Çalıştırma
+## Yerelde çalıştırma
 
 ```bash
-npm install
-npm run dev      # http://localhost:5173/galipefe/
-npm run build    # production build → dist/
-npm run lint
+npm ci
+npm run dev
 ```
 
-Deployment otomatik: `main` branch'e push → `.github/workflows/static.yml` build alıp GitHub Pages'e yayınlar.
+Varsayılan geliştirme adresi `http://localhost:5173/` olur.
 
-## Dökümantasyon
+## Kontroller
 
-Bu repo, **AI ajanları için optimize edilmiş bir dökümantasyon ekosistemi** içeriyor. Böylece herhangi bir model (veya insan) kaynak kodun tamamını okumadan değişiklik yapabilir:
+```bash
+npm run lint
+npm run build
+npm run preview
+```
 
-- **[`AGENTS.md`](./AGENTS.md)** — ana giriş noktası. Stack, dosya haritası, veri şemaları, kurallar, görev yönlendirme.
-- **[`docs/`](./docs/)** — daha derin mimari (`ARCHITECTURE.md`) ve adım adım tarifler:
-  - [`docs/recipes/add-project.md`](./docs/recipes/add-project.md) — yeni proje ekleme
-  - [`docs/recipes/add-translation.md`](./docs/recipes/add-translation.md) — çeviri anahtarı ekleme / yeniden adlandırma
-  - [`docs/recipes/add-skill.md`](./docs/recipes/add-skill.md) — skill / iletişim / sosyal medya düzenleme
-  - [`docs/recipes/update-bio.md`](./docs/recipes/update-bio.md) — bio, yaş, facts, alıntı, ilgi alanları
-- **[`.cursor/rules/project-guide.mdc`](./.cursor/rules/project-guide.mdc)** — Cursor için otomatik yüklenen kural.
+Repository'de otomatik test paketi bulunmuyor; değişiklikler lint, production build ve ilgili sayfanın manuel kontrolüyle doğrulanır.
 
-Rule'u otomatik yüklemeyen araçlarda (Antigravity, Windsurf, Cline, Claude Code, vb.) her sohbete şununla başla: *"Read `AGENTS.md` first, then follow its task routing."*
+## Ortam değişkenleri
+
+Firebase opsiyoneldir. Firebase yoksa site `src/data/projects.js` içindeki statik kataloğu kullanır. Değişken adları ve admin akışı için [`docs/firebase-admin.md`](./docs/firebase-admin.md) dosyasına bakın. Formspree form kimliği şu anda `src/components/Contact.jsx` içinde istemciye açık bir sabit olarak tanımlıdır.
+
+Gerçek `.env` değerlerini commit etmeyin.
+
+## Proje yapısı
+
+```text
+src/
+├─ components/      sayfalar, modal, admin ve etkileşimli bileşenler
+├─ context/         dil state'i ve t() fonksiyonu
+├─ data/            statik proje, profil ve çeviri verileri
+├─ services/        Firestore veri erişimi
+├─ hooks/           sayfa SEO yönetimi
+└─ styles/          aktif tasarım sistemi
+public/             favicon, sitemap ve optimize görseller
+docs/               mimari ve görev rehberleri
+```
+
+## Ajanlar ve dokümantasyon
+
+- [`AGENTS.md`](./AGENTS.md): Codex ve diğer kod ajanları için ana repository talimatları.
+- [`docs/README.md`](./docs/README.md): görev bazlı doküman dizini.
+- [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md): runtime, state, veri önceliği, i18n, Firebase, SEO ve deployment mimarisi.
+
+Bir görevde önce `AGENTS.md`, sonra yalnızca ilgili rehber okunmalıdır. Komut, veri şeması veya mimari değiştiğinde doküman aynı değişiklikte güncellenir.

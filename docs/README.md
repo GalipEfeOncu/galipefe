@@ -1,32 +1,39 @@
-# docs/
+# Dokümantasyon
 
-Claude Code documentation. Read order:
+Bu klasör, kaynak kodu tekrar taramadan sık yapılan değişiklikleri güvenli biçimde tamamlamak için hazırlanmıştır. Codex ve diğer kod ajanları için ana talimat dosyası repository kökündeki [`AGENTS.md`](../AGENTS.md) dosyasıdır.
 
-1. **`/CLAUDE.md`** (repo root) — start here. Dense, self-sufficient.
-2. **`docs/recipes/<task>.md`** — step-by-step for the specific task.
-3. **`docs/ARCHITECTURE.md`** — deeper reference if the recipe is not enough.
+## Okuma sırası
 
-Goal: any model should be able to complete common tasks (add a project, translate text, edit skills) by reading **at most two files** from this tree — no need to scan the source.
+1. [`AGENTS.md`](../AGENTS.md) — kalıcı kurallar, komutlar ve tamamlanma ölçütü.
+2. Göreve özel kısa tarif — yalnızca yapacağınız işle ilgili dosya.
+3. [`ARCHITECTURE.md`](./ARCHITECTURE.md) — veri akışı veya sistem sınırları gerektiğinde.
 
-## Index
+## Görev dizini
 
-- [`/CLAUDE.md`](../CLAUDE.md) — stack, file map, data shapes, conventions, task routing
-- [`ARCHITECTURE.md`](./ARCHITECTURE.md) — render tree, state, i18n, routing, CSS, deployment
-- [`recipes/add-project.md`](./recipes/add-project.md) — add a project card
-- [`recipes/add-translation.md`](./recipes/add-translation.md) — add/rename i18n keys
-- [`recipes/add-skill.md`](./recipes/add-skill.md) — edit skills / contact / socials
-- [`recipes/update-bio.md`](./recipes/update-bio.md) — bio, age, facts, quote, interests
-
-## When you update the project
-
-If you change any of these, also update the docs:
-
-| You changed… | Update… |
+| Görev | Rehber |
 |---|---|
-| `projects.js` schema (new field, removed field) | `CLAUDE.md` + `recipes/add-project.md` |
-| `translations.js` top-level structure (new section) | `CLAUDE.md` |
-| Adding a new page or route | `CLAUDE.md` + `ARCHITECTURE.md` |
-| Switching router, build tool, or base path | `CLAUDE.md` + `ARCHITECTURE.md` |
-| New recipe-worthy task | add `docs/recipes/<name>.md` + link from `CLAUDE.md` + this index |
+| Proje kartı eklemek veya düzenlemek | [`add-project.md`](./add-project.md) |
+| Çeviri anahtarı eklemek, taşımak veya silmek | [`add-translation.md`](./add-translation.md) |
+| Yetenek, iletişim kanalı veya sosyal bağlantı düzenlemek | [`add-skill.md`](./add-skill.md) |
+| Biyografi, yaş, facts, ilgi alanı veya profil resmi düzenlemek | [`update-bio.md`](./update-bio.md) |
+| Firebase bağlantısı ve `/admin` akışı | [`firebase-admin.md`](./firebase-admin.md) |
+| Rotalar, state, veri önceliği, CSS, SEO ve deployment | [`ARCHITECTURE.md`](./ARCHITECTURE.md) |
 
-Keep it dense. No filler.
+## Kaynak doğruluğu
+
+- Çalışan kaynak kodu gerçeğin ana kaynağıdır.
+- Bu dokümanlar komut, yol, veri şeması veya davranış açısından koddan ayrışırsa aynı değişiklikte güncellenmelidir.
+- `QA_REPORT.md` benzeri tarihsel audit çıktıları kalıcı mimari kaynağı olarak kullanılmamalıdır.
+
+## Doküman bakım tablosu
+
+| Değişiklik | Birlikte güncellenecek dosya |
+|---|---|
+| Komut, bağımlılık veya runtime | `AGENTS.md`, gerekirse kök `README.md` |
+| Rota, provider, global state veya veri önceliği | `docs/ARCHITECTURE.md` |
+| Proje veri şeması veya status değerleri | `AGENTS.md`, `docs/add-project.md` |
+| Locale yapısı veya `t()` davranışı | `docs/add-translation.md`, `docs/ARCHITECTURE.md` |
+| Profil veri şeması | `docs/add-skill.md` veya `docs/update-bio.md` |
+| Firebase env değişkeni ya da admin davranışı | `docs/firebase-admin.md`, `docs/ARCHITECTURE.md` |
+
+Dokümanı kısa, doğrulanabilir ve göreve dönük tutun. Kaynak kodun uzun kopyalarını veya geçici yapılacaklar listelerini buraya taşımayın.
