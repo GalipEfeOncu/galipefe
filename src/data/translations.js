@@ -1,6 +1,7 @@
 export const translations = {
     en: {
         seo: {
+            aboutTitle: "Galip Efe Öncü | Software & Game Developer",
             aboutDesc: "Galip Efe Öncü - Software Engineering student and game developer specializing in Unity, C#, React, and building interactive software experiences.",
             projectsDesc: "Explore the games, desktop utilities, and web tools developed by Galip Efe Öncü, featuring roguelikes, AI engines, and productivity apps.",
             contactDesc: "Get in touch with Galip Efe Öncü for software engineering projects, collaborations, or game development opportunities."
@@ -236,6 +237,7 @@ export const translations = {
     },
     tr: {
         seo: {
+            aboutTitle: "Galip Efe Öncü | Yazılım ve Oyun Geliştirici",
             aboutDesc: "Galip Efe Öncü - Unity, C#, React ve etkileşimli yazılım deneyimleri geliştirmeye odaklanmış Yazılım Mühendisliği öğrencisi ve oyun geliştirici.",
             projectsDesc: "Galip Efe Öncü tarafından geliştirilen roguelike oyunları, yapay zeka araçlarını ve web uygulamalarını inceleyin.",
             contactDesc: "Yazılım mühendisliği projeleri, iş birlikleri veya oyun geliştirme fırsatları için Galip Efe Öncü ile iletişime geçin."

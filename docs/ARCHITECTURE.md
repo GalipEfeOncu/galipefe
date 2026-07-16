@@ -84,9 +84,10 @@ Bu veri statiktir; Firestore tarafından değiştirilmez.
 
 ## SEO
 
-- `index.html` ilk yükleme için favicon, meta, Open Graph, Twitter ve JSON-LD varsayılanlarını içerir.
-- `src/hooks/useSEO.js` sayfa mount edildiğinde başlık ve meta açıklamalarını seçili dile göre günceller.
+- `index.html` ilk yükleme için favicon, canonical, meta, Open Graph, Twitter ve `WebSite` + `ProfilePage` + `Person` JSON-LD varsayılanlarını içerir.
+- `src/hooks/useSEO.js` sayfa mount edildiğinde başlık, canonical URL, meta açıklamaları ve sosyal paylaşım alanlarını seçili dile/rotaya göre günceller.
 - Sayfa açıklamaları `seo.*Desc` anahtarlarından gelir.
+- `/admin`, Vercel `X-Robots-Tag` başlığıyla indeks dışı bırakılır ve sitemap'e eklenmez.
 - Canonical public adres `https://galipefe.vercel.app/` olarak kullanılmaktadır; domain değişirse `index.html`, `useSEO.js`, `public/robots.txt` ve `public/sitemap.xml` birlikte kontrol edilmelidir.
 
 ## CSS ve görseller

@@ -50,7 +50,7 @@ export default function About() {
     const containerRef = useRef(null);
     const isScrollingRef = useRef(false);
 
-    useSEO({ titleKey: 'about.title', descriptionKey: 'seo.aboutDesc' });
+    useSEO({ fullTitleKey: 'seo.aboutTitle', descriptionKey: 'seo.aboutDesc' });
 
     useEffect(() => {
         const container = containerRef.current;

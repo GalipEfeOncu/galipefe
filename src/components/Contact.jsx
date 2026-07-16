@@ -82,7 +82,7 @@ export default function Contact() {
                         key={c.name}
                         href={c.url}
                         target={c.url.startsWith('mailto') ? '_self' : '_blank'}
-                        rel="noopener noreferrer"
+                        rel={c.url.startsWith('mailto') ? undefined : 'me noopener noreferrer'}
                         className="contact-directory-row"
                     >
                         <span className="contact-directory-name">{c.name}</span>
@@ -174,7 +174,7 @@ export default function Contact() {
                             key={s.name}
                             href={s.url}
                             target="_blank"
-                            rel="noopener noreferrer"
+                            rel="me noopener noreferrer"
                             className="contact-social-inline-link"
                         >
                             {s.name}
