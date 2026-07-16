@@ -100,7 +100,7 @@ export default function Contact() {
                 </p>
 
                 {status.submitted ? (
-                    <div className="contact-form-success">
+                    <div className="contact-form-success" role="status" aria-live="polite" tabIndex="-1">
                         <span className="contact-success-icon">✓</span>
                         <p className="contact-success-text">{t('contact.formSuccess')}</p>
                     </div>
@@ -150,7 +150,7 @@ export default function Contact() {
                             />
                         </div>
                         {status.error && (
-                            <div className="contact-form-error">
+                            <div className="contact-form-error" role="alert">
                                 {t('contact.formError')}
                             </div>
                         )}

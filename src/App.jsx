@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense, useRef } from 'react';
+import { useState, useEffect, lazy, Suspense, useRef, useCallback } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -9,6 +9,29 @@ const Projects = lazy(() => import('./components/Projects'));
 const Contact = lazy(() => import('./components/Contact'));
 const Modal = lazy(() => import('./components/Modal'));
 const Admin = lazy(() => import('./components/Admin'));
+const NotFound = lazy(() => import('./components/NotFound'));
+
+function PageLoader() {
+    const { t } = useLanguage();
+    return (
+        <div className="page-loader" role="status" aria-live="polite">
+            <span className="page-loader-spinner" aria-hidden="true" />
+            <span>{t('app.loadingPage')}</span>
+        </div>
+    );
+}
+
+function ModalLoader() {
+    const { t } = useLanguage();
+    return (
+        <div className="modal-overlay" role="status" aria-live="polite">
+            <div className="modal-loading-card">
+                <span className="page-loader-spinner" aria-hidden="true" />
+                <span>{t('app.loadingProject')}</span>
+            </div>
+        </div>
+    );
+}
 
 function ScrollToTop() {
     const { pathname } = useLocation();
@@ -53,34 +76,41 @@ function App() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const closeProject = useCallback(() => setSelectedProject(null), []);
+
     const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
     };
 
     return (
         <>
             <ScrollToTop />
+            <a href="#main-content" className="skip-link">{t('app.skipToContent')}</a>
             <Header theme={theme} toggleTheme={toggleTheme} />
-            <main>
-                <Suspense fallback={null}>
+            <main id="main-content" tabIndex="-1">
+                <Suspense fallback={<PageLoader />}>
                     <Routes>
                         <Route path="/" element={<About />} />
                         <Route path="/projects" element={<Projects onOpenModal={setSelectedProject} />} />
                         <Route path="/contact" element={<Contact />} />
                         <Route path="/admin" element={<Admin />} />
+                        <Route path="*" element={<NotFound />} />
                     </Routes>
                 </Suspense>
             </main>
             <Footer />
             {selectedProject && (
-                <Suspense fallback={null}>
-                    <Modal project={selectedProject} onClose={() => setSelectedProject(null)} />
+                <Suspense fallback={<ModalLoader />}>
+                    <Modal project={selectedProject} onClose={closeProject} />
                 </Suspense>
             )}
             <button
                 onClick={scrollToTop}
                 className="scroll-to-top"
                 aria-label={t('app.scrollToTop')}
+                aria-hidden={!showScrollTop}
+                tabIndex={showScrollTop ? 0 : -1}
                 style={{
                     position: 'fixed',
                     bottom: 24,

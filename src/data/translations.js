@@ -4,17 +4,24 @@ export const translations = {
             aboutTitle: "Galip Efe Öncü | Software & Game Developer",
             aboutDesc: "Galip Efe Öncü - Software Engineering student and game developer specializing in Unity, C#, React, and building interactive software experiences.",
             projectsDesc: "Explore the games, desktop utilities, and web tools developed by Galip Efe Öncü, featuring roguelikes, AI engines, and productivity apps.",
-            contactDesc: "Get in touch with Galip Efe Öncü for software engineering projects, collaborations, or game development opportunities."
+            contactDesc: "Get in touch with Galip Efe Öncü for software engineering projects, collaborations, or game development opportunities.",
+            notFoundTitle: "Page Not Found | Galip Efe Öncü",
+            notFoundDesc: "The requested page could not be found. Return to Galip Efe Öncü's portfolio homepage."
         },
         app: {
-            scrollToTop: "Scroll to top"
+            scrollToTop: "Scroll to top",
+            skipToContent: "Skip to main content",
+            loadingPage: "Loading page...",
+            loadingProject: "Loading project details..."
         },
         header: {
             switchToTurkish: "Switch language to Turkish",
             switchToEnglish: "Switch language to English",
             switchToLight: "Switch to light mode",
             switchToDark: "Switch to dark mode",
-            toggleNavigation: "Toggle navigation menu"
+            toggleNavigation: "Toggle navigation menu",
+            primaryNavigation: "Primary navigation",
+            mobileNavigation: "Mobile navigation"
         },
         footer: {
             builtWith: "built with React"
@@ -72,7 +79,8 @@ export const translations = {
             kvLocation: "location",
             kvEdu: "edu",
             kvLang: "lang",
-            kvFocus: "fav game"
+            kvFocus: "fav game",
+            scrollToDetails: "Scroll to the about details"
         },
         projects: {
             title: "Projects",
@@ -92,8 +100,13 @@ export const translations = {
                 liveDemo: "Live Demo",
                 githubRepo: "GitHub Repo"
             },
-            featuredLabel: "★ MY FAVORITE PROJECT",
-            sortLabel: "sort: recent ↓",
+            featuredLabel: "★ HIGHLIGHTED PROJECT",
+            sortLabel: "Sort projects",
+            sort: {
+                featured: "Featured order",
+                titleAsc: "Title A–Z",
+                titleDesc: "Title Z–A"
+            },
             viewDetails: "open →"
         },
         modal: {
@@ -106,7 +119,14 @@ export const translations = {
             idLabel: "id",
             statusLabel: "status",
             repoLabel: "repo",
+            role: "MY ROLE",
+            outcome: "OUTCOME",
             imageFallback: "{title} project image coming soon"
+        },
+        notFound: {
+            title: "That page isn't here.",
+            description: "The address may be incorrect or the page may have moved.",
+            backHome: "Back to homepage"
         },
         typingGame: {
             label: "mini game",
@@ -184,6 +204,8 @@ export const translations = {
             chaosTyping: {
                 subtitle: "React & Vite / Web Browser Game",
                 desc: "A typing game that actively fights you. Fake Windows errors, screen tilts, blur effects, WhatsApp pop-ups - the UI is trying to make you lose. There's also a dynamic word pool to test focus under pressure and a real-time global leaderboard backed by Firebase.",
+                role: "Game systems, frontend and Firebase integration",
+                outcome: "A playable browser release with a live global leaderboard.",
                 learnings: [
                     "High-performance game loops in React with requestAnimationFrame",
                     "Complex state management across Context and Refs",
@@ -195,6 +217,8 @@ export const translations = {
             soulClaim: {
                 subtitle: "Unity 2D / Action Roguelike",
                 desc: "A fast and chaotic action game in the Vampire Survivors vein, built from scratch in Unity with C#. I designed it around an ECS approach for performance and wrote a custom Object Pooling system so hundreds of enemies can be on screen at once without any frame drops.",
+                role: "Gameplay architecture and performance engineering",
+                outcome: "A scalable prototype designed to keep dense enemy scenes responsive.",
                 learnings: [
                     "ECS architecture - what it actually means in practice",
                     "Object Pooling to keep memory in check under heavy entity counts",
@@ -206,6 +230,8 @@ export const translations = {
             gameTracker: {
                 subtitle: ".NET WinForms Desktop App",
                 desc: "A desktop app for organizing your game library - not just CRUD, but smart. It pulls game data from the RAWG API and uses Google Gemini AI to recommend new games based on what's already in your collection. Data is stored locally in MSSQL.",
+                role: "Desktop UI, data layer and API/AI integration",
+                outcome: "A working library manager with personalized game recommendations.",
                 learnings: [
                     "Building a non-standard, polished UI in C# WinForms",
                     "Relational database management with MSSQL and ADO.NET",
@@ -217,6 +243,8 @@ export const translations = {
             prayerTime: {
                 subtitle: "React & Vite / Modern Web App",
                 desc: "A clean, fast web app for tracking daily prayer times. It detects your location automatically, shows a live countdown to the next prayer, and highlights special religious days. Built with React and Vite with a focus on responsiveness and simplicity.",
+                role: "Frontend, API integration and responsive UX",
+                outcome: "A deployed, location-aware prayer-time experience.",
                 learnings: [
                     "Building a solid SPA with React from the ground up",
                     "Managing time-sensitive state with useState and useEffect",
@@ -228,6 +256,8 @@ export const translations = {
             survivalGame: {
                 subtitle: "Unity 3D / First Person Survival",
                 desc: "A first-person survival game with no pre-made maps - terrain is generated on the fly using Perlin Noise and custom mesh generation. The world keeps building itself as you explore. Also includes resource gathering, an inventory system, and core survival mechanics.",
+                role: "Gameplay systems and procedural world generation",
+                outcome: "A playable prototype with a reusable procedural terrain system.",
                 learnings: [
                     "Procedural terrain generation with Perlin Noise algorithms",
                     "Real-time mesh generation and runtime optimization",
@@ -239,6 +269,8 @@ export const translations = {
             autoReq: {
                 subtitle: "Python / AI & NLP / Streamlit",
                 desc: "A tool that takes messy, vague customer requirements and turns them into clean, structured engineering docs. It uses a hybrid AI pipeline - NLP for parsing structure, LLMs for generating readable output - built on top of spaCy, NLTK, and Streamlit.",
+                role: "NLP/LLM pipeline development and Scrum team contribution",
+                outcome: "A structured requirement-analysis prototype built in an open-source team.",
                 learnings: [
                     "NLP in practice with spaCy and NLTK",
                     "Integrating LLMs into a real processing pipeline",
@@ -250,6 +282,8 @@ export const translations = {
             fileConverter: {
                 subtitle: "Python / Streamlit / AI & Desktop",
                 desc: "A cross-platform desktop app that brings together file conversion, document viewing, media playback, and AI-powered document analysis - all in one place, all offline. Built to handle a wide range of formats without needing an internet connection.",
+                role: "File-processing workflows, desktop UX and AI features",
+                outcome: "A cross-platform prototype combining conversion, viewing and offline analysis.",
                 learnings: [
                     "Cross-platform desktop utilities with Python and Streamlit",
                     "File conversion pipelines for multiple formats",
@@ -261,6 +295,8 @@ export const translations = {
             financeTracker: {
                 subtitle: "Python / Streamlit / Data Visualization",
                 desc: "A personal finance tracker to keep income, expenses, and budget in check. Built to be genuinely useful - quick to log, clear to read, with visualizations that actually help you understand where your money's going.",
+                role: "Product design, data workflows and visualization",
+                outcome: "A usable dashboard for recording and reviewing personal finances.",
                 learnings: [
                     "Data visualization with Python (Matplotlib, Plotly)",
                     "Building clean financial dashboards in Streamlit",
@@ -272,6 +308,8 @@ export const translations = {
             kadeh: {
                 subtitle: "React & Vite / Tailwind CSS / Web App",
                 desc: "A Turkish-language guide to alcoholic drinks - histories, production methods, tasting notes, serving tips - designed for curious beginners and enthusiasts alike. The UI leans into a premium dark magazine feel.",
+                role: "Frontend development, information architecture and visual design",
+                outcome: "A public work-in-progress guide with structured educational content.",
                 learnings: [
                     "Content-heavy static SPA architecture with React and Vite",
                     "Premium dark UI design with Tailwind CSS",
@@ -286,17 +324,24 @@ export const translations = {
             aboutTitle: "Galip Efe Öncü | Yazılım ve Oyun Geliştirici",
             aboutDesc: "Galip Efe Öncü'nün oyun geliştirme, web uygulamaları ve yazılım araçları üzerine çalışmalarını keşfedin.",
             projectsDesc: "Galip Efe Öncü'nün geliştirdiği oyunları, masaüstü uygulamalarını ve web projelerini inceleyin.",
-            contactDesc: "Yazılım projeleri, iş birlikleri ve oyun geliştirme çalışmaları için Galip Efe Öncü'ye ulaşın."
+            contactDesc: "Yazılım projeleri, iş birlikleri ve oyun geliştirme çalışmaları için Galip Efe Öncü'ye ulaşın.",
+            notFoundTitle: "Sayfa Bulunamadı | Galip Efe Öncü",
+            notFoundDesc: "Aradığınız sayfa bulunamadı. Galip Efe Öncü'nün portfolyo ana sayfasına dönebilirsiniz."
         },
         app: {
-            scrollToTop: "Sayfanın başına dön"
+            scrollToTop: "Sayfanın başına dön",
+            skipToContent: "Ana içeriğe geç",
+            loadingPage: "Sayfa yükleniyor...",
+            loadingProject: "Proje ayrıntıları yükleniyor..."
         },
         header: {
             switchToTurkish: "Dili Türkçe yap",
             switchToEnglish: "Dili İngilizce yap",
             switchToLight: "Açık temaya geç",
             switchToDark: "Koyu temaya geç",
-            toggleNavigation: "Gezinme menüsünü aç veya kapat"
+            toggleNavigation: "Gezinme menüsünü aç veya kapat",
+            primaryNavigation: "Ana gezinme",
+            mobileNavigation: "Mobil gezinme"
         },
         footer: {
             builtWith: "React ile geliştirildi"
@@ -354,7 +399,8 @@ export const translations = {
             kvLocation: "konum",
             kvEdu: "okul",
             kvLang: "dil",
-            kvFocus: "favori oyun"
+            kvFocus: "favori oyun",
+            scrollToDetails: "Hakkımda ayrıntılarına ilerle"
         },
         projects: {
             title: "Projeler",
@@ -375,7 +421,12 @@ export const translations = {
                 githubRepo: "GitHub Deposu"
             },
             featuredLabel: "★ ÖNE ÇIKAN PROJE",
-            sortLabel: "yeniden eskiye ↓",
+            sortLabel: "Projeleri sırala",
+            sort: {
+                featured: "Öne çıkan sıra",
+                titleAsc: "Başlık A–Z",
+                titleDesc: "Başlık Z–A"
+            },
             viewDetails: "Projeyi incele"
         },
         modal: {
@@ -388,7 +439,14 @@ export const translations = {
             idLabel: "id",
             statusLabel: "durum",
             repoLabel: "depo",
+            role: "PROJEDEKİ ROLÜM",
+            outcome: "ORTAYA ÇIKAN SONUÇ",
             imageFallback: "{title} proje görseli yakında"
+        },
+        notFound: {
+            title: "Bu sayfa burada değil.",
+            description: "Adres hatalı olabilir veya sayfa başka bir yere taşınmış olabilir.",
+            backHome: "Ana sayfaya dön"
         },
         typingGame: {
             label: "mini oyun",
@@ -466,6 +524,8 @@ export const translations = {
             chaosTyping: {
                 subtitle: "React & Vite / Web Tarayıcı Oyunu",
                 desc: "Oyuncunun işini bilerek zorlaştıran bir klavye oyunu. Sahte Windows hataları, eğilen ekran, bulanıklık efektleri ve WhatsApp bildirimleri derken arayüz, kaybetmen için elinden geleni yapıyor. Dinamik kelime havuzu baskı altında ne kadar odaklanabildiğini ölçerken Firebase destekli skor tablosu sonuçları anlık olarak sıralıyor.",
+                role: "Oyun sistemleri, frontend ve Firebase entegrasyonu",
+                outcome: "Canlı küresel skor tablosuna sahip, oynanabilir bir tarayıcı sürümü.",
                 learnings: [
                     "requestAnimationFrame kullanarak React'te performanslı bir oyun döngüsü kurmak",
                     "Context ve ref'lerle karmaşık oyun durumunu yönetmek",
@@ -477,6 +537,8 @@ export const translations = {
             soulClaim: {
                 subtitle: "Unity 2D / Aksiyon Roguelike",
                 desc: "Vampire Survivors tarzında, hızlı ve kaotik bir aksiyon oyunu. Unity ve C# ile sıfırdan geliştirdiğim oyunun altyapısını performans için ECS yaklaşımıyla kurdum. Yüzlerce düşmanı kare hızını düşürmeden aynı anda ekranda tutabilmek için de özel bir nesne havuzu sistemi yazdım.",
+                role: "Oynanış mimarisi ve performans mühendisliği",
+                outcome: "Yoğun düşman sahnelerinde akıcı kalmak üzere tasarlanmış ölçeklenebilir bir prototip.",
                 learnings: [
                     "ECS mimarisini gerçek bir oyun projesinde uygulamak",
                     "Çok sayıda nesne varken bellek kullanımını nesne havuzuyla kontrol etmek",
@@ -488,6 +550,8 @@ export const translations = {
             gameTracker: {
                 subtitle: ".NET WinForms Masaüstü Uygulaması",
                 desc: "Oyun arşivini düzenlemek için geliştirdiğim bir masaüstü uygulaması. RAWG API'den oyun bilgilerini alıyor, koleksiyonundaki oyunları Google Gemini ile değerlendirip sana yeni öneriler sunuyor. Kütüphane verileri yerel bir MSSQL veritabanında saklanıyor.",
+                role: "Masaüstü arayüzü, veri katmanı ve API/yapay zekâ entegrasyonu",
+                outcome: "Kişiselleştirilmiş öneriler sunan çalışan bir oyun arşivi yöneticisi.",
                 learnings: [
                     "C# WinForms ile alışılmışın dışında, modern bir arayüz geliştirmek",
                     "MSSQL ve ADO.NET ile ilişkisel veritabanı yönetmek",
@@ -499,6 +563,8 @@ export const translations = {
             prayerTime: {
                 subtitle: "React & Vite / Web Uygulaması",
                 desc: "Günlük namaz vakitlerini takip etmeyi kolaylaştıran sade ve hızlı bir web uygulaması. Konumunu otomatik olarak algılıyor, sıradaki vakte kalan süreyi canlı olarak gösteriyor ve önemli dinî günleri öne çıkarıyor. React ve Vite ile geliştirirken farklı ekran boyutlarında rahat kullanılmasına özellikle dikkat ettim.",
+                role: "Frontend, API entegrasyonu ve responsive kullanıcı deneyimi",
+                outcome: "Yayında olan, konuma duyarlı bir namaz vakti deneyimi.",
                 learnings: [
                     "React ile sıfırdan sağlam bir SPA geliştirmek",
                     "useState ve useEffect ile zamana bağlı verileri yönetmek",
@@ -510,6 +576,8 @@ export const translations = {
             survivalGame: {
                 subtitle: "Unity 3D / Birinci Şahıs Hayatta Kalma",
                 desc: "Hazır bir harita kullanmayan, birinci şahıs bakış açısına sahip bir hayatta kalma oyunu. Arazi, oyuncu dünyayı keşfettikçe Perlin Noise ve özel mesh üretimiyle anlık olarak oluşturuluyor. Oyunda ayrıca kaynak toplama, envanter ve temel hayatta kalma sistemleri bulunuyor.",
+                role: "Oynanış sistemleri ve prosedürel dünya üretimi",
+                outcome: "Yeniden kullanılabilir prosedürel arazi sistemine sahip oynanabilir bir prototip.",
                 learnings: [
                     "Perlin Noise ile prosedürel arazi oluşturmak",
                     "Çalışma anında mesh üretmek ve performansını iyileştirmek",
@@ -521,6 +589,8 @@ export const translations = {
             autoReq: {
                 subtitle: "Python / Yapay Zekâ & NLP / Streamlit",
                 desc: "Dağınık ve belirsiz müşteri taleplerini düzenli mühendislik dokümanlarına dönüştüren bir araç. Metnin yapısını çözümlemek için NLP'den, okunabilir çıktılar hazırlamak için büyük dil modellerinden yararlanan hibrit bir yapay zekâ iş akışı kullanıyor. Arayüzünü Streamlit'le, metin işleme katmanını ise spaCy ve NLTK ile geliştirdik.",
+                role: "NLP/LLM iş akışı geliştirme ve Scrum ekibi katkısı",
+                outcome: "Açık kaynaklı bir ekipte geliştirilen yapılandırılmış gereksinim analizi prototipi.",
                 learnings: [
                     "spaCy ve NLTK ile doğal dil işlemeyi gerçek bir projede kullanmak",
                     "Büyük dil modellerini çalışan bir metin işleme akışına bağlamak",
@@ -532,6 +602,8 @@ export const translations = {
             fileConverter: {
                 subtitle: "Python / Streamlit / Yapay Zekâ & Masaüstü",
                 desc: "Dosya dönüştürme, belge görüntüleme, medya oynatma ve yapay zekâ destekli belge analizini tek uygulamada bir araya getiren, platformlar arası bir masaüstü aracı. Pek çok dosya biçimini internet bağlantısına ihtiyaç duymadan işleyebiliyor.",
+                role: "Dosya işleme akışları, masaüstü deneyimi ve yapay zekâ özellikleri",
+                outcome: "Dönüştürme, görüntüleme ve çevrimdışı analizi birleştiren platformlar arası bir prototip.",
                 learnings: [
                     "Python ve Streamlit ile platformlar arası bir masaüstü aracı geliştirmek",
                     "Farklı dosya biçimleri için dönüştürme akışları kurmak",
@@ -543,6 +615,8 @@ export const translations = {
             financeTracker: {
                 subtitle: "Python / Streamlit / Veri Görselleştirme",
                 desc: "Gelirleri, giderleri ve bütçeyi tek yerde takip etmek için geliştirdiğim bir kişisel finans uygulaması. Hızlı kayıt eklemeye, bilgileri kolayca okumaya ve görselleştirmeler sayesinde paranın nereye gittiğini açıkça görmeye odaklanıyor.",
+                role: "Ürün tasarımı, veri akışları ve görselleştirme",
+                outcome: "Kişisel finans kayıtlarını eklemek ve incelemek için kullanılabilir bir pano.",
                 learnings: [
                     "Matplotlib ve Plotly ile finans verilerini görselleştirmek",
                     "Streamlit'le sade ve okunaklı finans panoları hazırlamak",
@@ -554,6 +628,8 @@ export const translations = {
             kadeh: {
                 subtitle: "React & Vite / Tailwind CSS / Web Uygulaması",
                 desc: "Alkollü içeceklerin tarihçelerini, üretim yöntemlerini, tadım notlarını ve servis önerilerini bir araya getiren Türkçe bir rehber. Hem konuya yeni ilgi duyanlara hem de daha fazlasını öğrenmek isteyenlere hitap ediyor. Arayüzde koyu renkli, seçkin bir dergi havası yakalamaya çalıştım.",
+                role: "Frontend geliştirme, bilgi mimarisi ve görsel tasarım",
+                outcome: "Yapılandırılmış eğitici içerik sunan, yayındaki bir geliştirme sürümü.",
                 learnings: [
                     "React ve Vite ile içerik ağırlıklı bir SPA kurgulamak",
                     "Tailwind CSS ile koyu temalı, dergi tarzında bir arayüz tasarlamak",

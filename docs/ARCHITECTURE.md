@@ -15,13 +15,14 @@ src/main.jsx
             │  ├─ /         → About
             │  ├─ /projects → Projects
             │  ├─ /contact  → Contact
-            │  └─ /admin    → Admin
+            │  ├─ /admin    → Admin
+            │  └─ *         → NotFound
             ├─ Footer
             ├─ Modal (seçili proje varsa)
             └─ scroll-to-top düğmesi
 ```
 
-`About`, `Projects`, `Contact`, `Admin` ve `Modal` lazy-load edilir. `App` tema, seçili proje ve scroll-to-top görünürlüğünü yönetir. Dil state'i `LanguageProvider` içindedir.
+`About`, `Projects`, `Contact`, `Admin`, `NotFound` ve `Modal` lazy-load edilir. Route geçişlerinde çevrilmiş yükleme göstergesi, modal chunk'ı beklenirken overlay geri bildirimi gösterilir. `App` tema, seçili proje ve scroll-to-top görünürlüğünü yönetir. Dil state'i `LanguageProvider` içindedir.
 
 ## Global ve yerel state
 
@@ -51,7 +52,8 @@ Projects/About
 - Firestore erişimi `src/services/projectService.js` üzerinden yapılır ve üç saniyelik timeout uygular.
 - Statik katalog yalnızca geliştirme verisi değildir; üretim için de gerçek fallback ve `/admin` seed kaynağıdır.
 - Statik dizinin ilk öğesi, aktif filtre içinde featured proje olur. Firestore tarafında sıralamayı `order` alanı belirler.
-- `Projects` ve `Modal`, proje metinlerini `src/utils/projectContent.js` üzerinden aynı sırayla çözer. Bilinen bir `translationKey` için `projectData.<translationKey>` çevirileri önceliklidir; anahtar bulunamazsa seçili dildeki Firestore alanları (`subtitleEn/Tr`, `descriptionEn/Tr`, `learningsEn/Tr`) ve son olarak ortak fallback alanları kullanılır.
+- `Projects` ve `Modal`, proje metinlerini `src/utils/projectContent.js` üzerinden aynı sırayla çözer. Bilinen bir `translationKey` için `projectData.<translationKey>` çevirileri önceliklidir; anahtar bulunamazsa seçili dildeki Firestore alanları (`subtitleEn/Tr`, `descriptionEn/Tr`, `roleEn/Tr`, `outcomeEn/Tr`, `learningsEn/Tr`) ve son olarak ortak fallback alanları kullanılır.
+- `About`, ilk render'da statik proje sayısını gösterir; Firestore servis chunk'ını tarayıcı boşta kaldığında dinamik import ederek sayıyı arka planda günceller.
 
 Şema ve ekleme adımları için [`add-project.md`](./add-project.md) dosyasına bakın.
 
@@ -76,7 +78,7 @@ Bu veri statiktir; Firestore tarafından değiştirilmez.
 ## Sayfalar ve bileşenler
 
 - `About`: hero, dinamik yaş, yetenekler, ilgi alanları, TypingGame ve Firestore/static proje sayısı.
-- `Projects`: Firestore/static veri seçimi, status filtresi, featured kart ve modal tetikleme.
+- `Projects`: Firestore/static veri seçimi, status filtresi, çalışan sıralama kontrolü, featured kart ve modal tetikleme. Featured kart ile modal, proje rolü ve doğrulanabilir sonuç alanlarını case-study özeti olarak gösterebilir.
 - `Contact`: iletişim kartları, sosyal bağlantılar ve Formspree destekli form. Form kimliği şu anda bileşendeki `FORMSPREE_FORM_ID` sabitidir; sabit boş bırakılırsa form demo modunda gönderimi simüle eder.
 - `Admin`: Firebase email/password girişi; proje oluşturma, güncelleme, silme, sıralama ve statik kataloğu seed etme.
 - `InteractiveCanvas`: bağımsız canvas animasyonu; şu anda herhangi bir rota tarafından render edilmez.
@@ -87,6 +89,7 @@ Bu veri statiktir; Firestore tarafından değiştirilmez.
 - `src/hooks/useSEO.js` sayfa mount edildiğinde başlık, canonical URL, meta açıklamaları ve sosyal paylaşım alanlarını seçili dile/rotaya göre günceller.
 - Sayfa açıklamaları `seo.*Desc` anahtarlarından gelir.
 - `/admin`, Vercel `X-Robots-Tag` başlığıyla indeks dışı bırakılır ve sitemap'e eklenmez.
+- Bilinmeyen rotalar iki dilli `NotFound` görünümüne düşer ve `noindex, follow` meta değeri alır.
 - Canonical public adres `https://galipefe.vercel.app/` olarak kullanılmaktadır; domain değişirse `index.html`, `useSEO.js`, `public/robots.txt` ve `public/sitemap.xml` birlikte kontrol edilmelidir.
 
 ## CSS ve görseller
@@ -94,7 +97,10 @@ Bu veri statiktir; Firestore tarafından değiştirilmez.
 - Bütün aktif stiller `src/styles/design-system.css` içindedir.
 - `src/index.css` yalnızca boş/legacy import olarak durur; yeni stil eklemeyin.
 - Tema tokenları `html[data-theme='light']` ve varsayılan koyu tema üzerinden çalışır.
+- Kayıtlı veya sistem teması, React yüklenmeden önce `index.html` içindeki küçük başlangıç script'iyle uygulanır; bu açık/koyu tema parlamasını önler.
 - Responsive kurallar aynı CSS dosyasındaki media query'lerdedir; ana kırılım 768px'tir.
+- `prefers-reduced-motion: reduce` etkin olduğunda animasyon, transition ve smooth scroll süreleri etkisizleştirilir.
+- About sayfası normal belge kaydırmasını kullanır; bölüm düğmeleri kullanıcı tercihine göre smooth/instant kaydırır.
 - Statik görseller `public/assets/images/` altında WebP tutulur ve `import.meta.env.BASE_URL` ile referanslanır.
 
 ## Firebase ve güvenlik sınırı

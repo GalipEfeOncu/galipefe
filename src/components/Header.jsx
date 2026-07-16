@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -6,6 +6,7 @@ export default function Header({ theme, toggleTheme }) {
     const location = useLocation();
     const { lang, toggleLang, t } = useLanguage();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const headerRef = useRef(null);
 
     const navItems = [
         { to: '/', label: t('nav.about') },
@@ -13,8 +14,26 @@ export default function Header({ theme, toggleTheme }) {
         { to: '/contact', label: t('nav.contact') },
     ];
 
+    useEffect(() => {
+        if (!isMobileMenuOpen) return undefined;
+
+        const closeOnEscape = (event) => {
+            if (event.key === 'Escape') setIsMobileMenuOpen(false);
+        };
+        const closeOnOutsideClick = (event) => {
+            if (!headerRef.current?.contains(event.target)) setIsMobileMenuOpen(false);
+        };
+
+        document.addEventListener('keydown', closeOnEscape);
+        document.addEventListener('pointerdown', closeOnOutsideClick);
+        return () => {
+            document.removeEventListener('keydown', closeOnEscape);
+            document.removeEventListener('pointerdown', closeOnOutsideClick);
+        };
+    }, [isMobileMenuOpen]);
+
     return (
-        <header style={{ position: 'fixed', top: 12, left: 0, right: 0, zIndex: 100, padding: '0 16px' }}>
+        <header ref={headerRef} style={{ position: 'fixed', top: 12, left: 0, right: 0, zIndex: 100, padding: '0 16px' }}>
             <div className="dock-wrapper">
                 <div className="dock-container">
                     
@@ -27,11 +46,12 @@ export default function Header({ theme, toggleTheme }) {
                     </div>
 
                     {/* Center Group: Desktop Navigation */}
-                    <nav className="dock-nav">
+                    <nav className="dock-nav" aria-label={t('header.primaryNavigation')}>
                         {navItems.map(({ to, label }) => (
                             <Link
                                 key={to}
                                 to={to}
+                                aria-current={location.pathname === to ? 'page' : undefined}
                                 className={`dock-nav-link ${location.pathname === to ? 'active' : ''}`}
                             >
                                 {label}
@@ -74,6 +94,8 @@ export default function Header({ theme, toggleTheme }) {
                             className="dock-mobile-toggle dock-btn"
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                             aria-label={t('header.toggleNavigation')}
+                            aria-expanded={isMobileMenuOpen}
+                            aria-controls="mobile-navigation"
                         >
                             {isMobileMenuOpen ? '✕' : '☰'}
                         </button>
@@ -81,7 +103,9 @@ export default function Header({ theme, toggleTheme }) {
 
                     {/* Mobile Navigation Dropdown */}
                     {isMobileMenuOpen && (
-                        <div
+                        <nav
+                            id="mobile-navigation"
+                            aria-label={t('header.mobileNavigation')}
                             className="dock-mobile-dropdown"
                             style={{
                                 position: 'absolute',
@@ -106,6 +130,7 @@ export default function Header({ theme, toggleTheme }) {
                                 <Link
                                     key={to}
                                     to={to}
+                                    aria-current={location.pathname === to ? 'page' : undefined}
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className={`dock-nav-link ${location.pathname === to ? 'active' : ''}`}
                                     style={{ 
@@ -119,7 +144,7 @@ export default function Header({ theme, toggleTheme }) {
                                     {label}
                                 </Link>
                             ))}
-                        </div>
+                        </nav>
                     )}
 
                 </div>

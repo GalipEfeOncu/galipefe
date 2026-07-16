@@ -27,7 +27,7 @@ function StatusBadge({ status }) {
     );
 }
 
-function ProjectImage({ project, height = 140, className = '' }) {
+function ProjectImage({ project, height = 140, className = '', loading = 'lazy' }) {
     const [failed, setFailed] = useState(false);
     if (project.image && !failed) {
         return (
@@ -36,7 +36,7 @@ function ProjectImage({ project, height = 140, className = '' }) {
                 alt={project.title}
                 onError={() => setFailed(true)}
                 className={className}
-                loading="lazy"
+                loading={loading}
                 decoding="async"
                 style={{ height, width: '100%', objectFit: 'cover', display: 'block' }}
             />
@@ -52,6 +52,7 @@ function ProjectImage({ project, height = 140, className = '' }) {
 export default function Projects({ onOpenModal }) {
     const { t, lang } = useLanguage();
     const [filter, setFilter] = useState('All');
+    const [sortOrder, setSortOrder] = useState('featured');
     const [projectList, setProjectList] = useState(staticProjects);
     const [loading, setLoading] = useState(true);
 
@@ -89,7 +90,12 @@ export default function Projects({ onOpenModal }) {
         { key: 'Discontinued', label: t('projects.filters.discontinued'), count: projectList.filter(p => p.status === 'Discontinued').length },
     ];
 
-    const list = filter === 'All' ? projectList : projectList.filter(p => p.status === filter);
+    const filteredList = filter === 'All' ? projectList : projectList.filter(p => p.status === filter);
+    const list = [...filteredList].sort((a, b) => {
+        if (sortOrder === 'titleAsc') return a.title.localeCompare(b.title, lang);
+        if (sortOrder === 'titleDesc') return b.title.localeCompare(a.title, lang);
+        return 0;
+    });
     const featured = list[0];
     const rest = list.slice(1);
 
@@ -104,6 +110,9 @@ export default function Projects({ onOpenModal }) {
     const getLearnings = (p) => {
         return getProjectContent(p, lang).learnings;
     };
+
+    const getRole = (p) => getProjectContent(p, lang).role;
+    const getOutcome = (p) => getProjectContent(p, lang).outcome;
 
     return (
         <div className="page projects-page-container container">
@@ -124,13 +133,24 @@ export default function Projects({ onOpenModal }) {
                         <span className="projects-filter-count">{f.count}</span>
                     </button>
                 ))}
-                <span style={{ flex: 1 }} />
-                <span className="projects-sort">{t('projects.sortLabel')}</span>
+                <span className="projects-filter-spacer" aria-hidden="true" />
+                <label className="projects-sort-control">
+                    <span>{t('projects.sortLabel')}</span>
+                    <select value={sortOrder} onChange={(event) => setSortOrder(event.target.value)}>
+                        <option value="featured">{t('projects.sort.featured')}</option>
+                        <option value="titleAsc">{t('projects.sort.titleAsc')}</option>
+                        <option value="titleDesc">{t('projects.sort.titleDesc')}</option>
+                    </select>
+                </label>
             </div>
 
             {loading ? (
-                <div style={{ textAlign: 'center', padding: 80, color: 'var(--muted)', fontFamily: 'var(--mono)', fontSize: 14 }}>
-                    {t('projects.loading')}
+                <div className="projects-skeleton" role="status" aria-live="polite">
+                    <span className="sr-only">{t('projects.loading')}</span>
+                    <span className="projects-skeleton-featured" />
+                    <span className="projects-skeleton-grid">
+                        <span /><span /><span />
+                    </span>
                 </div>
             ) : list.length === 0 ? (
                 <div className="projects-empty">
@@ -162,6 +182,7 @@ export default function Projects({ onOpenModal }) {
                                             project={featured} 
                                             height="100%" 
                                             className="proj-featured-img" 
+                                            loading="eager"
                                         />
                                     </div>
 
@@ -203,6 +224,23 @@ export default function Projects({ onOpenModal }) {
                                             <span key={tag} className="tag">{tag}</span>
                                         ))}
                                     </div>
+
+                                    {(getRole(featured) || getOutcome(featured)) && (
+                                        <div className="project-case-summary">
+                                            {getRole(featured) && (
+                                                <div>
+                                                    <span>{t('modal.role')}</span>
+                                                    <p>{getRole(featured)}</p>
+                                                </div>
+                                            )}
+                                            {getOutcome(featured) && (
+                                                <div>
+                                                    <span>{t('modal.outcome')}</span>
+                                                    <p>{getOutcome(featured)}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
 
                                     {/* Inline key learnings / takeaways showcase */}
                                     {getLearnings(featured).length > 0 && (

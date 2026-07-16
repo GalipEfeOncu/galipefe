@@ -27,8 +27,10 @@ function ModalImage({ project }) {
 export default function Modal({ project, onClose }) {
     const { t, lang } = useLanguage();
     const modalRef = useRef(null);
+    const previouslyFocusedRef = useRef(null);
 
     useEffect(() => {
+        previouslyFocusedRef.current = document.activeElement;
         const onKey = (e) => { if (e.key === 'Escape') onClose(); };
         window.addEventListener('keydown', onKey);
         document.body.style.overflow = 'hidden';
@@ -72,12 +74,13 @@ export default function Modal({ project, onClose }) {
                 window.removeEventListener('keydown', handleFocusTrap);
             }
             document.body.style.overflow = '';
+            previouslyFocusedRef.current?.focus?.();
         };
     }, [onClose]);
 
     if (!project) return null;
 
-    const { subtitle, description: desc, learnings } = getProjectContent(project, lang);
+    const { subtitle, description: desc, learnings, role, outcome } = getProjectContent(project, lang);
     
     const statusLabel = t(
         project.status === 'Completed'
@@ -115,7 +118,7 @@ export default function Modal({ project, onClose }) {
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginBottom: 4 }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-                                    <h2 className="proj-featured-title" style={{ fontSize: 28, margin: 0 }}>{project.title}</h2>
+                                    <h2 id="modal-title" className="proj-featured-title" style={{ fontSize: 28, margin: 0 }}>{project.title}</h2>
                                     <span className={`status ${statusCls}`}><span className="led" />{statusLabel}</span>
                                     <span className="modal-meta-id" style={{ fontSize: 11, opacity: 0.6, marginLeft: 'auto' }}>#{project.id}</span>
                                 </div>
@@ -141,6 +144,23 @@ export default function Modal({ project, onClose }) {
                         {/* Right Column: Description, Tags, Learnings */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                             <p className="modal-desc" style={{ margin: 0 }}>{desc}</p>
+
+                            {(role || outcome) && (
+                                <div className="project-case-summary modal-case-summary">
+                                    {role && (
+                                        <div>
+                                            <span>{t('modal.role')}</span>
+                                            <p>{role}</p>
+                                        </div>
+                                    )}
+                                    {outcome && (
+                                        <div>
+                                            <span>{t('modal.outcome')}</span>
+                                            <p>{outcome}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
 
                             <div className="modal-tags" style={{ marginTop: 0 }}>
                                 {project.tags.map(tag => (

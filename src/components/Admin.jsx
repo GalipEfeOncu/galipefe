@@ -83,6 +83,10 @@ export default function Admin() {
             status: 'Work in Progress',
             descriptionEn: '',
             descriptionTr: '',
+            roleEn: '',
+            roleTr: '',
+            outcomeEn: '',
+            outcomeTr: '',
             link: '',
             demoLink: '',
             image: '',
@@ -230,6 +234,10 @@ export default function Admin() {
             status: proj.status || 'Work in Progress',
             descriptionEn: proj.descriptionEn || proj.description || '',
             descriptionTr: proj.descriptionTr || proj.description || '',
+            roleEn: proj.roleEn || proj.role || '',
+            roleTr: proj.roleTr || proj.role || '',
+            outcomeEn: proj.outcomeEn || proj.outcome || '',
+            outcomeTr: proj.outcomeTr || proj.outcome || '',
             link: proj.link || '',
             demoLink: proj.demoLink || '',
             image: proj.image || '',
@@ -283,6 +291,12 @@ export default function Admin() {
             description: formState.descriptionTr || formState.descriptionEn || '', // compatibility fallback
             descriptionEn: formState.descriptionEn,
             descriptionTr: formState.descriptionTr,
+            role: formState.roleTr || formState.roleEn || '',
+            roleEn: formState.roleEn,
+            roleTr: formState.roleTr,
+            outcome: formState.outcomeTr || formState.outcomeEn || '',
+            outcomeEn: formState.outcomeEn,
+            outcomeTr: formState.outcomeTr,
             link: formState.link || null,
             demoLink: formState.demoLink || null,
             image: formState.image || null,
@@ -558,6 +572,51 @@ export default function Admin() {
                                 onChange={e => setFormState(prev => ({ ...prev, descriptionTr: e.target.value }))} 
                                 rows={4}
                                 required
+                                style={textareaStyle}
+                            />
+                        </div>
+
+                        <div style={formRowStyle}>
+                            <div style={formColStyle}>
+                                <label style={labelStyle}>Projede Üstlenilen Rol (İngilizce)</label>
+                                <input
+                                    type="text"
+                                    value={formState.roleEn}
+                                    onChange={e => setFormState(prev => ({ ...prev, roleEn: e.target.value }))}
+                                    placeholder="Frontend, game systems and Firebase integration"
+                                    style={inputStyle}
+                                />
+                            </div>
+                            <div style={formColStyle}>
+                                <label style={labelStyle}>Projede Üstlenilen Rol (Türkçe)</label>
+                                <input
+                                    type="text"
+                                    value={formState.roleTr}
+                                    onChange={e => setFormState(prev => ({ ...prev, roleTr: e.target.value }))}
+                                    placeholder="Frontend, oyun sistemleri ve Firebase entegrasyonu"
+                                    style={inputStyle}
+                                />
+                            </div>
+                        </div>
+
+                        <div style={formColStyle}>
+                            <label style={labelStyle}>Doğrulanabilir Sonuç (İngilizce)</label>
+                            <textarea
+                                value={formState.outcomeEn}
+                                onChange={e => setFormState(prev => ({ ...prev, outcomeEn: e.target.value }))}
+                                rows={2}
+                                placeholder="Describe the concrete project outcome without inventing metrics."
+                                style={textareaStyle}
+                            />
+                        </div>
+
+                        <div style={formColStyle}>
+                            <label style={labelStyle}>Doğrulanabilir Sonuç (Türkçe)</label>
+                            <textarea
+                                value={formState.outcomeTr}
+                                onChange={e => setFormState(prev => ({ ...prev, outcomeTr: e.target.value }))}
+                                rows={2}
+                                placeholder="Ölçüm uydurmadan projenin somut çıktısını yazın."
                                 style={textareaStyle}
                             />
                         </div>

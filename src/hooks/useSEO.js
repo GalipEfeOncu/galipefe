@@ -13,8 +13,9 @@ const DEFAULT_IMAGE = `${SITE_URL}/assets/images/pp.webp`;
  * @param {string} [params.fullTitleKey] - Translation key for a complete title without the site-name suffix
  * @param {string} params.descriptionKey - Translation key for meta description
  * @param {string} [params.ogImage] - Optional absolute URL for sharing image
+ * @param {boolean} [params.noIndex] - Prevent indexing for utility/error routes
  */
-export default function useSEO({ titleKey, fullTitleKey, descriptionKey, ogImage }) {
+export default function useSEO({ titleKey, fullTitleKey, descriptionKey, ogImage, noIndex = false }) {
     const { t, lang } = useLanguage();
 
     useEffect(() => {
@@ -58,7 +59,7 @@ export default function useSEO({ titleKey, fullTitleKey, descriptionKey, ogImage
 
         // 3. Update Meta Description
         updateMeta('meta[name="description"]', 'name', 'description', pageDesc);
-        updateMeta('meta[name="robots"]', 'name', 'robots', 'index, follow');
+        updateMeta('meta[name="robots"]', 'name', 'robots', noIndex ? 'noindex, follow' : 'index, follow');
         updateLink('link[rel="canonical"]', 'canonical', canonicalUrl);
 
         // 4. Update Open Graph tags
@@ -78,5 +79,5 @@ export default function useSEO({ titleKey, fullTitleKey, descriptionKey, ogImage
         updateMeta('meta[property="twitter:url"]', 'property', 'twitter:url', canonicalUrl);
         updateMeta('meta[property="twitter:image"]', 'property', 'twitter:image', absoluteImage);
         updateMeta('meta[property="twitter:image:alt"]', 'property', 'twitter:image:alt', 'Galip Efe Öncü');
-    }, [t, lang, titleKey, fullTitleKey, descriptionKey, ogImage]);
+    }, [t, lang, titleKey, fullTitleKey, descriptionKey, ogImage, noIndex]);
 }

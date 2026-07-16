@@ -13,6 +13,7 @@ Yalnızca statik dosyayı değiştirmek, dolu Firestore kullanan production orta
 - Benzersiz `translationKey`
 - Başlık ve üç izinli durumdan biri: `Completed`, `Work in Progress`, `Discontinued`
 - İngilizce ve Türkçe subtitle, açıklama ve öğrenimler
+- Projedeki kişisel rolü ve doğrulanabilir sonucu anlatan kısa TR/EN case-study alanları
 - Repository linki, isteğe bağlı demo linki
 - Tag listesi
 - Tercihen 16:9 WebP görsel; yoksa anlamlı emoji
@@ -49,6 +50,8 @@ Görsel yoksa `image: null` ve anlamlı bir `icon` kullanın. `/assets/...` biç
     subtitle: "React / Short fallback subtitle",
     status: "Work in Progress",
     description: "English fallback description.",
+    role: "Frontend development and API integration",
+    outcome: "A deployed application that solves the described problem.",
     link: "https://github.com/GalipEfeOncu/my-project",
     demoLink: "https://example.com/", // yoksa alanı kaldırın
     image: `${base}assets/images/MyProject.webp`,
@@ -68,6 +71,8 @@ Dizi sırası görünüm sırasıdır; aktif filtrenin ilk öğesi featured kart
 myProject: {
     subtitle: "...",
     desc: "...",
+    role: "...",
+    outcome: "...",
     learnings: ["...", "..."]
 }
 ```
@@ -76,13 +81,13 @@ Anahtar, `projects.js` içindeki `translationKey` ile birebir aynı olmalıdır.
 
 ## Firestore ve `/admin` yolu
 
-`/admin`, email/password oturumu sonrasında kayıtları doğrudan Firestore'a yazar. Form kayıtları `subtitleEn/Tr`, `descriptionEn/Tr`, `learningsEn/Tr` ve `order` alanlarını da içerir. Görsel yüklemesi tarayıcıda 16:9 kırpılıp en fazla 1200px WebP/JPEG data URL'ine dönüştürülür.
+`/admin`, email/password oturumu sonrasında kayıtları doğrudan Firestore'a yazar. Form kayıtları `subtitleEn/Tr`, `descriptionEn/Tr`, `roleEn/Tr`, `outcomeEn/Tr`, `learningsEn/Tr` ve `order` alanlarını da içerir. Görsel yüklemesi tarayıcıda 16:9 kırpılıp en fazla 1200px WebP/JPEG data URL'ine dönüştürülür.
 
 Dikkat edilmesi gerekenler:
 
 - Firestore'daki dolu koleksiyon statik diziyi tamamen geçersiz kılar; iki kaynağı bilinçli biçimde senkron tutun.
 - “Local Projeleri Aktararak Başla” işlemi statik diziyi Firestore'a seed eder ve harici veri yazar; kullanıcı açıkça istemeden çalıştırmayın.
-- `translationKey` için statik çeviri varsa liste ve modal bu içeriği Firestore alanlarından önce kullanır. DB-only bir anahtarın statik karşılığı yoksa iki görünüm de `subtitleEn/Tr`, `descriptionEn/Tr` ve `learningsEn/Tr` alanlarına döner. Yeni projeyi yine de iki dilde kontrol edin.
+- `translationKey` için statik çeviri varsa liste ve modal bu içeriği Firestore alanlarından önce kullanır. DB-only bir anahtarın statik karşılığı yoksa iki görünüm de `subtitleEn/Tr`, `descriptionEn/Tr`, `roleEn/Tr`, `outcomeEn/Tr` ve `learningsEn/Tr` alanlarına döner. Yeni projeyi yine de iki dilde kontrol edin.
 - Production Firestore değişikliği dış sistem mutasyonudur; yetki ve hedef ortam net değilse gerçekleştirmeyin.
 
 Firebase ayrıntıları için [`firebase-admin.md`](./firebase-admin.md) dosyasına bakın.

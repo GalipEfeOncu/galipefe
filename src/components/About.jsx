@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { SKILLS } from '../data/profile';
 import { projects as staticProjects } from '../data/projects';
-import { projectService } from '../services/projectService';
 import TypingGame from './TypingGame';
 import useSEO from '../hooks/useSEO';
 
@@ -38,56 +37,34 @@ export default function About() {
 
     useEffect(() => {
         let active = true;
+        let idleId;
+        let timeoutId;
+
         async function fetchCount() {
+            const { projectService } = await import('../services/projectService');
             const data = await projectService.getProjects();
             if (active && data && data.length > 0) {
                 setProjectCount(data.length);
             }
         }
-        fetchCount();
-        return () => { active = false; };
+        if ('requestIdleCallback' in window) {
+            idleId = window.requestIdleCallback(fetchCount, { timeout: 2500 });
+        } else {
+            timeoutId = window.setTimeout(fetchCount, 800);
+        }
+
+        return () => {
+            active = false;
+            if (idleId) window.cancelIdleCallback(idleId);
+            if (timeoutId) window.clearTimeout(timeoutId);
+        };
     }, []);
-    const containerRef = useRef(null);
-    const isScrollingRef = useRef(false);
 
     useSEO({ fullTitleKey: 'seo.aboutTitle', descriptionKey: 'seo.aboutDesc' });
 
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        const handleWheel = (e) => {
-            if (isScrollingRef.current) {
-                e.preventDefault();
-                return;
-            }
-
-            const scrollTop = container.scrollTop;
-            const detailsTop = detailsSectionRef.current?.offsetTop || window.innerHeight;
-            const threshold = 50;
-            
-            // On hero section, scrolling down
-            if (scrollTop <= threshold && e.deltaY > 0) {
-                e.preventDefault();
-                isScrollingRef.current = true;
-                detailsSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
-                setTimeout(() => { isScrollingRef.current = false; }, 800);
-            }
-            // On details section top, scrolling up
-            else if (scrollTop > threshold && scrollTop <= detailsTop + threshold && e.deltaY < 0) {
-                e.preventDefault();
-                isScrollingRef.current = true;
-                container.scrollTo({ top: 0, behavior: 'smooth' });
-                setTimeout(() => { isScrollingRef.current = false; }, 800);
-            }
-        };
-
-        container.addEventListener('wheel', handleWheel, { passive: false });
-        return () => container.removeEventListener('wheel', handleWheel);
-    }, []);
-
     const handleScrollDown = () => {
-        detailsSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        detailsSectionRef.current?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
     };
 
     const interests = [
@@ -98,7 +75,7 @@ export default function About() {
     ];
 
     return (
-        <div className="scroll-container" ref={containerRef}>
+        <div className="about-page">
             
             {/* 1. 100vh Hero Landing Section (Snap Start) */}
             <section className="hero-section scroll-section">
@@ -154,12 +131,17 @@ export default function About() {
                 </div>
 
                 {/* Animated Mouse indicator */}
-                <div className="scroll-indicator" onClick={handleScrollDown}>
+                <button
+                    type="button"
+                    className="scroll-indicator"
+                    onClick={handleScrollDown}
+                    aria-label={t('about.scrollToDetails')}
+                >
                     <span>{t('about.title').toLowerCase()}</span>
                     <div className="scroll-indicator-mouse">
                         <div className="scroll-indicator-wheel" />
                     </div>
-                </div>
+                </button>
             </section>
 
             {/* 2. Detailed Profile Section (Snap Start) */}
