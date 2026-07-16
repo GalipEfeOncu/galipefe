@@ -11,6 +11,7 @@ Contact sayfasındaki ana kartlar:
 ```js
 {
     name: 'GitHub',
+    nameKey: 'contact.channels.github',
     url: 'https://github.com/GalipEfeOncu',
     value: '@GalipEfeOncu',
     descKey: 'contact.githubDesc',
@@ -18,6 +19,7 @@ Contact sayfasındaki ana kartlar:
 }
 ```
 
+- `nameKey` ziyaretçiye gösterilen kanal adıdır ve iki locale altında bulunmalıdır. `name`, React anahtarı ve veri etiketi olarak korunur.
 - `descKey` veri modelinde bulunur ancak mevcut `Contact.jsx` görünümünde render edilmez. Açıklamaları yeniden gösterecek bir değişiklikte iki locale altında geçerli anahtarı koruyun.
 - Dış linkler tam `https://` URL olmalı; e-posta için `mailto:` kullanın.
 - Görünür açıklama eklenirse `translations.en.contact` ve `translations.tr.contact` birlikte güncellenir.
@@ -38,12 +40,12 @@ About sayfasındaki teknoloji grupları:
 
 ```js
 {
-    title: 'Frameworks & Tools',
+    titleKey: 'about.skillCategories.frameworks',
     items: ['React', 'Vite', 'Unity', '.NET', 'Git']
 }
 ```
 
-Mevcut kategoriye eklerken tekrar oluşturmayın. Yeni kategori eklerken kısa ve anlaşılır bir `title`, doğrulanmış teknoloji adları ve tutarlı sıralama kullanın. Bu başlıklar şu anda çevrilmeden doğrudan gösterilir; TR/EN içerik gerekiyorsa önce veri modelini ve render katmanını birlikte tasarlayın.
+Mevcut kategoriye eklerken tekrar oluşturmayın. Yeni kategori eklerken iki locale altında kısa ve anlaşılır bir `titleKey`, doğrulanmış teknoloji adları ve tutarlı sıralama kullanın. Teknoloji ve ürün adları ortak kalır; yalnızca kategori başlıkları çevrilir.
 
 ## Stil ve render noktaları
 

@@ -45,7 +45,7 @@ export default function Header({ theme, toggleTheme }) {
                         <button
                             onClick={toggleLang}
                             className="dock-btn"
-                            aria-label={lang === 'en' ? 'Switch language to Turkish' : 'Switch language to English'}
+                            aria-label={lang === 'en' ? t('header.switchToTurkish') : t('header.switchToEnglish')}
                         >
                             <span style={{ 
                                 width: 6, 
@@ -63,8 +63,8 @@ export default function Header({ theme, toggleTheme }) {
                         <button
                             onClick={toggleTheme}
                             className="dock-btn"
-                            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-                            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                            title={theme === 'dark' ? t('header.switchToLight') : t('header.switchToDark')}
+                            aria-label={theme === 'dark' ? t('header.switchToLight') : t('header.switchToDark')}
                         >
                             {theme === 'dark' ? '◑' : '◐'}
                         </button>
@@ -73,7 +73,7 @@ export default function Header({ theme, toggleTheme }) {
                         <button
                             className="dock-mobile-toggle dock-btn"
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            aria-label="Toggle navigation menu"
+                            aria-label={t('header.toggleNavigation')}
                         >
                             {isMobileMenuOpen ? '✕' : '☰'}
                         </button>

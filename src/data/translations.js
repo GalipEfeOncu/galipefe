@@ -6,6 +6,19 @@ export const translations = {
             projectsDesc: "Explore the games, desktop utilities, and web tools developed by Galip Efe Öncü, featuring roguelikes, AI engines, and productivity apps.",
             contactDesc: "Get in touch with Galip Efe Öncü for software engineering projects, collaborations, or game development opportunities."
         },
+        app: {
+            scrollToTop: "Scroll to top"
+        },
+        header: {
+            switchToTurkish: "Switch language to Turkish",
+            switchToEnglish: "Switch language to English",
+            switchToLight: "Switch to light mode",
+            switchToDark: "Switch to dark mode",
+            toggleNavigation: "Toggle navigation menu"
+        },
+        footer: {
+            builtWith: "built with React"
+        },
         nav: {
             about: "About",
             projects: "Projects",
@@ -50,6 +63,12 @@ export const translations = {
             heading: "Hi, I'm Galip. I write code and build things people actually use.",
             interestsPanel: "interests",
             stackPanel: "stack · what I work with",
+            skillCategories: {
+                languages: "Languages",
+                frameworks: "Frameworks & Tools",
+                backend: "Backend & Data",
+                gameDev: "Game Development"
+            },
             kvLocation: "location",
             kvEdu: "edu",
             kvLang: "lang",
@@ -66,6 +85,7 @@ export const translations = {
             },
             emptyStateTitle: "No projects found",
             emptyStateDesc: "There are no projects matching the selected status filter.",
+            loading: "Loading projects...",
             modal: {
                 about: "About",
                 learnings: "Key Learnings",
@@ -85,7 +105,25 @@ export const translations = {
             github: "github↗",
             idLabel: "id",
             statusLabel: "status",
-            repoLabel: "repo"
+            repoLabel: "repo",
+            imageFallback: "{title} project image coming soon"
+        },
+        typingGame: {
+            label: "mini game",
+            record: "my record",
+            intro: "10 seconds, random words — how fast can you type?",
+            start: "Start",
+            inputPlaceholder: "start typing...",
+            you: "you",
+            me: "me",
+            retry: "Refresh the page to play again.",
+            result: {
+                beat: "{wpm} WPM — You beat me! How many tries did it take?",
+                near: "{wpm} WPM — So close! You're just short of my record.",
+                good: "{wpm} WPM — Not bad! You're getting close to my record.",
+                decent: "{wpm} WPM — Good start. A little more practice?",
+                warmup: "{wpm} WPM — Looks like your fingers are still warming up."
+            }
         },
         contact: {
             title: "Let's Connect",
@@ -107,6 +145,9 @@ export const translations = {
             formName: "Name",
             formEmail: "Email",
             formMessage: "Message",
+            formNamePlaceholder: "Your name",
+            formEmailPlaceholder: "you@example.com",
+            formMessagePlaceholder: "Write your message here...",
             formSubmit: "Send Message",
             formSubmitting: "Sending...",
             formSuccess: "Thanks! Your message has been sent successfully.",
@@ -130,6 +171,11 @@ export const translations = {
             githubDesc: "Where most of my code lives",
             linkedinDesc: "If you're the professional type",
             emailDesc: "Fastest way to actually reach me",
+            channels: {
+                github: "GitHub",
+                linkedin: "LinkedIn",
+                email: "Email"
+            },
             viewProjects: "see my work →",
             formInfoLive: "This form sends messages directly to my inbox via Formspree.",
             formInfoDemo: "Demo Mode: Formspree ID is not configured. Submissions will be logged to the console."
@@ -238,9 +284,22 @@ export const translations = {
     tr: {
         seo: {
             aboutTitle: "Galip Efe Öncü | Yazılım ve Oyun Geliştirici",
-            aboutDesc: "Galip Efe Öncü - Unity, C#, React ve etkileşimli yazılım deneyimleri geliştirmeye odaklanmış Yazılım Mühendisliği öğrencisi ve oyun geliştirici.",
-            projectsDesc: "Galip Efe Öncü tarafından geliştirilen roguelike oyunları, yapay zeka araçlarını ve web uygulamalarını inceleyin.",
-            contactDesc: "Yazılım mühendisliği projeleri, iş birlikleri veya oyun geliştirme fırsatları için Galip Efe Öncü ile iletişime geçin."
+            aboutDesc: "Galip Efe Öncü'nün oyun geliştirme, web uygulamaları ve yazılım araçları üzerine çalışmalarını keşfedin.",
+            projectsDesc: "Galip Efe Öncü'nün geliştirdiği oyunları, masaüstü uygulamalarını ve web projelerini inceleyin.",
+            contactDesc: "Yazılım projeleri, iş birlikleri ve oyun geliştirme çalışmaları için Galip Efe Öncü'ye ulaşın."
+        },
+        app: {
+            scrollToTop: "Sayfanın başına dön"
+        },
+        header: {
+            switchToTurkish: "Dili Türkçe yap",
+            switchToEnglish: "Dili İngilizce yap",
+            switchToLight: "Açık temaya geç",
+            switchToDark: "Koyu temaya geç",
+            toggleNavigation: "Gezinme menüsünü aç veya kapat"
+        },
+        footer: {
+            builtWith: "React ile geliştirildi"
         },
         nav: {
             about: "Hakkımda",
@@ -248,225 +307,258 @@ export const translations = {
             contact: "İletişim"
         },
         hero: {
-            welcome: "Selam, ben",
+            welcome: "Merhaba, ben",
             role: "Yazılım Mühendisliği Öğrencisi",
-            status: "yeni fırsatlara açık",
-            desc: "Sorunsuz çalışan, iyi hissettiren ve çökmeyen şeyler geliştiriyorum. Oyunlar, araçlar, web uygulamaları... Kodla çözülebilecek bir şeyse, çoktan üzerine düşünmeye başlamışımdır.",
+            status: "iş fırsatlarına açık",
+            desc: "Oyunlar, araçlar ve web uygulamaları geliştiriyorum. Yaptığım şeyin yalnızca çalışması değil, kullanırken iyi hissettirmesi de önemli. Kodla çözülebilecek bir sorun varsa kurcalamadan duramıyorum.",
             interests: {
                 gaming: "Oyun",
                 walking: "Yürüyüş",
                 reading: "Kitap",
                 fitness: "Spor"
             },
-            quote: "\"Hayat harika. Güzel. Bizi büyüleyip kendine takıntı derecesinde bağlıyor.\""
+            quote: "\"Hayat ışıl ışıl, güzel. Bizi büyüler; öyle ki ona tutkuyla bağlanırız.\""
         },
         about: {
             title: "Hakkımda",
-            bio1: "<strong>{age} yaşındayım,</strong> Elazığ <strong>Fırat Üniversitesi</strong>'nde Yazılım Mühendisliği 2. sınıf öğrencisiyim. <strong>Konya</strong>'da büyüdüm.",
-            bio2: "Üniversiteden önce dört yılımı <strong>Adil Karaağaç Mesleki ve Teknik Anadolu Lisesi</strong> Bilişim Teknolojileri bölümünde geçirdim. İşlerin arka planda gerçekten nasıl yürüdüğüne dair asıl merakım orada başladı.",
-            bio3: "Yaşayan, etkileşimli şeyler geliştirmeyi seviyorum - Unity ile roguelike oyunlar, React uygulamaları, fark etmez. İlginç bir problem gördüğümde mutlaka derinine inerim. Kod yazmadığım zamanlarda genellikle spor yapıyorum, oyun oynuyorum, ve ara sıra kitaplara gömülüyorum - bu son alışkanlığı alışkanlık haline getirmek istiyorum.",
+            bio1: "<strong>{age}</strong> yaşındayım. Elazığ'da <strong>Fırat Üniversitesi</strong> Yazılım Mühendisliği 2. sınıf öğrencisiyim. <strong>Konya</strong>'da büyüdüm.",
+            bio2: "Üniversiteden önce <strong>Adil Karaağaç Mesleki ve Teknik Anadolu Lisesi</strong> Bilişim Teknolojileri Bölümünde okudum. Teknolojinin arka planda nasıl çalıştığını gerçekten merak etmeye de orada başladım.",
+            bio3: "Bir fikri çalışan bir ürüne dönüştürmeyi seviyorum; kimi zaman Unity'de bir roguelike, kimi zaman React'le bir web uygulaması. Karşıma ilginç bir problem çıktığında kurcalamadan duramıyorum. Kod yazmadığım zamanlarda spor yapıyor, oyun oynuyor ve daha düzenli okumaya çalışıyorum.",
             facts: {
                 location: "Konum",
                 locationVal: "Konya, Türkiye",
                 university: "Üniversite",
-                universityVal: "Fırat Üniversitesi - Yazılım Müh.",
+                universityVal: "Fırat Üniversitesi · Yazılım Müh.",
                 languages: "Diller",
-                languagesVal: "Türkçe (Anadil) · İngilizce (B2)",
+                languagesVal: "Türkçe (ana dil) · İngilizce (B2)",
                 game: "Favori Oyun",
                 gameVal: "The Witcher 3: Wild Hunt"
             },
             cta: {
-                projectsTitle: "Neler geliştirdim",
-                projectsDesc: "Oyunlar, araçlar, web projeleri - bir göz at.",
-                contactTitle: "Selam ver",
-                contactDesc: "Bir sorun mu var veya birlikte bir şeyler mi inşa etmek istiyorsun? Buralardayım.",
-                projectsCount: "{count} proje · oyunlar, araçlar, web",
-                contactChannels: "Bana ulaşabileceğin 3 yol"
+                projectsTitle: "Projelerim",
+                projectsDesc: "Oyunlarıma, araçlarıma ve web projelerime göz at.",
+                contactTitle: "Bana ulaş",
+                contactDesc: "Bir fikrin veya birlikte geliştirmek istediğin bir proje varsa konuşalım.",
+                projectsCount: "{count} proje · oyun, araç ve web uygulaması",
+                contactChannels: "E-posta ve sosyal medya hesaplarım"
             },
-            heading: "Selam, ben Galip. Kod yazıyor ve insanların gerçekten kullandığı şeyler inşa ediyorum.",
-            interestsPanel: "ilgilendiklerim",
-            stackPanel: "stack · kullandığım teknolojiler",
+            heading: "Merhaba, ben Galip. İnsanların işine yarayan yazılımlar geliştiriyorum.",
+            interestsPanel: "İlgi alanlarım",
+            stackPanel: "Kullandığım teknolojiler",
+            skillCategories: {
+                languages: "Programlama dilleri",
+                frameworks: "Framework ve araçlar",
+                backend: "Backend ve veri",
+                gameDev: "Oyun geliştirme"
+            },
             kvLocation: "konum",
             kvEdu: "okul",
             kvLang: "dil",
-            kvFocus: "fav oyun"
+            kvFocus: "favori oyun"
         },
         projects: {
             title: "Projeler",
-            subtitle: "Oyunlar, masaüstü uygulamaları, web araçları - sırf yapıp yapamayacağımı görmek için geliştirdiğim şeyler.",
+            subtitle: "Oyunlardan masaüstü uygulamalarına, merak edip geliştirdiğim projeler.",
             filters: {
                 all: "Tümü",
-                completed: "Tamamlanan",
-                wip: "Devam Eden",
-                discontinued: "Askıya Alınan"
+                completed: "Tamamlandı",
+                wip: "Geliştiriliyor",
+                discontinued: "Sonlandırıldı"
             },
             emptyStateTitle: "Proje bulunamadı",
             emptyStateDesc: "Seçilen filtreye uygun bir proje yok.",
+            loading: "Projeler yükleniyor...",
             modal: {
                 about: "Hakkında",
-                learnings: "Neler Öğrendim",
+                learnings: "Bu Projede Öğrendiklerim",
                 liveDemo: "Canlı Demo",
-                githubRepo: "GitHub Repo"
+                githubRepo: "GitHub Deposu"
             },
-            featuredLabel: "★ FAVORİ PROJEM",
-            sortLabel: "sıralama: en yeni ↓",
-            viewDetails: "incele →"
+            featuredLabel: "★ ÖNE ÇIKAN PROJE",
+            sortLabel: "yeniden eskiye ↓",
+            viewDetails: "Projeyi incele"
         },
         modal: {
-            keyTakeaways: "NELER ÖĞRENDİM",
-            stack: "STACK",
-            repo: "⎇ Repo",
+            keyTakeaways: "BU PROJEDE ÖĞRENDİKLERİM",
+            stack: "TEKNOLOJİLER",
+            repo: "⎇ GitHub",
             liveDemo: "▶ Canlı Demo",
-            close: "× kapat",
+            close: "× Kapat",
             github: "github↗",
             idLabel: "id",
             statusLabel: "durum",
-            repoLabel: "repo"
+            repoLabel: "depo",
+            imageFallback: "{title} proje görseli yakında"
+        },
+        typingGame: {
+            label: "mini oyun",
+            record: "rekorum",
+            intro: "10 saniye, rastgele kelimeler — ne kadar hızlı yazabilirsin?",
+            start: "Başla",
+            inputPlaceholder: "yazmaya başla...",
+            you: "sen",
+            me: "ben",
+            retry: "Tekrar oynamak için sayfayı yenile.",
+            result: {
+                beat: "{wpm} WPM — Beni geçtin! Kaçıncı denemendi?",
+                near: "{wpm} WPM — Çok yaklaştın! Rekorumu yakalamana az kaldı.",
+                good: "{wpm} WPM — Fena değil! Rekoruma yaklaşmışsın.",
+                decent: "{wpm} WPM — İyi başlangıç. Biraz daha pratik?",
+                warmup: "{wpm} WPM — Parmakların daha yeni ısınıyor gibi."
+            }
         },
         contact: {
-            title: "Bağlantı Kuralım",
-            subtitle: "Bir projen, iş birliği fikrin mi var veya sadece kod hakkında mı konuşmak istiyorsun? Buralardayım.",
-            elsewhere: "Diğer Platformlar",
+            title: "İletişim",
+            subtitle: "Bir proje fikrin varsa ya da biraz kod konuşmak istiyorsan mesaj atabilirsin.",
+            elsewhere: "Diğer hesaplarım",
             skills: "Kullandığım Araçlar",
             category: {
-                lang: "Diller",
-                frameworks: "Framework'ler & Araçlar",
-                backend: "Backend & Veritabanı",
+                lang: "Programlama dilleri",
+                frameworks: "Framework ve araçlar",
+                backend: "Backend ve veritabanı",
                 gamedev: "Oyun Geliştirme"
             },
-            ctaTitle: "Aklında bir şeyler mi var?",
-            ctaDesc: "Geliştirdiğim işlere bir göz at ya da doğrudan bana mesaj gönder.",
-            ctaBtn: "işlerimi gör →",
-            primaryChannels: "bana buradan ulaş",
-            elsewherePanel: "beni internette bul",
-            formName: "İsim",
-            formEmail: "E-posta",
-            formMessage: "Mesaj",
-            formSubmit: "Mesaj Gönder",
+            ctaTitle: "Aklında bir proje mi var?",
+            ctaDesc: "Projelerime göz atabilir veya doğrudan mesaj gönderebilirsin.",
+            ctaBtn: "Projelerimi gör →",
+            primaryChannels: "Bana buradan ulaşabilirsin",
+            elsewherePanel: "Diğer hesaplarım",
+            formName: "Adın",
+            formEmail: "E-posta adresin",
+            formMessage: "Mesajın",
+            formNamePlaceholder: "Adın ve soyadın",
+            formEmailPlaceholder: "ornek@eposta.com",
+            formMessagePlaceholder: "Mesajını buraya yaz...",
+            formSubmit: "Mesaj gönder",
             formSubmitting: "Gönderiliyor...",
-            formSuccess: "Teşekkürler! Mesajın başarıyla gönderildi.",
-            formError: "Bir sorun çıktı ve mesajın gönderilemedi. Lütfen doğrudan e-posta atmayı dene.",
-            formTitle: "Mesaj Gönder",
-            projectCTA: "Aklında bir şey mi var?",
-            projectCTADesc: "Bir mesaj at - genelde aynı gün içinde dönerim.",
+            formSuccess: "Teşekkürler, mesajın bana ulaştı.",
+            formError: "Mesaj gönderilemedi. Biraz sonra tekrar deneyebilir veya doğrudan e-posta gönderebilirsin.",
+            formTitle: "Bana mesaj gönder",
+            projectCTA: "Aklında bir proje mi var?",
+            projectCTADesc: "Mesajını gönder; genellikle aynı gün içinde yanıtlarım.",
             availabilityPanel: "durum",
-            availabilityStatus: "yeni fırsatlara açık",
-            availabilityTypes: "tam zamanlı · freelance · yan proje",
+            availabilityStatus: "iş fırsatlarına açık",
+            availabilityTypes: "tam zamanlı · serbest işler · yan projeler",
             responseLabel: "geri dönüş",
-            responseVal: "~24s",
+            responseVal: "genellikle 24 saat içinde",
             timezoneLabel: "saat dilimi",
             timezoneVal: "GMT+3 · İstanbul",
-            preferredLabel: "en iyi yol",
+            preferredLabel: "tercihim",
             preferredVal: "e-posta →",
-            whatImInto: "ilgilendiklerim",
-            interest1: "Oyun geliştirme - oyun hissi, sistemler ve o hissi veren küçük detaylar",
-            interest2: "Modern web - React, akıcı etkileşimler, temiz UX",
-            interest3: "Gerçekten insanlara zaman kazandıran araçlar",
-            githubDesc: "Kodlarımın çoğunun yaşadığı yer",
-            linkedinDesc: "Eğer profesyonel takılıyorsan",
-            emailDesc: "Bana gerçekten ulaşmanın en hızlı yolu",
-            viewProjects: "işlerimi gör →",
-            heading: "Selam ver.",
-            formInfoLive: "Bu form, mesajları Formspree aracılığıyla doğrudan gelen kutuma iletir.",
-            formInfoDemo: "Demo Modu: Formspree ID ayarlanmamış. Gönderimler konsola kaydedilecek."
+            whatImInto: "İlgilendiğim konular",
+            interest1: "Oyun geliştirme: oynanış hissi, sistemler ve deneyimi tamamlayan küçük ayrıntılar",
+            interest2: "Modern web: React, akıcı etkileşimler ve anlaşılır arayüzler",
+            interest3: "İnsanlara gerçekten zaman kazandıran araçlar",
+            githubDesc: "Projelerimin çoğunu burada bulabilirsin",
+            linkedinDesc: "Profesyonel profilim",
+            emailDesc: "Bana ulaşmanın en hızlı yolu",
+            channels: {
+                github: "GitHub",
+                linkedin: "LinkedIn",
+                email: "E-posta"
+            },
+            viewProjects: "Projelerimi gör →",
+            heading: "Bana ulaş.",
+            formInfoLive: "Bu formdan gönderdiğin mesaj doğrudan gelen kutuma ulaşır.",
+            formInfoDemo: "Demo modu: Formspree kimliği ayarlanmamış. Gönderimler yalnızca tarayıcı konsoluna kaydedilir."
         },
         projectData: {
             chaosTyping: {
                 subtitle: "React & Vite / Web Tarayıcı Oyunu",
-                desc: "Seninle aktif olarak savaşan bir yazım oyunu. Sahte Windows hataları, ekran eğrilmeleri, bulanıklık efektleri, WhatsApp bildirimleri - arayüz kaybetmen için elinden geleni yapıyor. Ayrıca baskı altında odaklanmayı test eden dinamik bir kelime havuzu ve Firebase destekli gerçek zamanlı küresel bir liderlik tablosu var.",
+                desc: "Oyuncunun işini bilerek zorlaştıran bir klavye oyunu. Sahte Windows hataları, eğilen ekran, bulanıklık efektleri ve WhatsApp bildirimleri derken arayüz, kaybetmen için elinden geleni yapıyor. Dinamik kelime havuzu baskı altında ne kadar odaklanabildiğini ölçerken Firebase destekli skor tablosu sonuçları anlık olarak sıralıyor.",
                 learnings: [
-                    "requestAnimationFrame ile React'ta yüksek performanslı game loop",
-                    "Context ve Ref'ler üzerinden karmaşık state yönetimi",
-                    "Firebase ile gerçek zamanlı global skor tablosu",
-                    "Oyuncuyu kasıtlı olarak çileden çıkarmak için tasarlanmış UI elemanları",
-                    "Yoğun yük altında DOM güncellemelerini 60 FPS'te akıcı tutmak"
+                    "requestAnimationFrame kullanarak React'te performanslı bir oyun döngüsü kurmak",
+                    "Context ve ref'lerle karmaşık oyun durumunu yönetmek",
+                    "Firebase ile gerçek zamanlı bir küresel skor tablosu geliştirmek",
+                    "Oyuncunun dikkatini bilinçli olarak dağıtan arayüz öğeleri tasarlamak",
+                    "Yoğun DOM güncellemelerinde görüntüyü 60 FPS'te akıcı tutmak"
                 ]
             },
             soulClaim: {
-                subtitle: "Unity 2D / Action Roguelike",
-                desc: "Vampire Survivors tarzında hızlı ve kaotik bir aksiyon oyunu. Unity ve C# ile sıfırdan geliştirdim. Performans için ECS yaklaşımı etrafında tasarladım ve yüzlerce düşmanın aynı anda kare hızı düşmeden ekranda olabilmesi için özel bir Object Pooling sistemi yazdım.",
+                subtitle: "Unity 2D / Aksiyon Roguelike",
+                desc: "Vampire Survivors tarzında, hızlı ve kaotik bir aksiyon oyunu. Unity ve C# ile sıfırdan geliştirdiğim oyunun altyapısını performans için ECS yaklaşımıyla kurdum. Yüzlerce düşmanı kare hızını düşürmeden aynı anda ekranda tutabilmek için de özel bir nesne havuzu sistemi yazdım.",
                 learnings: [
-                    "ECS mimarisinin pratikte gerçekten ne anlama geldiği",
-                    "Yüksek entity sayısında belleği kontrol altında tutmak için Object Pooling",
-                    "Temiz ve kolayca ayarlanabilir veri yapıları için ScriptableObjects",
-                    "Observer pattern ile event-driven mimari",
-                    "Unity URP ile görsel efektler ve shader çalışması"
+                    "ECS mimarisini gerçek bir oyun projesinde uygulamak",
+                    "Çok sayıda nesne varken bellek kullanımını nesne havuzuyla kontrol etmek",
+                    "Kolayca düzenlenebilen veri yapıları için ScriptableObject kullanmak",
+                    "Observer deseniyle olay tabanlı bir yapı kurmak",
+                    "Unity URP ile görsel efektler ve shader'lar geliştirmek"
                 ]
             },
             gameTracker: {
                 subtitle: ".NET WinForms Masaüstü Uygulaması",
-                desc: "Oyun kütüphaneni düzenlemek için bir masaüstü uygulaması - sadece basit bir kayıt defteri değil, akıllı. RAWG API'den oyun verilerini çekiyor ve koleksiyonundakilere dayanarak Google Gemini AI ile sana yeni oyunlar öneriyor. Veriler yerel olarak MSSQL'de tutuluyor.",
+                desc: "Oyun arşivini düzenlemek için geliştirdiğim bir masaüstü uygulaması. RAWG API'den oyun bilgilerini alıyor, koleksiyonundaki oyunları Google Gemini ile değerlendirip sana yeni öneriler sunuyor. Kütüphane verileri yerel bir MSSQL veritabanında saklanıyor.",
                 learnings: [
-                    "C# WinForms'ta standart dışı, modern bir UI inşası",
-                    "MSSQL ve ADO.NET ile ilişkisel veritabanı yönetimi",
-                    "REST API tüketimi ve büyük JSON yanıtlarını parse etmek (RAWG API)",
-                    "Kişiselleştirilmiş öneriler için Gemini AI entegrasyonu",
-                    "API çağrıları sırasında UI'ın donmaması için Async/Await kullanımı"
+                    "C# WinForms ile alışılmışın dışında, modern bir arayüz geliştirmek",
+                    "MSSQL ve ADO.NET ile ilişkisel veritabanı yönetmek",
+                    "RAWG API'yi kullanıp kapsamlı JSON yanıtlarını işlemek",
+                    "Kişiselleştirilmiş oyun önerileri için Gemini'yi sisteme bağlamak",
+                    "API çağrıları sırasında arayüzün donmaması için async/await kullanmak"
                 ]
             },
             prayerTime: {
                 subtitle: "React & Vite / Web Uygulaması",
-                desc: "Günlük namaz vakitlerini takip etmek için temiz ve hızlı bir web uygulaması. Konumunu otomatik algılar, bir sonraki vakte canlı geri sayım gösterir ve dini günleri vurgular. Basitlik ve duyarlılık odaklı olarak React ve Vite ile geliştirildi.",
+                desc: "Günlük namaz vakitlerini takip etmeyi kolaylaştıran sade ve hızlı bir web uygulaması. Konumunu otomatik olarak algılıyor, sıradaki vakte kalan süreyi canlı olarak gösteriyor ve önemli dinî günleri öne çıkarıyor. React ve Vite ile geliştirirken farklı ekran boyutlarında rahat kullanılmasına özellikle dikkat ettim.",
                 learnings: [
-                    "React ile sıfırdan sağlam bir SPA inşa etmek",
-                    "useState ve useEffect ile zamana duyarlı state yönetimi",
-                    "Konum ve saat verisi için birden fazla dış API ile çalışmak",
-                    "Tailwind CSS ile responsive arayüzler",
+                    "React ile sıfırdan sağlam bir SPA geliştirmek",
+                    "useState ve useEffect ile zamana bağlı verileri yönetmek",
+                    "Konum ve vakit bilgileri için birden fazla harici API kullanmak",
+                    "Tailwind CSS ile farklı ekranlara uyum sağlayan bir arayüz hazırlamak",
                     "JavaScript'te tarih ve saat hesaplamaları (göründüğünden daha zor)"
                 ]
             },
             survivalGame: {
-                subtitle: "Unity 3D / FPS Survival Oyunu",
-                desc: "Önceden yapılmış haritaları olmayan, birinci şahıs bir hayatta kalma oyunu. Arazi, Perlin Noise ve özel mesh üretimi ile sen oynarken anında oluşturulur. Dünyayı keşfettikçe kendi kendini inşa etmeye devam eder. Ayrıca kaynak toplama, envanter sistemi ve temel hayatta kalma mekanikleri içerir.",
+                subtitle: "Unity 3D / Birinci Şahıs Hayatta Kalma",
+                desc: "Hazır bir harita kullanmayan, birinci şahıs bakış açısına sahip bir hayatta kalma oyunu. Arazi, oyuncu dünyayı keşfettikçe Perlin Noise ve özel mesh üretimiyle anlık olarak oluşturuluyor. Oyunda ayrıca kaynak toplama, envanter ve temel hayatta kalma sistemleri bulunuyor.",
                 learnings: [
-                    "Perlin Noise ile prosedürel arazi üretimi",
-                    "Gerçek zamanlı mesh üretimi ve runtime optimizasyonu",
-                    "FPS kamera ve controller hissiyatı",
-                    "Kaynak toplama döngüleri (madencilik, odun kesme)",
-                    "Slot tabanlı envanter mantığı"
+                    "Perlin Noise ile prosedürel arazi oluşturmak",
+                    "Çalışma anında mesh üretmek ve performansını iyileştirmek",
+                    "Birinci şahıs karakter kontrolünü ve kamera hissini geliştirmek",
+                    "Madencilik ve odun kesme gibi kaynak toplama döngüleri kurmak",
+                    "Bölme tabanlı bir envanter sistemi tasarlamak"
                 ]
             },
             autoReq: {
-                subtitle: "Python / Yapay Zeka & NLP / Streamlit",
-                desc: "Dağınık ve belirsiz müşteri gereksinimlerini alıp temiz, yapılandırılmış mühendislik dokümanlarına dönüştüren bir araç. Yapıyı ayrıştırmak için NLP, okunabilir çıktılar üretmek için LLM kullanan hibrit bir yapay zeka pipeline'ına sahip. spaCy, NLTK ve Streamlit üzerinde inşa edildi.",
+                subtitle: "Python / Yapay Zekâ & NLP / Streamlit",
+                desc: "Dağınık ve belirsiz müşteri taleplerini düzenli mühendislik dokümanlarına dönüştüren bir araç. Metnin yapısını çözümlemek için NLP'den, okunabilir çıktılar hazırlamak için büyük dil modellerinden yararlanan hibrit bir yapay zekâ iş akışı kullanıyor. Arayüzünü Streamlit'le, metin işleme katmanını ise spaCy ve NLTK ile geliştirdik.",
                 learnings: [
-                    "spaCy ve NLTK ile NLP'nin pratikteki kullanımı",
-                    "LLM'leri gerçek bir işleme pipeline'ına entegre etmek",
-                    "Streamlit ile kullanılabilir yapay zeka arayüzleri inşa etmek",
-                    "Açık kaynaklı bir ekipte Scrum ile çalışmak",
-                    "Gereksinim analizi için karmaşık veri akışlarını yapılandırmak"
+                    "spaCy ve NLTK ile doğal dil işlemeyi gerçek bir projede kullanmak",
+                    "Büyük dil modellerini çalışan bir metin işleme akışına bağlamak",
+                    "Streamlit ile kullanışlı bir yapay zekâ arayüzü geliştirmek",
+                    "Açık kaynaklı bir ekipte Scrum düzeniyle çalışmak",
+                    "Gereksinim analizi için karmaşık veri akışlarını düzenlemek"
                 ]
             },
             fileConverter: {
-                subtitle: "Python / Streamlit / Yapay Zeka & Masaüstü",
-                desc: "Dosya dönüştürme, belge görüntüleme, medya oynatma ve yapay zeka destekli belge analizini tek bir yerde, tamamen çevrimdışı bir araya getiren çapraz platform bir masaüstü uygulaması. İnternet bağlantısı olmadan birçok formatı işleyebilmesi için yapıldı.",
+                subtitle: "Python / Streamlit / Yapay Zekâ & Masaüstü",
+                desc: "Dosya dönüştürme, belge görüntüleme, medya oynatma ve yapay zekâ destekli belge analizini tek uygulamada bir araya getiren, platformlar arası bir masaüstü aracı. Pek çok dosya biçimini internet bağlantısına ihtiyaç duymadan işleyebiliyor.",
                 learnings: [
-                    "Python ve Streamlit ile platformdan bağımsız masaüstü araçları",
-                    "Birden fazla format için dosya dönüştürme pipeline'ları",
-                    "Yapay zeka destekli belge özetleme ve soru-cevap",
-                    "Çok sayfalı uygulama state'i ve navigasyon yönetimi",
-                    "Çok dilli kullanıcı kitlesi için yerelleştirme (i18n)"
+                    "Python ve Streamlit ile platformlar arası bir masaüstü aracı geliştirmek",
+                    "Farklı dosya biçimleri için dönüştürme akışları kurmak",
+                    "Belgeleri yapay zekâyla özetleyip içerik hakkında soruları yanıtlamak",
+                    "Çok sayfalı bir uygulamanın durumunu ve gezinme akışını yönetmek",
+                    "Çok dilli kullanıcılar için yerelleştirme altyapısı hazırlamak"
                 ]
             },
             financeTracker: {
                 subtitle: "Python / Streamlit / Veri Görselleştirme",
-                desc: "Gelir, gider ve bütçeyi kontrol altında tutmak için bir kişisel finans takipçisi. Gerçekten işe yaraması için yapıldı - hızlıca kayıt girilen, okunması kolay ve paranın nereye gittiğini anlamana gerçekten yardımcı olan görselleştirmelere sahip.",
+                desc: "Gelirleri, giderleri ve bütçeyi tek yerde takip etmek için geliştirdiğim bir kişisel finans uygulaması. Hızlı kayıt eklemeye, bilgileri kolayca okumaya ve görselleştirmeler sayesinde paranın nereye gittiğini açıkça görmeye odaklanıyor.",
                 learnings: [
-                    "Python ile veri görselleştirme (Matplotlib, Plotly)",
-                    "Streamlit'te sade finansal panolar oluşturmak",
-                    "Kişisel kayıtlar için kalıcı yerel depolama",
-                    "Sezgisel gider kategorizasyonu UX'i",
-                    "Finansal hesaplamalar ve rapor üretimi"
+                    "Matplotlib ve Plotly ile finans verilerini görselleştirmek",
+                    "Streamlit'le sade ve okunaklı finans panoları hazırlamak",
+                    "Kişisel kayıtları cihazda kalıcı olarak saklamak",
+                    "Giderleri kolayca sınıflandıran bir kullanım akışı tasarlamak",
+                    "Finansal hesaplamalar yapmak ve raporlar oluşturmak"
                 ]
             },
             kadeh: {
                 subtitle: "React & Vite / Tailwind CSS / Web Uygulaması",
-                desc: "Alkollü içecekler için Türkçe bir rehber - tarihçeler, üretim yöntemleri, tadım notları, servis ipuçları. Hem meraklı yeni başlayanlar hem de tutkunlar için tasarlandı. Arayüz, premium ve karanlık bir dergi hissiyatına sahip.",
+                desc: "Alkollü içeceklerin tarihçelerini, üretim yöntemlerini, tadım notlarını ve servis önerilerini bir araya getiren Türkçe bir rehber. Hem konuya yeni ilgi duyanlara hem de daha fazlasını öğrenmek isteyenlere hitap ediyor. Arayüzde koyu renkli, seçkin bir dergi havası yakalamaya çalıştım.",
                 learnings: [
-                    "React ve Vite ile içerik ağırlıklı statik SPA mimarisi",
-                    "Tailwind CSS ile premium karanlık arayüz tasarımı",
-                    "Büyük statik veri setlerini JS/JSON olarak organize etmek",
-                    "Hızlı ve erişilebilir filtreleme ve arama UX'i"
+                    "React ve Vite ile içerik ağırlıklı bir SPA kurgulamak",
+                    "Tailwind CSS ile koyu temalı, dergi tarzında bir arayüz tasarlamak",
+                    "Geniş statik veri kümelerini JS ve JSON içinde düzenli tutmak",
+                    "Hızlı ve erişilebilir bir arama ve filtreleme deneyimi oluşturmak"
                 ]
             }
         }

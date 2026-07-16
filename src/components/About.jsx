@@ -202,8 +202,8 @@ export default function About() {
                             </div>
                             <div className="skills-categories">
                                 {SKILLS.map(cat => (
-                                    <div key={cat.title} className="skills-category-box">
-                                        <span className="skills-category-title">{cat.title}</span>
+                                    <div key={cat.titleKey} className="skills-category-box">
+                                        <span className="skills-category-title">{t(cat.titleKey)}</span>
                                         <div className="skills-tags-wrap">
                                             {cat.items.map(s => (
                                                 <span key={s} className="tag">{s}</span>

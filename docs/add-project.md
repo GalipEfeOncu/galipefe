@@ -82,7 +82,7 @@ Dikkat edilmesi gerekenler:
 
 - Firestore'daki dolu koleksiyon statik diziyi tamamen geçersiz kılar; iki kaynağı bilinçli biçimde senkron tutun.
 - “Local Projeleri Aktararak Başla” işlemi statik diziyi Firestore'a seed eder ve harici veri yazar; kullanıcı açıkça istemeden çalıştırmayın.
-- Admin formu yeni bir `translationKey` üretebilir fakat modal hâlâ `projectData.<translationKey>` ağacını okur. DB-only proje ekledikten sonra modalı iki dilde mutlaka kontrol edin; gerekirse aynı anahtarın statik çevirilerini de ekleyip deploy edin.
+- `translationKey` için statik çeviri varsa liste ve modal bu içeriği Firestore alanlarından önce kullanır. DB-only bir anahtarın statik karşılığı yoksa iki görünüm de `subtitleEn/Tr`, `descriptionEn/Tr` ve `learningsEn/Tr` alanlarına döner. Yeni projeyi yine de iki dilde kontrol edin.
 - Production Firestore değişikliği dış sistem mutasyonudur; yetki ve hedef ortam net değilse gerçekleştirmeyin.
 
 Firebase ayrıntıları için [`firebase-admin.md`](./firebase-admin.md) dosyasına bakın.

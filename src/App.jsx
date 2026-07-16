@@ -2,6 +2,7 @@ import { useState, useEffect, lazy, Suspense, useRef } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import { useLanguage } from './context/LanguageContext';
 
 const About = lazy(() => import('./components/About'));
 const Projects = lazy(() => import('./components/Projects'));
@@ -16,6 +17,7 @@ function ScrollToTop() {
 }
 
 function App() {
+    const { t } = useLanguage();
     const [selectedProject, setSelectedProject] = useState(null);
     const [theme, setTheme] = useState(() => {
         const saved = localStorage.getItem('site_theme');
@@ -78,7 +80,7 @@ function App() {
             <button
                 onClick={scrollToTop}
                 className="scroll-to-top"
-                aria-label="Scroll to top"
+                aria-label={t('app.scrollToTop')}
                 style={{
                     position: 'fixed',
                     bottom: 24,

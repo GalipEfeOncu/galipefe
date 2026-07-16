@@ -1,7 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { getProjectContent } from '../utils/projectContent';
 
 function ModalImage({ project }) {
+    const { t } = useLanguage();
     const [failed, setFailed] = useState(false);
     if (project.image && !failed) {
         return (
@@ -17,13 +19,13 @@ function ModalImage({ project }) {
     }
     return (
         <div className="sketchy-img" style={{ aspectRatio: '16/9', width: '100%', height: 'auto', display: 'grid', placeItems: 'center', background: 'var(--bg-2)', borderRadius: 'var(--r-md)' }}>
-            [hero screenshot - {project.title}]
+            [{t('modal.imageFallback').replace('{title}', project.title)}]
         </div>
     );
 }
 
 export default function Modal({ project, onClose }) {
-    const { t } = useLanguage();
+    const { t, lang } = useLanguage();
     const modalRef = useRef(null);
 
     useEffect(() => {
@@ -75,9 +77,7 @@ export default function Modal({ project, onClose }) {
 
     if (!project) return null;
 
-    const subtitle = t(`projectData.${project.translationKey}.subtitle`) || project.subtitle;
-    const desc = t(`projectData.${project.translationKey}.desc`) || project.description;
-    const learnings = t(`projectData.${project.translationKey}.learnings`) || project.learnings || [];
+    const { subtitle, description: desc, learnings } = getProjectContent(project, lang);
     
     const statusLabel = t(
         project.status === 'Completed'

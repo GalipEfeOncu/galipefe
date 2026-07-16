@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { projects as staticProjects } from '../data/projects';
 import { projectService } from '../services/projectService';
+import { getProjectContent } from '../utils/projectContent';
 import useSEO from '../hooks/useSEO';
 
 // Prefetch Modal chunk on first card hover to eliminate lazy-load delay
@@ -9,11 +10,19 @@ const prefetchModal = () => import('./Modal');
 let modalPrefetched = false;
 
 function StatusBadge({ status }) {
+    const { t } = useLanguage();
     const cls = status === 'Completed' ? 'completed' : status === 'Discontinued' ? 'disc' : 'wip';
+    const label = t(
+        status === 'Completed'
+            ? 'projects.filters.completed'
+            : status === 'Discontinued'
+                ? 'projects.filters.discontinued'
+                : 'projects.filters.wip'
+    );
     return (
         <span className={`status ${cls}`}>
             <span className="led" />
-            {status}
+            {label}
         </span>
     );
 }
@@ -85,31 +94,15 @@ export default function Projects({ onOpenModal }) {
     const rest = list.slice(1);
 
     const getSubtitle = (p) => {
-        if (p.subtitleEn || p.subtitleTr) {
-            return lang === 'tr' ? (p.subtitleTr || p.subtitle) : (p.subtitleEn || p.subtitle);
-        }
-        const key = `projectData.${p.translationKey}.subtitle`;
-        const val = t(key);
-        return val === key ? p.subtitle : val;
+        return getProjectContent(p, lang).subtitle;
     };
     
     const getDesc = (p) => {
-        if (p.descriptionEn || p.descriptionTr) {
-            return lang === 'tr' ? (p.descriptionTr || p.description) : (p.descriptionEn || p.description);
-        }
-        const key = `projectData.${p.translationKey}.desc`;
-        const val = t(key);
-        return val === key ? p.description : val;
+        return getProjectContent(p, lang).description;
     };
     
     const getLearnings = (p) => {
-        if (p.learningsEn || p.learningsTr) {
-            const list = lang === 'tr' ? p.learningsTr : p.learningsEn;
-            return Array.isArray(list) ? list : (p.learnings || []);
-        }
-        const key = `projectData.${p.translationKey}.learnings`;
-        const val = t(key);
-        return val === key ? (p.learnings || []) : val;
+        return getProjectContent(p, lang).learnings;
     };
 
     return (
@@ -137,7 +130,7 @@ export default function Projects({ onOpenModal }) {
 
             {loading ? (
                 <div style={{ textAlign: 'center', padding: 80, color: 'var(--muted)', fontFamily: 'var(--mono)', fontSize: 14 }}>
-                    {lang === 'tr' ? 'Projeler yükleniyor...' : 'Loading projects...'}
+                    {t('projects.loading')}
                 </div>
             ) : list.length === 0 ? (
                 <div className="projects-empty">

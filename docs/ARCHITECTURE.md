@@ -51,8 +51,7 @@ Projects/About
 - Firestore erişimi `src/services/projectService.js` üzerinden yapılır ve üç saniyelik timeout uygular.
 - Statik katalog yalnızca geliştirme verisi değildir; üretim için de gerçek fallback ve `/admin` seed kaynağıdır.
 - Statik dizinin ilk öğesi, aktif filtre içinde featured proje olur. Firestore tarafında sıralamayı `order` alanı belirler.
-- `Projects` Firestore kayıtlarında `subtitleEn/Tr`, `descriptionEn/Tr` ve `learningsEn/Tr` alanlarını destekler. Statik kayıtlarda `projectData.<translationKey>` çevirilerini tercih eder.
-- `Modal` statik `projectData.<translationKey>` ağacını doğrudan okur. Bu nedenle DB-only yeni bir `translationKey` için modal davranışı ayrıca kontrol edilmelidir; mevcut uygulama tam anlamıyla CMS-bağımsız çeviri sağlamaz.
+- `Projects` ve `Modal`, proje metinlerini `src/utils/projectContent.js` üzerinden aynı sırayla çözer. Bilinen bir `translationKey` için `projectData.<translationKey>` çevirileri önceliklidir; anahtar bulunamazsa seçili dildeki Firestore alanları (`subtitleEn/Tr`, `descriptionEn/Tr`, `learningsEn/Tr`) ve son olarak ortak fallback alanları kullanılır.
 
 Şema ve ekleme adımları için [`add-project.md`](./add-project.md) dosyasına bakın.
 
@@ -68,9 +67,9 @@ Projects/About
 
 `src/data/profile.js` üç named export içerir:
 
-- `CONTACTS`: ana iletişim kartları. Kayıtlardaki `descKey` alanı mevcut Contact görünümünde render edilmez.
+- `CONTACTS`: ana iletişim kartları. Görünen kanal adları `nameKey` ile çevrilir; kayıtlardaki `descKey` alanı mevcut Contact görünümünde render edilmez.
 - `SOCIALS`: ikincil profil bağlantıları.
-- `SKILLS`: About sayfasındaki teknoloji kategorileri.
+- `SKILLS`: About sayfasındaki teknoloji kategorileri. Kategori başlıkları `titleKey` ile çevrilir, teknoloji adları ortak kalır.
 
 Bu veri statiktir; Firestore tarafından değiştirilmez.
 

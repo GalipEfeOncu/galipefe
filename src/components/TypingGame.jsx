@@ -34,21 +34,19 @@ const WORDS_TR = [
 const PERSONAL_RECORD = 155; // MonkeyType 15s record
 
 /* ── Score comments ─────────────────────────────────────────── */
-function getComment(wpm, lang, myWpm) {
+function getComment(wpm, myWpm, t) {
     const ratio = wpm / myWpm;
+    const key = wpm >= myWpm
+        ? 'beat'
+        : ratio >= 0.85
+            ? 'near'
+            : ratio >= 0.65
+                ? 'good'
+                : ratio >= 0.45
+                    ? 'decent'
+                    : 'warmup';
 
-    if (lang === 'tr') {
-        if (wpm >= myWpm) return `${wpm} WPM — Beni geçtin! Tebrikler, bu kaçıncı denemen?`;
-        if (ratio >= 0.85) return `${wpm} WPM — Çok yaklaştın! Rekoruma az kaldı.`;
-        if (ratio >= 0.65) return `${wpm} WPM — Fena sayılmaz, ama benim rekoruma daha var.`;
-        if (ratio >= 0.45) return `${wpm} WPM — İdare eder. Biraz daha pratik?`;
-        return `${wpm} WPM — Klavye biraz ısınması lazım galiba.`;
-    }
-    if (wpm >= myWpm) return `${wpm} WPM — You beat me! Impressive, was this your first try?`;
-    if (ratio >= 0.85) return `${wpm} WPM — So close to my record!`;
-    if (ratio >= 0.65) return `${wpm} WPM — Not bad! Still a ways off my record though.`;
-    if (ratio >= 0.45) return `${wpm} WPM — Decent. Might want to practice more.`;
-    return `${wpm} WPM — The keyboard needs warming up.`;
+    return t(`typingGame.result.${key}`).replace('{wpm}', wpm);
 }
 
 /* ── Generate a word line ────────────────────────────────────── */
@@ -63,7 +61,7 @@ function generateWords(pool, count = 60) {
 const DURATION = 10; // seconds
 
 export default function TypingGame() {
-    const { lang } = useLanguage();
+    const { lang, t } = useLanguage();
     const pool = lang === 'tr' ? WORDS_TR : WORDS_EN;
     const myRecord = PERSONAL_RECORD;
 
@@ -209,9 +207,9 @@ export default function TypingGame() {
         <div className="tg-shell">
             {/* Header row */}
             <div className="tg-header">
-                <span className="tg-label">mini game</span>
+                <span className="tg-label">{t('typingGame.label')}</span>
                 <div className="tg-record-badge">
-                    <span className="tg-record-key">my record</span>
+                    <span className="tg-record-key">{t('typingGame.record')}</span>
                     <span className="tg-record-val">{myRecord} wpm</span>
                 </div>
             </div>
@@ -220,12 +218,10 @@ export default function TypingGame() {
             {phase === 'idle' && !hasPlayed && (
                 <div className="tg-idle">
                     <p className="tg-idle-desc">
-                        {lang === 'tr'
-                            ? '10 saniye, rastgele kelimeler — ne kadar hızlı yazabilirsin?'
-                            : '10 seconds, random words — how fast can you type?'}
+                        {t('typingGame.intro')}
                     </p>
                     <button className="tg-start-btn" onClick={startGame}>
-                        {lang === 'tr' ? 'Başla' : 'Start'}
+                        {t('typingGame.start')}
                         <span className="tg-start-icon">↵</span>
                     </button>
                 </div>
@@ -282,7 +278,7 @@ export default function TypingGame() {
                         className={`tg-input${isCurrentWrong ? ' input-wrong' : ''}`}
                         value={typed}
                         onChange={handleInput}
-                        placeholder={lang === 'tr' ? 'yazmaya başla...' : 'start typing...'}
+                        placeholder={t('typingGame.inputPlaceholder')}
                         autoComplete="off"
                         autoCorrect="off"
                         autoCapitalize="off"
@@ -298,10 +294,10 @@ export default function TypingGame() {
                         <span className="tg-result-number">{wpm}</span>
                         <span className="tg-result-unit">wpm</span>
                     </div>
-                    <p className="tg-result-comment">{getComment(wpm, lang, myRecord)}</p>
+                    <p className="tg-result-comment">{getComment(wpm, myRecord, t)}</p>
                     <div className="tg-result-compare">
                         <div className="tg-compare-item">
-                            <span className="tg-compare-label">{lang === 'tr' ? 'senin' : 'you'}</span>
+                            <span className="tg-compare-label">{t('typingGame.you')}</span>
                             <div className="tg-compare-bar-wrap">
                                 <div
                                     className="tg-compare-bar you"
@@ -311,7 +307,7 @@ export default function TypingGame() {
                             <span className="tg-compare-val">{wpm}</span>
                         </div>
                         <div className="tg-compare-item">
-                            <span className="tg-compare-label">{lang === 'tr' ? 'benim' : 'me'}</span>
+                            <span className="tg-compare-label">{t('typingGame.me')}</span>
                             <div className="tg-compare-bar-wrap">
                                 <div
                                     className="tg-compare-bar me"
@@ -322,7 +318,7 @@ export default function TypingGame() {
                         </div>
                     </div>
                     <p className="tg-once-note">
-                        {lang === 'tr' ? 'F5 ile tekrar oynayabilirsin.' : 'Refresh to play again.'}
+                        {t('typingGame.retry')}
                     </p>
                 </div>
             )}

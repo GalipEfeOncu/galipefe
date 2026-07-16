@@ -85,7 +85,7 @@ export default function Contact() {
                         rel={c.url.startsWith('mailto') ? undefined : 'me noopener noreferrer'}
                         className="contact-directory-row"
                     >
-                        <span className="contact-directory-name">{c.name}</span>
+                        <span className="contact-directory-name">{t(c.nameKey)}</span>
                         <span className="contact-directory-value">{c.value}</span>
                         <span className="contact-directory-arrow">→</span>
                     </a>
@@ -118,7 +118,7 @@ export default function Contact() {
                                     value={formData.name}
                                     onChange={e => setFormData({ ...formData, name: e.target.value })}
                                     disabled={status.loading}
-                                    placeholder="e.g. John Doe"
+                                    placeholder={t('contact.formNamePlaceholder')}
                                 />
                             </div>
                             <div className="form-group">
@@ -132,7 +132,7 @@ export default function Contact() {
                                     value={formData.email}
                                     onChange={e => setFormData({ ...formData, email: e.target.value })}
                                     disabled={status.loading}
-                                    placeholder="e.g. john@example.com"
+                                    placeholder={t('contact.formEmailPlaceholder')}
                                 />
                             </div>
                         </div>
@@ -146,7 +146,7 @@ export default function Contact() {
                                 value={formData.message}
                                 onChange={e => setFormData({ ...formData, message: e.target.value })}
                                 disabled={status.loading}
-                                placeholder="Write your message here..."
+                                placeholder={t('contact.formMessagePlaceholder')}
                             />
                         </div>
                         {status.error && (
