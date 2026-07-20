@@ -2,7 +2,7 @@
 
 Oyun geliştirme, web uygulamaları ve geliştirici araçları üzerine çalışmalarımı sergileyen iki dilli kişisel portfolyo.
 
-Canlı site: [galipefe.vercel.app](https://galipefe.vercel.app/)
+Canlı site: [galipefeoncu.com](https://galipefeoncu.com/)
 
 ## Teknolojiler
 

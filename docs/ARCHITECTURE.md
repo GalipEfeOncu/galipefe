@@ -90,7 +90,7 @@ Bu veri statiktir; Firestore tarafından değiştirilmez.
 - Sayfa açıklamaları `seo.*Desc` anahtarlarından gelir.
 - `/admin`, Vercel `X-Robots-Tag` başlığıyla indeks dışı bırakılır ve sitemap'e eklenmez.
 - Bilinmeyen rotalar iki dilli `NotFound` görünümüne düşer ve `noindex, follow` meta değeri alır.
-- Canonical public adres `https://galipefe.vercel.app/` olarak kullanılmaktadır; domain değişirse `index.html`, `useSEO.js`, `public/robots.txt` ve `public/sitemap.xml` birlikte kontrol edilmelidir.
+- Canonical public adres `https://galipefeoncu.com/` olarak kullanılmaktadır; domain değişirse `index.html`, `useSEO.js`, `public/robots.txt` ve `public/sitemap.xml` birlikte kontrol edilmelidir.
 
 ## CSS ve görseller
 
