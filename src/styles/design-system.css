@@ -27,8 +27,8 @@
   --accent-glow: rgba(217, 119, 87, 0.15);
   
   --warn: #e0984f;
-  --good: #788c5d;
-  --bad: #d95c5c;
+  --good: #8aab66;
+  --bad:  #e87070;
   
   --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(255, 255, 255, 0.01);
   --shadow-lg: 0 20px 40px -15px rgba(0, 0, 0, 0.7);

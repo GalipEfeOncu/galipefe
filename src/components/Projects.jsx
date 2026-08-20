@@ -268,7 +268,7 @@ export default function Projects({ onOpenModal }) {
                                 className="proj-grid-card"
                                 onClick={() => onOpenModal(p)}
                                 onMouseEnter={handleCardMouseEnter}
-                                aria-label={`${p.title} - ${t('projects.viewDetails')}`}
+                                aria-label={p.title}
                             >
                                 <span className="proj-grid-img-wrap">
                                     <ProjectImage 
