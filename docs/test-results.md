@@ -247,7 +247,76 @@ Aşağıdaki HTML raporlar interaktif olarak açılabilir:
 
 ## Aşama 2 — SEO Testleri
 
-**Durum:** ⏳ Beklemede
+**Tarih:** 2026-08-20  
+**Durum:** ✅ Otomatik testler tamamlandı — Manuel testler beklemede
+
+---
+
+### 2.1 Teknik SEO — Otomatik Curl Sonuçları
+
+| Test | Kontrol | Sonuç | Durum |
+|---|---|---|---|
+| SEO-01 | `<title>` mevcut | "Galip Efe Öncü \| Software & Game Developer" | ✅ |
+| SEO-03 | `<title>` uzunluğu | 50 karakter (hedef 30–60) | ✅ |
+| SEO-02 | `<meta description>` mevcut | 155 karakter | ✅ |
+| SEO-05 | Canonical URL | `https://galipefeoncu.com/` mevcut | ✅ |
+| SEO-06 | `robots.txt` (200) | `Allow: /`, Sitemap referansı var | ✅ |
+| SEO-07 | `sitemap.xml` (200) | Geçerli XML, 3 URL listelendi | ✅ |
+| SEO-08 | Sitemap URL'leri | `/`, `/projects`, `/contact` | ✅ |
+| SEO-09 | `/admin` noindex | `X-Robots-Tag: noindex, nofollow` ✅ | ✅ |
+| SEO-28 | Redirect zinciri | `galipefeoncu.com` → `www.galipefeoncu.com` (301, tek adım) | ✅ |
+| SEO-29 | Clean URLs | Trailing slash → 308 redirect (/projects/ → /projects) | ✅ |
+| SEO-24 | sameAs linkleri | GitHub ✅ · Instagram ✅ · LinkedIn 999* | ⚠️ |
+
+**LinkedIn 999:** LinkedIn, bot requestlerine 999 döndürür — gerçek bir hata değil, LinkedIn'in bot engelleme mekanizması. Tarayıcıda link çalışıyor.
+
+---
+
+### 2.2 Open Graph & Twitter Card
+
+| Test | Değer | Durum |
+|---|---|---|
+| SEO-12 | `og:title` | "Galip Efe Öncü \| Software & Game Developer" | ✅ |
+| SEO-13 | `og:description` | Mevcut, 155 karakter | ✅ |
+| SEO-14 | `og:image` URL (200) | `https://galipefeoncu.com/assets/images/pp.webp` → HTTP 200 | ✅ |
+| SEO-15 | `og:image` boyutu | 11,104 bytes (10.8 KB WebP) | ⚠️ |
+| SEO-16 | `twitter:card` | `summary_large_image` | ✅ |
+| SEO-17 | `og:locale` | `en_US` (statik, dil değişiminde güncellenmez) | ⚠️ |
+
+**OG image boyutu uyarısı (SEO-15):** `og:image` için önerilen minimum 1200×630 px büyük bir görsel. `pp.webp` yüksek ihtimalle bu boyutta değil. Facebook ve Twitter'da küçük önizleme görseli çıkabilir — `summary_large_image` için en az 800×418 px gerekli.
+
+**og:locale statik (SEO-17):** `og:locale` her zaman `en_US`. Kullanıcı TR moduna geçse de `lang` değişmiyor. Bu bilinen bir SPA kısıtlaması — düşük öncelikli.
+
+---
+
+### 2.3 Bulunan Sorunlar
+
+#### 🟠 /admin rotası — 404 dönüyor (vercel.json sorunu)
+
+`vercel.json` içinde `/admin` için rewrite tanımlı ama production'da `/admin` HTTP 404 veriyor.  
+`noindex` header'ı geliyor ama sayfa içeriği gelmiyor. Vercel deploy sonrası yeniden kontrol edilmeli.
+
+**Olası neden:** Son commit öncesi production'da eski versiyon varsa bu geçici olabilir. Deploy tamamlanınca tekrar test edilecek.
+
+#### ✅ sitemap.xml — www vs non-www tutarsızlığı (Yeniden Değerlendirme)
+
+Sitemap URL'leri `https://galipefeoncu.com/` (non-www) kullanıyor ve site www'ye yönlendiriyor — ancak **bu tutarlı**: `index.html` içindeki `<link rel="canonical">` ve tüm JSON-LD URL'leri de non-www. Google canonical'ı takip ettiği için sitemap ve canonical'ın eşleşmesi yeterli. Sorun yok.
+
+#### ⚠️ Güvenlik headerları eksik
+
+`Content-Security-Policy`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy` headerları Vercel'den gelmiyor.  
+Bu Aşama 6 (Güvenlik) kapsamında ele alınacak; `vercel.json` headers bölümüne eklenebilir.
+
+---
+
+### 2.4 Manuel Testler — Senden Beklenen
+
+| Test | Araç | Yapılacak | Sonuç |
+|---|---|---|---|
+| SEO-20–23 | [Rich Results Test](https://search.google.com/test/rich-results) | `https://www.galipefeoncu.com` gir → JSON-LD doğrula | ✅ **1 geçerli öğe (ProfilePage)** |
+| SEO-25–26 | [Google Search Console](https://search.google.com/search-console) | İndeksleme durumu + URL coverage kontrol | ⏳ Beklemede |
+| SEO-18 | [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) | OG image önizlemesini gör (boyut uyarısı var mı?) | ⏳ "Fetch new information" tıklanmalı |
+
 
 ---
 
