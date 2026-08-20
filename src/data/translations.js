@@ -15,8 +15,8 @@ export const translations = {
             loadingProject: "Loading project details..."
         },
         header: {
-            switchToTurkish: "Switch language to Turkish",
-            switchToEnglish: "Switch language to English",
+            switchToTurkish: "EN – Switch language to Turkish",
+            switchToEnglish: "TR – Switch language to English",
             switchToLight: "Switch to light mode",
             switchToDark: "Switch to dark mode",
             toggleNavigation: "Toggle navigation menu",
@@ -80,7 +80,7 @@ export const translations = {
             kvEdu: "edu",
             kvLang: "lang",
             kvFocus: "fav game",
-            scrollToDetails: "Scroll to the about details"
+            scrollToDetails: "about me – scroll down"
         },
         projects: {
             title: "Projects",
@@ -335,8 +335,8 @@ export const translations = {
             loadingProject: "Proje ayrıntıları yükleniyor..."
         },
         header: {
-            switchToTurkish: "Dili Türkçe yap",
-            switchToEnglish: "Dili İngilizce yap",
+            switchToTurkish: "TR – Dili Türkçe yap",
+            switchToEnglish: "EN – Dili İngilizce yap",
             switchToLight: "Açık temaya geç",
             switchToDark: "Koyu temaya geç",
             toggleNavigation: "Gezinme menüsünü aç veya kapat",
@@ -400,7 +400,7 @@ export const translations = {
             kvEdu: "okul",
             kvLang: "dil",
             kvFocus: "favori oyun",
-            scrollToDetails: "Hakkımda ayrıntılarına ilerle"
+            scrollToDetails: "hakkımda – aşağı kaydır"
         },
         projects: {
             title: "Projeler",

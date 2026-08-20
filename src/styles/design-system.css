@@ -1931,7 +1931,6 @@ footer {
   color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  opacity: 0.75;
 }
 
 .tg-record-badge {
