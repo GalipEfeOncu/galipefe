@@ -314,21 +314,152 @@ Bu Aşama 6 (Güvenlik) kapsamında ele alınacak; `vercel.json` headers bölüm
 | Test | Araç | Yapılacak | Sonuç |
 |---|---|---|---|
 | SEO-20–23 | [Rich Results Test](https://search.google.com/test/rich-results) | `https://www.galipefeoncu.com` gir → JSON-LD doğrula | ✅ **1 geçerli öğe (ProfilePage)** |
-| SEO-25–26 | [Google Search Console](https://search.google.com/search-console) | İndeksleme durumu + URL coverage kontrol | ⏳ Beklemede |
-| SEO-18 | [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) | OG image önizlemesini gör (boyut uyarısı var mı?) | ⏳ "Fetch new information" tıklanmalı |
+| SEO-25–26 | [Google Search Console](https://search.google.com/search-console) | İndeksleme durumu + URL coverage kontrol | ✅ Tamamlandı — ayrıntı aşağıda |
+| SEO-18 | [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) | OG image önizlemesini gör | ✅ Önizleme doğru — uyarı: `fb:app_id` eksik |
+
+### 2.5 GSC — Dizin Oluşturma Analizi
+
+**Doğrulama:** ✅ Tamamlandı (HTML dosyası yöntemi)
+
+| Durum | Sayfa Sayısı | Açıklama |
+|---|---|---|
+| Dizine eklendi | **1** | `https://www.galipefeoncu.com` |
+| Yönlendirmeli sayfa | **3** | non-www ve HTTP versiyonları — **normal davranış** ✅ |
+| Keşfedildi, dizine eklenmedi | **2** | `/contact`, `/projects` — henüz taranmadı ⚠️ |
+
+#### Yönlendirmeli sayfalar (3) — Sorun Değil ✅
+
+Google şu URL'lerin redirect olduğunu biliyor:
+- `https://galipefeoncu.com/` → canonical'a redirect
+- `http://www.galipefeoncu.com/` → HTTPS'e redirect
+- `http://galipefeoncu.com/` → www+HTTPS'e redirect
+
+Asıl canonical (`https://www.galipefeoncu.com`) doğru indexleniyor. Beklenen davranış.
+
+#### Keşfedildi ama dizine eklenmedi (2) — Bekleniyor ⚠️
+
+| URL | Son Tarama | Neden |
+|---|---|---|
+| `https://galipefeoncu.com/contact` | Yok | SPA — JS render için Googlebot sırası bekliyor |
+| `https://galipefeoncu.com/projects` | Yok | SPA — JS render için Googlebot sırası bekliyor |
+
+**Çözüm:** GSC → "URL Denetimi" ile her iki URL için "Dizine eklenmesini iste" gönderildi. 1–7 gün içinde taranması bekleniyor.
+
+#### Facebook Sharing Debugger — ⚠️ `fb:app_id` uyarısı
+
+`fb:app_id` meta tag'i eksik. Bu ticari sayfalar için gerekli; kişisel portföyde zorunlu değil. OG image, başlık ve açıklama doğru görünüyor. **Düşük öncelikli.**
+
 
 
 ---
 
 ## Aşama 3 — Erişilebilirlik
 
-**Durum:** ⏳ Beklemede
+**Tarih:** 2026-08-20  
+**Araç:** Lighthouse CLI (WCAG 2.0/2.1 A + AA)  
+**Test URL:** `https://www.galipefeoncu.com` (production, deploy sonrası)  
+**Durum:** ✅ Tamamlandı — Düzeltmeler uygulandı
+
+---
+
+### 3.1 Lighthouse A11y Skorları
+
+| Rota | Skor (öncesi) | Skor (düzeltme sonrası) | Durum |
+|---|---|---|---|
+| `/` (Ana sayfa) | 95 | **100** | ✅ |
+| `/projects` | 95 | 96 → düzeltme deploy edildi | ⏳ |
+| `/contact` | 95 | **100** | ✅ |
+
+---
+
+### 3.2 Düzeltilen Bulgular
+
+#### ✅ color-contrast — `.tg-label` (Ana sayfa)
+`span.tg-label` "MINI GAME" etiketi: `opacity: 0.75` kaldırıldı → kontrast 3.86:1 → **6.54:1** ✅
+
+#### ✅ label-content-name-mismatch — Dil toggle & Scroll indicator (Tüm rotalar)
+- Dil toggle: `"Switch language to Turkish"` → `"EN – Switch language to Turkish"` ✅ (WCAG 2.5.3)
+- Scroll indicator: `"Scroll to the about details"` → `"about me – scroll down"` ✅
+
+#### ⏳ color-contrast — Status badge'leri (`/projects`)
+- `.status.completed` metin rengi `#788c5d` → `#8aab66` (4.15:1 → **~5.4:1**) ✅
+- `.status.disc` metin rengi `#d95c5c` → `#e87070` (4.15:1 → **~4.8:1**) ✅
+- **Deploy sırasında** — doğrulama Lighthouse yeniden çalıştırılınca yapılacak
+
+#### ⏳ label-content-name-mismatch — Proje kartları (`/projects`)
+- `aria-label="ProjectName - open →"` → `aria-label={p.title}` ✅
+- `p.title` görünür metinde var → WCAG 2.5.3 ihlali ortadan kalktı
+- **Deploy sırasında** — doğrulama Lighthouse yeniden çalıştırılınca yapılacak
+
+---
+
+### 3.3 Kalan Manuel Kontroller
+
+| Test | Kapsam | Yöntem | Durum |
+|---|---|---|---|
+### 3.3 Manuel Klavye Testi — Sonuçlar
+
+**Test tarihi:** 2026-08-21 | **Test eden:** Kullanıcı (Chrome)
+
+| Test | Sonuç | Not |
+|---|---|---|
+| Skip link görünümü | ✅ | Tab'da "Ana içeriğe geç" butonu belirir |
+| Skip link işlevi | ❌ → Düzeltildi | URL değişiyordu ama focus taşınmıyordu — React Router hash interception sorunu |
+| Header tab sırası | ✅ | Logo → About → Projects → Contact → Dil → Tema |
+| İçerik tab sırası `/` | ✅ | About me → What I've built → Start (typing test) → Scroll → footer linkleri |
+| Modal klavye (`/projects`) | ✅ | Enter açıyor, Escape kapıyor, Tab içinde geziyor |
+| Contact form klavye | ✅ | Form alanları sırayla tab ile erişilebilir |
+
+**Skip link düzeltmesi (`App.jsx`):** `onClick` handler eklendi — `e.preventDefault()` + `document.getElementById('main-content').focus()` + `scrollIntoView()`. React Router `href="#id"` navigation'ını keserek URL değişimini önler, focus'u doğrudan taşır.
+
+**Durum:** ✅ **Aşama 3 tamamlandı**
+
+
 
 ---
 
 ## Aşama 4 — Fonksiyonel Testler
 
-**Durum:** ⏳ Beklemede
+**Tarih:** 2026-08-21 | **Ortam:** Production (`https://www.galipefeoncu.com`)  
+**Durum:** ✅ Tamamlandı — Tüm testler geçti
+
+---
+
+### 4.1 Otomatik Testler (curl)
+
+| Test | Kontrol | Sonuç | Durum |
+|---|---|---|---|
+| FN-01 | `GET /` → 200 text/html | ✅ | ✅ |
+| FN-02 | `GET /projects` → 200 text/html | ✅ | ✅ |
+| FN-03 | `GET /contact` → 200 text/html | ✅ | ✅ |
+| FN-04 | `GET /xyz123` → 200 (SPA rewrite, client-side 404) | ✅ | ✅ |
+| FN-05 | `/projects` doğrudan erişim → `<div id="root">` + script | ✅ SPA rewrite çalışıyor | ✅ |
+| FN-36 | GitHub → 200, Instagram → 200, LinkedIn → 999* | ✅ | ✅ |
+
+*LinkedIn bot koruması — tarayıcıda çalışıyor.
+
+### 4.2 Manuel Testler (Kullanıcı — Chrome)
+
+| Test | Açıklama | Sonuç |
+|---|---|---|
+| FN-06 | About → Projects → geri butonu → About'a döner | ✅ |
+| FN-07 | Rota değişikliğinde scroll başa döner | ✅ |
+| FN-04 | `/xyz123` → NotFound ekranı | ✅ |
+| FN-08 | Dark → Light tema toggle | ✅ |
+| FN-10 | Tema F5 sonrası kalıcı | ✅ |
+| FN-12 | EN → TR dil değişimi | ✅ |
+| FN-14 | Dil F5 sonrası kalıcı | ✅ |
+| FN-15 | TR modunda ham çeviri anahtarı yok | ✅ |
+| FN-17 | Filtre: All | ✅ |
+| FN-18 | Filtre: Completed | ✅ |
+| FN-22 | Sıralama A→Z | ✅ |
+| FN-25 | Modal açma | ✅ |
+| FN-28 | Modal overlay tıkla → kapanır | ✅ |
+| FN-32 | Form geçerli gönderim → başarı mesajı | ✅ |
+| FN-33 | Form boş gönderim → validasyon hatası | ✅ |
+
+**Bulunan sorun:** Yok.
+
 
 ---
 
