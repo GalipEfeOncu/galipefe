@@ -86,7 +86,15 @@ function App() {
     return (
         <>
             <ScrollToTop />
-            <a href="#main-content" className="skip-link">{t('app.skipToContent')}</a>
+            <a
+                href="#main-content"
+                className="skip-link"
+                onClick={(e) => {
+                    e.preventDefault();
+                    const main = document.getElementById('main-content');
+                    if (main) { main.focus(); main.scrollIntoView(); }
+                }}
+            >{t('app.skipToContent')}</a>
             <Header theme={theme} toggleTheme={toggleTheme} />
             <main id="main-content" tabIndex="-1">
                 <Suspense fallback={<PageLoader />}>
