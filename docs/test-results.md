@@ -465,7 +465,39 @@ Asıl canonical (`https://www.galipefeoncu.com`) doğru indexleniyor. Beklenen d
 
 ## Aşama 5 — Responsive & Cross-Browser
 
-**Durum:** ⏳ Beklemede
+**Tarih:** 2026-08-21 | **Ortam:** Production  
+**Durum:** ✅ Tamamlandı — 1 bug bulundu ve düzeltildi
+
+---
+
+### 5.1 Mobile Lighthouse Skorları
+
+| Rota | Perf | A11y | BP | SEO | FCP | LCP | TBT | CLS |
+|---|---|---|---|---|---|---|---|---|
+| `/` | **90** ✅ | **100** ✅ | 96 | 100 | 2.1s | 2.9s | 180ms | 0.072 |
+| `/projects` | **78** ⚠️ | **100** ✅ | 96 | 100 | 2.1s | 4.7s | 120ms | 0.063 |
+| `/contact` | **90** ✅ | **100** ✅ | 100 | 100 | 2.2s | 3.2s | 10ms | 0.072 |
+
+`/projects` Perf=78 (hedef ≥80): Firebase SDK (342 KB) mobilde parse süresi LCP'yi 4.7s'ye çıkarıyor. Aşama 7'de ele alınacak.
+
+### 5.2 Manuel DevTools Responsive Testi
+
+**Test eden:** Kullanıcı | **Araç:** Chrome DevTools Device Toolbar
+
+| Genişlik | Cihaz | `/` | `/projects` | Sonuç |
+|---|---|---|---|---|
+| 375px | iPhone SE | ✅ | ✅ | Taşma yok, butonlar erişilebilir |
+| 768px | iPad | ✅ | ✅ | Layout düzgün |
+| 1280px | Desktop | ✅ | ✅ | Normal görünüm |
+
+### 5.3 Bulunan ve Düzeltilen Bug
+
+**RES-01 — Mini-game mobilde gizlenmiyor** ❌ → ✅ Düzeltildi
+
+- **Sorun:** `.hero-right` (TypingGame bileşeni) `≤900px`'de tek sütuna geçiyor ama hiç `display: none` almıyor. Mobilde bio metninin altında tam yükseklikte görünüyordu.
+- **Düzeltme:** `@media (max-width: 768px)` bloğuna `.hero-right { display: none; }` eklendi.
+- **Commit:** `f58df57`
+
 
 ---
 
