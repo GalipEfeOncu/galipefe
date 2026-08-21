@@ -1835,6 +1835,7 @@ footer {
   .section-padding { padding: 60px 0; }
   .dock-mobile-toggle { display: flex !important; }
   .dock-nav { display: none !important; }
+  .hero-right { display: none; }
   
   .modal-container { max-width: 100%; }
   .modal-hero { flex-direction: column; text-align: center; }
