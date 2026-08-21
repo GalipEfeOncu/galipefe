@@ -498,6 +498,13 @@ Asıl canonical (`https://www.galipefeoncu.com`) doğru indexleniyor. Beklenen d
 - **Düzeltme:** `@media (max-width: 768px)` bloğuna `.hero-right { display: none; }` eklendi.
 - **Commit:** `f58df57`
 
+**RES-02 — Sort dropdown yanlış konumda açılıyor (mobile Chrome)** ❌ → ✅ Düzeltildi
+
+- **Sorun:** `/projects` mobilde sıralama `<select>`'e tıklanınca dropdown seçenekleri ekranın üst kısmında, select'ten uzakta açılıyordu.
+- **Kök neden:** `pageFadeIn` animasyonu `transform: translateY(10px→0)` kullanıyordu. Chrome/Blink, transform içeren animasyonlar için GPU compositing layer oluşturur; bu layer native `<select>` dropdown koordinat hesaplamasını bozuyor.
+- **Düzeltme:** `pageFadeIn`'den `transform` kaldırıldı — sadece `opacity: 0→1` fade kullanıldı.
+- **Commit:** `81faf04`
+
 
 ---
 
