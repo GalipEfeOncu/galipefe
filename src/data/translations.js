@@ -1,10 +1,10 @@
 export const translations = {
     en: {
         seo: {
-            aboutTitle: "Galip Efe Öncü | Software & Game Developer",
-            aboutDesc: "Galip Efe Öncü - Software Engineering student and game developer specializing in Unity, C#, React, and building interactive software experiences.",
-            projectsDesc: "Explore the games, desktop utilities, and web tools developed by Galip Efe Öncü, featuring roguelikes, AI engines, and productivity apps.",
-            contactDesc: "Get in touch with Galip Efe Öncü for software engineering projects, collaborations, or game development opportunities.",
+            aboutTitle: "Galip Efe Öncü | AI Agent Systems",
+            aboutDesc: "Galip Efe Öncü builds AI agent systems for project research, positioning, and ad-content workflows.",
+            projectsDesc: "Explore AI agent systems, automation workflows, and experimental products by Galip Efe Öncü.",
+            contactDesc: "Get in touch with Galip Efe Öncü about AI agent systems, growth automation, or content workflows.",
             notFoundTitle: "Page Not Found | Galip Efe Öncü",
             notFoundDesc: "The requested page could not be found. Return to Galip Efe Öncü's portfolio homepage."
         },
@@ -33,9 +33,9 @@ export const translations = {
         },
         hero: {
             welcome: "Hi there, I'm",
-            role: "Software Engineering Student",
+            role: "AI Agent Systems Builder",
             status: "open to work",
-            desc: "I build things that run, feel good, and don't break. Games, tools, web apps - if code can solve it, I'm already thinking about it.",
+            desc: "I design AI agent systems that take a project from research and positioning to campaign ideas and usable ad content.",
             interests: {
                 gaming: "Gaming",
                 walking: "Walking",
@@ -46,9 +46,9 @@ export const translations = {
         },
         about: {
             title: "About Me",
-            bio1: "I'm <strong>{age}</strong>, a second-year Software Engineering student at <strong>Fırat University</strong> in Elazığ. Grew up in <strong>Konya</strong>, Turkey.",
-            bio2: "Before university, I spent four years at <strong>Adil Karaağaç Vocational High School</strong> in the IT department. That's where my real curiosity about how things actually work under the hood began.",
-            bio3: "I'm into building things that feel alive - Unity roguelikes, React apps, whatever. If there's an interesting problem, I'll dig into it. When I'm not coding, I'm usually working out, playing games, or occasionally burying myself in a book - a habit I'm trying to make stick.",
+            bio1: "I'm <strong>{age}</strong> and based in <strong>Konya</strong>, Turkey. I build AI agent systems for people who need to move a project from an idea to a clearer, more repeatable execution plan.",
+            bio2: "My Software Engineering background at <strong>Fırat University</strong> gives those systems a practical foundation: clear inputs, reliable tools, and workflows people can actually use.",
+            bio3: "My focus is AI agent systems: turning repeated work into clear workflows for research, project positioning, campaign planning, and content production. I like making automation practical enough to use, not just interesting to demo.",
             facts: {
                 location: "Location",
                 locationVal: "Konya, Turkey",
@@ -60,21 +60,21 @@ export const translations = {
                 gameVal: "The Witcher 3: Wild Hunt"
             },
             cta: {
-                projectsTitle: "What I've built",
-                projectsDesc: "Games, tools, web stuff - take a look.",
+                projectsTitle: "What I build",
+                projectsDesc: "Agent workflows, automation, and practical product experiments.",
                 contactTitle: "Say hello",
-                contactDesc: "Got a question or want to build something together? I'm around.",
-                projectsCount: "{count} projects · games, tools, web",
+                contactDesc: "Need an agent workflow or a clearer way to market a project? Let's talk.",
+                projectsCount: "{count} projects · agents, automation, experiments",
                 contactChannels: "3 ways to reach me"
             },
-            heading: "Hi, I'm Galip. I write code and build things people actually use.",
+            heading: "Hi, I'm Galip. I build AI agent systems that move projects forward.",
             interestsPanel: "interests",
             stackPanel: "stack · what I work with",
             skillCategories: {
-                languages: "Languages",
-                frameworks: "Frameworks & Tools",
-                backend: "Backend & Data",
-                gameDev: "Game Development"
+                agentSystems: "AI Agent Systems",
+                growthAutomation: "Growth Automation",
+                productDelivery: "Product Delivery",
+                foundations: "Technical Foundations"
             },
             kvLocation: "location",
             kvEdu: "edu",
@@ -84,7 +84,7 @@ export const translations = {
         },
         projects: {
             title: "Projects",
-            subtitle: "Games, desktop apps, web tools - stuff I built because I wanted to see if I could.",
+            subtitle: "AI agent systems, automation workflows, and practical experiments built to turn ideas into action.",
             filters: {
                 all: "All",
                 completed: "Completed",
@@ -147,14 +147,14 @@ export const translations = {
         },
         contact: {
             title: "Let's Connect",
-            subtitle: "Got a project, a collab idea, or just want to talk code? I'm around.",
+            subtitle: "Have a project to position, a workflow to automate, or content to produce? Let's talk.",
             elsewhere: "Find Me Elsewhere",
             skills: "Technical Skills",
             category: {
                 lang: "Languages",
                 frameworks: "Frameworks & Tools",
                 backend: "Backend & Database",
-                gamedev: "Game Development"
+                gamedev: "AI Agent Systems"
             },
             ctaTitle: "Got something cooking?",
             ctaDesc: "Take a look at what I've been building - or just message me directly.",
@@ -185,9 +185,9 @@ export const translations = {
             preferredLabel: "best way",
             preferredVal: "email →",
             whatImInto: "what I'm into",
-            interest1: "Game dev - the feel, the systems, the tiny details that make it click",
-            interest2: "Modern web - React, smooth interactions, clean UX",
-            interest3: "Tools that actually save people time",
+            interest1: "Agent systems that turn repeatable work into dependable workflows",
+            interest2: "Project positioning, lead research, and campaign planning",
+            interest3: "Ad-content workflows that turn a clear offer into usable creative directions",
             githubDesc: "Where most of my code lives",
             linkedinDesc: "If you're the professional type",
             emailDesc: "Fastest way to actually reach me",
@@ -321,10 +321,10 @@ export const translations = {
     },
     tr: {
         seo: {
-            aboutTitle: "Galip Efe Öncü | Yazılım ve Oyun Geliştirici",
-            aboutDesc: "Galip Efe Öncü'nün oyun geliştirme, web uygulamaları ve yazılım araçları üzerine çalışmalarını keşfedin.",
-            projectsDesc: "Galip Efe Öncü'nün geliştirdiği oyunları, masaüstü uygulamalarını ve web projelerini inceleyin.",
-            contactDesc: "Yazılım projeleri, iş birlikleri ve oyun geliştirme çalışmaları için Galip Efe Öncü'ye ulaşın.",
+            aboutTitle: "Galip Efe Öncü | Yapay Zeka Agent Sistemleri",
+            aboutDesc: "Galip Efe Öncü; proje araştırması, konumlandırma ve reklam içeriği iş akışları için yapay zeka agent sistemleri geliştirir.",
+            projectsDesc: "Galip Efe Öncü'nün yapay zeka agent sistemlerini, otomasyon iş akışlarını ve deneysel ürünlerini keşfedin.",
+            contactDesc: "Yapay zeka agent sistemleri, büyüme otomasyonu veya içerik iş akışları için Galip Efe Öncü ile iletişime geçin.",
             notFoundTitle: "Sayfa Bulunamadı | Galip Efe Öncü",
             notFoundDesc: "Aradığınız sayfa bulunamadı. Galip Efe Öncü'nün portfolyo ana sayfasına dönebilirsiniz."
         },
@@ -353,9 +353,9 @@ export const translations = {
         },
         hero: {
             welcome: "Merhaba, ben",
-            role: "Yazılım Mühendisliği Öğrencisi",
+            role: "Yapay Zeka Agent Sistemleri Geliştiricisi",
             status: "iş fırsatlarına açık",
-            desc: "Oyunlar, araçlar ve web uygulamaları geliştiriyorum. Yaptığım şeyin yalnızca çalışması değil, kullanırken iyi hissettirmesi de önemli. Kodla çözülebilecek bir sorun varsa kurcalamadan duramıyorum.",
+            desc: "Bir projeyi araştırmadan konumlandırmaya, kampanya fikrinden kullanılabilir reklam içeriğine taşıyan yapay zeka agent sistemleri tasarlıyorum.",
             interests: {
                 gaming: "Oyun",
                 walking: "Yürüyüş",
@@ -366,9 +366,9 @@ export const translations = {
         },
         about: {
             title: "Hakkımda",
-            bio1: "<strong>{age}</strong> yaşındayım. Elazığ'da <strong>Fırat Üniversitesi</strong> Yazılım Mühendisliği 2. sınıf öğrencisiyim. <strong>Konya</strong>'da büyüdüm.",
-            bio2: "Üniversiteden önce <strong>Adil Karaağaç Mesleki ve Teknik Anadolu Lisesi</strong> Bilişim Teknolojileri Bölümünde okudum. Teknolojinin arka planda nasıl çalıştığını gerçekten merak etmeye de orada başladım.",
-            bio3: "Bir fikri çalışan bir ürüne dönüştürmeyi seviyorum; kimi zaman Unity'de bir roguelike, kimi zaman React'le bir web uygulaması. Karşıma ilginç bir problem çıktığında kurcalamadan duramıyorum. Kod yazmadığım zamanlarda spor yapıyor, oyun oynuyor ve daha düzenli okumaya çalışıyorum.",
+            bio1: "<strong>{age}</strong> yaşındayım ve <strong>Konya</strong>'dayım. Bir projeyi fikir aşamasından daha net, tekrarlanabilir bir uygulama planına taşıyan yapay zeka agent sistemleri geliştiriyorum.",
+            bio2: "<strong>Fırat Üniversitesi</strong> Yazılım Mühendisliği altyapım; bu sistemleri net girdiler, güvenilir araçlar ve gerçekten kullanılabilir iş akışlarıyla kurmama yardımcı oluyor.",
+            bio3: "Şu an odağım yapay zeka agent sistemleri. Tekrarlanan işleri; araştırma, proje konumlandırması, kampanya planı ve içerik üretimi için net iş akışlarına dönüştürüyorum. Benim için otomasyonun gösterişli olmasından çok, gerçekten kullanılabilir olması önemli.",
             facts: {
                 location: "Konum",
                 locationVal: "Konya, Türkiye",
@@ -380,21 +380,21 @@ export const translations = {
                 gameVal: "The Witcher 3: Wild Hunt"
             },
             cta: {
-                projectsTitle: "Projelerim",
-                projectsDesc: "Oyunlarıma, araçlarıma ve web projelerime göz at.",
+                projectsTitle: "Neler kuruyorum",
+                projectsDesc: "Agent iş akışları, otomasyonlar ve uygulanabilir ürün deneyleri.",
                 contactTitle: "Bana ulaş",
-                contactDesc: "Bir fikrin veya birlikte geliştirmek istediğin bir proje varsa konuşalım.",
-                projectsCount: "{count} proje · oyun, araç ve web uygulaması",
+                contactDesc: "Bir projeyi agentlarla büyütmek veya daha net pazarlamak istiyorsan konuşalım.",
+                projectsCount: "{count} proje · agentlar, otomasyonlar, deneyler",
                 contactChannels: "E-posta ve sosyal medya hesaplarım"
             },
-            heading: "Merhaba, ben Galip. İnsanların işine yarayan yazılımlar geliştiriyorum.",
+            heading: "Merhaba, ben Galip. Projeleri ileri taşıyan yapay zeka agent sistemleri geliştiriyorum.",
             interestsPanel: "İlgi alanlarım",
             stackPanel: "Kullandığım teknolojiler",
             skillCategories: {
-                languages: "Programlama dilleri",
-                frameworks: "Framework ve araçlar",
-                backend: "Backend ve veri",
-                gameDev: "Oyun geliştirme"
+                agentSystems: "Yapay zeka agent sistemleri",
+                growthAutomation: "Büyüme otomasyonu",
+                productDelivery: "Ürün teslimi",
+                foundations: "Teknik altyapı"
             },
             kvLocation: "konum",
             kvEdu: "okul",
@@ -404,7 +404,7 @@ export const translations = {
         },
         projects: {
             title: "Projeler",
-            subtitle: "Oyunlardan masaüstü uygulamalarına, merak edip geliştirdiğim projeler.",
+            subtitle: "Fikirleri aksiyona dönüştürmek için geliştirdiğim yapay zeka agent sistemleri, otomasyonlar ve pratik deneyler.",
             filters: {
                 all: "Tümü",
                 completed: "Tamamlandı",
@@ -467,14 +467,14 @@ export const translations = {
         },
         contact: {
             title: "İletişim",
-            subtitle: "Bir proje fikrin varsa ya da biraz kod konuşmak istiyorsan mesaj atabilirsin.",
+            subtitle: "Konumlandırmak istediğin bir proje, otomatikleştirmek istediğin iş akışı veya üretmek istediğin içerik varsa konuşalım.",
             elsewhere: "Diğer hesaplarım",
             skills: "Kullandığım Araçlar",
             category: {
                 lang: "Programlama dilleri",
                 frameworks: "Framework ve araçlar",
                 backend: "Backend ve veritabanı",
-                gamedev: "Oyun Geliştirme"
+                gamedev: "Yapay zeka agent sistemleri"
             },
             ctaTitle: "Aklında bir proje mi var?",
             ctaDesc: "Projelerime göz atabilir veya doğrudan mesaj gönderebilirsin.",
@@ -504,9 +504,9 @@ export const translations = {
             preferredLabel: "tercihim",
             preferredVal: "e-posta →",
             whatImInto: "İlgilendiğim konular",
-            interest1: "Oyun geliştirme: oynanış hissi, sistemler ve deneyimi tamamlayan küçük ayrıntılar",
-            interest2: "Modern web: React, akıcı etkileşimler ve anlaşılır arayüzler",
-            interest3: "İnsanlara gerçekten zaman kazandıran araçlar",
+            interest1: "Tekrarlanan işleri güvenilir iş akışlarına dönüştüren agent sistemleri",
+            interest2: "Proje konumlandırması, potansiyel müşteri araştırması ve kampanya planı",
+            interest3: "Net bir teklifi uygulanabilir reklam içeriği yönlerine dönüştüren iş akışları",
             githubDesc: "Projelerimin çoğunu burada bulabilirsin",
             linkedinDesc: "Profesyonel profilim",
             emailDesc: "Bana ulaşmanın en hızlı yolu",

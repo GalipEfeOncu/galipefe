@@ -32,8 +32,8 @@ export const SOCIALS = [
 ];
 
 export const SKILLS = [
-    { titleKey: 'about.skillCategories.languages', items: ['C#', 'Python', 'JavaScript', 'Java', 'SQL'] },
-    { titleKey: 'about.skillCategories.frameworks', items: ['React', 'Vite', 'Unity', '.NET', 'WinForms', 'Git'] },
-    { titleKey: 'about.skillCategories.backend', items: ['MSSQL', 'Firebase', 'REST APIs', 'Streamlit'] },
-    { titleKey: 'about.skillCategories.gameDev', items: ['Unity 2D/3D', 'ECS', 'Object Pooling', 'Procedural Gen'] },
+    { titleKey: 'about.skillCategories.agentSystems', items: ['LLM Workflows', 'Agent Orchestration', 'Prompt Design', 'Tool Calling'] },
+    { titleKey: 'about.skillCategories.growthAutomation', items: ['Lead Research', 'Content Workflows', 'Campaign Planning', 'Reporting'] },
+    { titleKey: 'about.skillCategories.productDelivery', items: ['React', 'Vite', 'Cloudflare', 'Vercel', 'Git'] },
+    { titleKey: 'about.skillCategories.foundations', items: ['Python', 'JavaScript', 'REST APIs', 'Firebase', 'SQL'] },
 ];
