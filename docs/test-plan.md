@@ -1,7 +1,7 @@
 # galipefeoncu.com — Kapsamlı Test Planı
 
 > **Son güncelleme:** 2026-08-13  
-> **Hedef URL:** `https://galipefeoncu.com`  
+> **Hedef URL:** `https://www.galipefeoncu.com`
 > **Yerel geliştirme:** `npm run dev` → `http://localhost:5173`
 
 ---
@@ -135,20 +135,20 @@ Her rota (`, /projects, /contact, 404`) için Lighthouse raporu çıkarılacakt�
 
 ```bash
 # CLI ile Lighthouse (Node.js gerekli)
-npx -y lighthouse https://galipefeoncu.com \
+npx -y lighthouse https://www.galipefeoncu.com \
   --output=html --output-path=./reports/lighthouse-desktop.html \
   --preset=desktop --chrome-flags="--headless=new"
 
-npx -y lighthouse https://galipefeoncu.com \
+npx -y lighthouse https://www.galipefeoncu.com \
   --output=html --output-path=./reports/lighthouse-mobile.html \
   --chrome-flags="--headless=new"
 
 # Her rota için:
-npx -y lighthouse https://galipefeoncu.com/projects \
+npx -y lighthouse https://www.galipefeoncu.com/projects \
   --output=json --output-path=./reports/lighthouse-projects.json \
   --chrome-flags="--headless=new"
 
-npx -y lighthouse https://galipefeoncu.com/contact \
+npx -y lighthouse https://www.galipefeoncu.com/contact \
   --output=json --output-path=./reports/lighthouse-contact.json \
   --chrome-flags="--headless=new"
 ```
@@ -200,7 +200,7 @@ onTTFB(sendToAnalytics);
 ### 4.4 WebPageTest Konfigürasyonu
 
 ```
-URL: https://galipefeoncu.com
+URL: https://www.galipefeoncu.com
 Location: Europe - Frankfurt (ec2-eu-central-1)
 Browser: Chrome
 Connection: 4G (9 Mbps, 170ms RTT)
@@ -692,9 +692,9 @@ jobs:
       - uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
-            https://galipefeoncu.com/
-            https://galipefeoncu.com/projects
-            https://galipefeoncu.com/contact
+            https://www.galipefeoncu.com/
+            https://www.galipefeoncu.com/projects
+            https://www.galipefeoncu.com/contact
           budgetPath: ./lighthouse-budget.json
           uploadArtifacts: true
 

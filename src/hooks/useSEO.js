@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 
-const SITE_URL = 'https://galipefeoncu.com';
+const SITE_URL = 'https://www.galipefeoncu.com';
 const DEFAULT_IMAGE = `${SITE_URL}/assets/images/pp.webp`;
 
 /**
