@@ -392,8 +392,8 @@ main {
 
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 48px;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 64px;
   align-items: center;
   z-index: 10;
   width: 100%;
@@ -469,25 +469,29 @@ main {
 .hero-right {
   position: relative;
   width: 100%;
-  height: 480px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.agent-workflow { width: 100%; min-height: 390px; padding: 24px; display: flex; flex-direction: column; gap: 22px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--r-lg); box-shadow: var(--shadow); }
+.agent-workflow { width: 100%; max-width: 460px; min-height: 360px; padding: 24px; display: flex; flex-direction: column; gap: 16px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--r-lg); box-shadow: var(--shadow); }
 .agent-workflow-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
 .agent-workflow-eyebrow, .agent-workflow-output-label { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; color: var(--accent); }
 .agent-workflow h3 { margin-top: 7px; max-width: 300px; font-family: var(--display); font-size: 25px; line-height: 1.18; }
 .agent-workflow-state { padding: 5px 8px; border: 1px solid var(--accent-line); border-radius: 999px; color: var(--accent); background: var(--accent-soft); font: 10px var(--mono); white-space: nowrap; }
-.agent-workflow-steps { display: grid; grid-template-columns: 1fr; gap: 4px; }
-.agent-workflow-step { display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 10px; text-align: left; color: var(--muted); border: 1px solid transparent; background: transparent; border-radius: var(--r-sm); font: 12px var(--mono); cursor: pointer; }
+.agent-workflow-steps { display: grid; grid-template-columns: 1fr; gap: 3px; }
+.agent-workflow-step { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 34px; padding: 7px 10px; text-align: left; color: var(--text-2); border: 1px solid transparent; background: transparent; border-radius: var(--r-sm); font: 12px var(--mono); cursor: pointer; transition: color .18s ease, background .18s ease, border-color .18s ease; }
 .agent-workflow-step > span { color: var(--dim); font-size: 10px; }
 .agent-workflow-step:hover, .agent-workflow-step.active { color: var(--text); border-color: var(--accent-line); background: var(--accent-soft); }
 .agent-workflow-step.active > span { color: var(--accent); }
-.agent-workflow-output { margin-top: auto; padding: 16px; border: 1px solid var(--border-soft); background: var(--bg-2); border-radius: var(--r); }
+.agent-workflow-output { margin-top: auto; min-height: 102px; padding: 15px 16px; border: 1px solid var(--border-soft); background: var(--bg-2); border-radius: var(--r); animation: workflowOutputIn .2s ease-out both; }
 .agent-workflow-output strong { display: block; margin-top: 8px; font-family: var(--display); font-size: 18px; }
 .agent-workflow-output p { margin-top: 7px; color: var(--text-2); font-size: 13px; line-height: 1.55; }
+
+@keyframes workflowOutputIn {
+  from { opacity: .55; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 .interactive-canvas-wrap {
   width: 100%;
@@ -1856,7 +1860,8 @@ footer {
   }
   .hero-left { align-items: center; }
   .hero-desc-text { max-width: 100%; }
-  .hero-right { height: 340px; max-width: 560px; margin: 0 auto; }
+  .hero-right { max-width: 560px; margin: 0 auto; }
+  .agent-workflow { max-width: 560px; }
   .about-biography { grid-template-columns: 1fr; gap: 24px; }
   .about-metadata-grid { grid-template-columns: repeat(2, 1fr); }
   .skills-categories { grid-template-columns: 1fr; }
@@ -1867,14 +1872,15 @@ footer {
 }
 
 @media (max-width: 768px) {
-  .hero-section { padding-top: 80px; }
-  .hero-section { padding-bottom: 100px; }
+  .hero-section { min-height: auto; padding: 80px 0 72px; }
+  .hero-grid { gap: 28px; }
   .hero-title-main { font-size: 40px; }
   .about-bio-heading { font-size: 28px; text-align: center; }
   .section-padding { padding: 60px 0; }
   .dock-mobile-toggle { display: flex !important; }
   .dock-nav { display: none !important; }
-  .hero-right { display: none; }
+  .hero-right { display: flex; max-width: 100%; }
+  .agent-workflow { max-width: 100%; min-height: 0; padding: 20px; text-align: left; }
   
   .modal-container { max-width: 100%; }
   .modal-hero { flex-direction: column; text-align: center; }
@@ -1898,7 +1904,12 @@ footer {
 @media (max-width: 480px) {
   .about-metadata-grid { grid-template-columns: 1fr; }
   .hero-title-main { font-size: 34px; }
-  .hero-right { height: 320px; }
+  .agent-workflow { padding: 18px; gap: 14px; }
+  .agent-workflow-header { gap: 10px; }
+  .agent-workflow h3 { font-size: 22px; }
+  .agent-workflow-state { max-width: 118px; white-space: normal; line-height: 1.35; text-align: right; }
+  .agent-workflow-step { min-height: 44px; }
+  .agent-workflow-output { min-height: 112px; }
   .hero-actions { width: 100%; }
   .hero-actions .btn { flex: 1 1 100%; justify-content: center; white-space: nowrap; }
   .contact-status-bar { gap: 8px; }
