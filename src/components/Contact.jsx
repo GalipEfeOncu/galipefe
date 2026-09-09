@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { CONTACTS, SOCIALS } from '../data/profile';
 import useSEO from '../hooks/useSEO';
@@ -179,15 +180,11 @@ export default function Contact() {
                 <span className="contact-socials-label">{t('contact.elsewhere')}:</span>
                 <div className="contact-socials-links">
                     {SOCIALS.map(s => (
-                        <a
-                            key={s.name}
-                            href={s.url}
-                            target="_blank"
-                            rel="me noopener noreferrer"
-                            className="contact-social-inline-link"
-                        >
-                            {s.name}
-                        </a>
+                        s.internal ? (
+                            <Link key={s.name} to={s.url} className="contact-social-inline-link">{s.name}</Link>
+                        ) : (
+                            <a key={s.name} href={s.url} target="_blank" rel="me noopener noreferrer" className="contact-social-inline-link">{s.name}</a>
+                        )
                     ))}
                 </div>
             </div>

@@ -7,6 +7,7 @@ import { useLanguage } from './context/LanguageContext';
 const About = lazy(() => import('./components/About'));
 const Projects = lazy(() => import('./components/Projects'));
 const Contact = lazy(() => import('./components/Contact'));
+const TypingTest = lazy(() => import('./components/TypingTest'));
 const Modal = lazy(() => import('./components/Modal'));
 const Admin = lazy(() => import('./components/Admin'));
 const NotFound = lazy(() => import('./components/NotFound'));
@@ -108,6 +109,7 @@ function App() {
                         <Route path="/" element={<About />} />
                         <Route path="/projects" element={<Projects onOpenModal={setSelectedProject} />} />
                         <Route path="/contact" element={<Contact />} />
+                        <Route path="/typing-test" element={<TypingTest />} />
                         <Route path="/admin" element={<Admin />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>

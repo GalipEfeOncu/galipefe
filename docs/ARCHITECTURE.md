@@ -15,6 +15,7 @@ src/main.jsx
             │  ├─ /         → About
             │  ├─ /projects → Projects
             │  ├─ /contact  → Contact
+            │  ├─ /typing-test → TypingTest (gizli easter egg)
             │  ├─ /admin    → Admin
             │  └─ *         → NotFound
             ├─ Footer
@@ -22,7 +23,7 @@ src/main.jsx
             └─ scroll-to-top düğmesi
 ```
 
-`About`, `Projects`, `Contact`, `Admin`, `NotFound` ve `Modal` lazy-load edilir. Route geçişlerinde çevrilmiş yükleme göstergesi, modal chunk'ı beklenirken overlay geri bildirimi gösterilir. `App` tema, seçili proje ve scroll-to-top görünürlüğünü yönetir. Dil state'i `LanguageProvider` içindedir.
+`About`, `Projects`, `Contact`, `TypingTest`, `Admin`, `NotFound` ve `Modal` lazy-load edilir. Route geçişlerinde çevrilmiş yükleme göstergesi, modal chunk'ı beklenirken overlay geri bildirimi gösterilir. `App` tema, seçili proje ve scroll-to-top görünürlüğünü yönetir. Dil state'i `LanguageProvider` içindedir.
 
 ## Global ve yerel state
 
@@ -74,6 +75,7 @@ Bu veri statiktir; Firestore tarafından değiştirilmez.
 ## Sayfalar ve bileşenler
 
 - `About`: hero, dinamik yaş, yetenekler, ilgi alanları ve etkileşimli AgentWorkflow konsolu.
+- `TypingTest`: Contact sayfasındaki Monkeytype easter egg bağlantısından açılan, süre seçilebilir yerel yazma testi; arama motorları için `noindex` olarak işaretlenir.
 - `Projects`: Firestore verisi, önbellek, hata/yeniden deneme durumu, status filtresi, çalışan sıralama kontrolü, featured kart ve modal tetikleme. Featured kart ile modal, proje rolü ve doğrulanabilir sonuç alanlarını case-study özeti olarak gösterebilir.
 - `Contact`: iletişim kartları, sosyal bağlantılar ve Formspree destekli form. Form kimliği şu anda bileşendeki `FORMSPREE_FORM_ID` sabitidir; sabit boş bırakılırsa form demo modunda gönderimi simüle eder.
 - `Admin`: Firebase email/password girişi; proje oluşturma, güncelleme, silme ve sıralama.

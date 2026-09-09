@@ -2275,6 +2275,92 @@ footer {
   margin-top: 4px;
 }
 
+/* Standalone typing-test easter egg */
+.typing-test-page {
+  max-width: 780px;
+  min-height: calc(100vh - 160px);
+  padding-top: 128px;
+  padding-bottom: 96px;
+}
+
+.typing-test-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.typing-test-eyebrow,
+.tg-duration-control > span {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.typing-test-profile-link {
+  flex: 0 0 auto;
+  color: var(--text-2);
+  font-family: var(--mono);
+  font-size: 12px;
+  text-decoration: none;
+  transition: color .2s ease;
+}
+
+.typing-test-profile-link:hover { color: var(--accent); }
+
+.typing-test-panel {
+  min-height: 440px;
+  padding: 30px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+}
+
+.typing-test-panel .tg-shell {
+  min-height: 380px;
+  height: 100%;
+  padding: 0;
+}
+
+.tg-duration-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0 2px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.tg-duration-options { display: flex; gap: 6px; }
+
+.tg-duration-options button {
+  min-width: 46px;
+  min-height: 32px;
+  padding: 6px 9px;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--muted);
+  font: 11px var(--mono);
+  cursor: pointer;
+  transition: color .18s ease, background .18s ease, border-color .18s ease;
+}
+
+.tg-duration-options button:hover:not(:disabled),
+.tg-duration-options button.active {
+  color: var(--text);
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+}
+
+.tg-duration-options button:disabled { cursor: not-allowed; opacity: .5; }
+.tg-restart-btn { align-self: flex-start; }
+
 /* Responsive */
 @media (max-width: 900px) {
   .tg-shell {
@@ -2282,4 +2368,15 @@ footer {
     min-height: 360px;
   }
   .tg-result-number { font-size: 44px; }
+  .typing-test-panel .tg-shell { min-height: 380px; padding: 0; }
+}
+
+@media (max-width: 600px) {
+  .typing-test-page { min-height: auto; padding-top: 96px; padding-bottom: 72px; }
+  .typing-test-heading { flex-direction: column; gap: 14px; margin-bottom: 24px; }
+  .typing-test-panel { min-height: 420px; padding: 20px; }
+  .typing-test-panel .tg-shell { min-height: 380px; }
+  .tg-duration-control { align-items: flex-start; flex-direction: column; gap: 10px; }
+  .tg-duration-options { width: 100%; }
+  .tg-duration-options button { flex: 1; min-height: 40px; }
 }
