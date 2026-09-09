@@ -4,7 +4,7 @@ import useSEO from '../hooks/useSEO';
 import TypingGame from './TypingGame';
 
 export default function TypingTest() {
-    const { t } = useLanguage();
+    const { lang, t } = useLanguage();
 
     useSEO({ titleKey: 'typingGame.pageTitle', descriptionKey: 'seo.typingTestDesc', noIndex: true });
 
@@ -18,7 +18,7 @@ export default function TypingTest() {
                 <div className="typing-test-signal-burst" aria-hidden="true">
                     {Array.from({ length: 12 }, (_, index) => <span key={index} />)}
                 </div>
-                <TypingGame />
+                <TypingGame key={lang} />
             </div>
         </div>
     );

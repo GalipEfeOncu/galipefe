@@ -32,7 +32,7 @@ export default function TypingGame() {
     const { lang, t } = useLanguage();
     const pool = lang === 'tr' ? WORDS_TR : WORDS_EN;
     const [duration, setDuration] = useState(30);
-    const [phase, setPhase] = useState('idle');
+    const [phase, setPhase] = useState('ready');
     const [words, setWords] = useState(() => generateWords(pool));
     const [typed, setTyped] = useState('');
     const [currentWordIdx, setCurrentWordIdx] = useState(0);
@@ -76,6 +76,12 @@ export default function TypingGame() {
         return () => window.clearTimeout(focusTimer);
     }, [phase]);
 
+    useEffect(() => {
+        if (phase === 'done') return undefined;
+        const focusTimer = window.setTimeout(() => inputRef.current?.focus(), 50);
+        return () => window.clearTimeout(focusTimer);
+    }, [duration, phase]);
+
     const resetGame = useCallback((nextDuration = duration) => {
         clearInterval(timerRef.current);
         setWords(generateWords(pool));
@@ -84,12 +90,17 @@ export default function TypingGame() {
         setTimeLeft(nextDuration);
         setWordStatuses([]);
         setTimerStarted(false);
-        setPhase('idle');
+        setPhase('ready');
     }, [duration, pool]);
 
     const startGame = () => {
         resetGame();
-        setPhase('playing');
+        window.setTimeout(() => inputRef.current?.focus(), 50);
+    };
+
+    const changeDuration = (nextDuration) => {
+        setDuration(nextDuration);
+        resetGame(nextDuration);
         window.setTimeout(() => inputRef.current?.focus(), 50);
     };
 
@@ -118,9 +129,12 @@ export default function TypingGame() {
     };
 
     const handleInput = (event) => {
-        if (phase !== 'playing') return;
+        if (phase === 'done') return;
         const value = event.target.value;
-        if (!timerStarted && value.length > 0) setTimerStarted(true);
+        if (!timerStarted && value.length > 0) {
+            setTimerStarted(true);
+            setPhase('playing');
+        }
         if (value.endsWith(' ')) {
             const isCorrect = value.trim() === words[currentWordIdx];
             setWordStatuses((statuses) => {
@@ -146,14 +160,13 @@ export default function TypingGame() {
                     <div className="tg-duration-control" aria-label={t('typingGame.durationLabel')}>
                         <span>{t('typingGame.durationLabel')}</span>
                         <div className="tg-duration-options">
-                            {DURATIONS.map((option) => <button key={option} type="button" className={duration === option ? 'active' : ''} aria-pressed={duration === option} disabled={phase === 'playing'} onClick={() => { setDuration(option); resetGame(option); }}>{t('typingGame.durationOption').replace('{seconds}', option)}</button>)}
+                            {DURATIONS.map((option) => <button key={option} type="button" className={duration === option ? 'active' : ''} aria-pressed={duration === option} onClick={() => changeDuration(option)}>{t('typingGame.durationOption').replace('{seconds}', option)}</button>)}
                         </div>
                     </div>
                     <button ref={quickRestartButtonRef} type="button" className="tg-quick-restart" onClick={startGame} onKeyDown={handleRestartKeyDown} aria-label={t('typingGame.restart')}>↻</button>
                 </div>
             </div>
-            {phase === 'idle' && <div className="tg-idle"><p className="tg-idle-desc">{t('typingGame.intro')}</p><button className="tg-start-btn" type="button" onClick={startGame}>{t('typingGame.start')} <span className="tg-start-icon">↵</span></button></div>}
-            {phase === 'playing' && <>
+            {phase !== 'done' && <div className="tg-test-area">
                 <div className={`tg-timer-row${timeLeft <= 3 ? ' urgent' : ''}`} role="timer" aria-label={t('typingGame.timeLeft').replace('{seconds}', timeLeft)}>
                     <svg className="tg-ring" viewBox="0 0 36 36" width="36" height="36" aria-hidden="true"><circle cx="18" cy="18" r="16" fill="none" strokeWidth="2.5" className="tg-ring-bg" /><circle cx="18" cy="18" r="16" fill="none" strokeWidth="2.5" className="tg-ring-progress" strokeDasharray={circumference} strokeDashoffset={dashOffset} strokeLinecap="round" transform="rotate(-90 18 18)" /><text x="18" y="22" textAnchor="middle" className="tg-ring-text">{timeLeft}</text></svg>
                 </div>
@@ -165,7 +178,7 @@ export default function TypingGame() {
                     })}
                 </div>
                 <input ref={inputRef} className={`tg-input${isCurrentWrong ? ' input-wrong' : ''}`} value={typed} onChange={handleInput} onKeyDown={handleInputKeyDown} placeholder={t('typingGame.inputPlaceholder')} aria-label={t('typingGame.inputLabel')} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} />
-            </>}
+            </div>}
             {phase === 'done' && <div className="tg-result" aria-live="polite">
                 <div className="tg-result-wpm"><span className="tg-result-number">{wpm}</span><span className="tg-result-unit">wpm</span></div>
                 <p className="tg-result-comment">{getComment(wpm, personalRecord, t)}</p>
