@@ -110,6 +110,12 @@ body {
   overflow-x: hidden;
 }
 
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
 a {
   text-decoration: none;
   color: inherit;
@@ -143,6 +149,11 @@ button {
 /* ===== General Containers & Spacing ===== */
 main {
   width: 100%;
+  flex: 1 0 auto;
+}
+
+main:has(> .typing-test-page) {
+  display: flex;
 }
 
 .skip-link {
@@ -1967,11 +1978,9 @@ footer {
    ============================================================ */
 .tg-shell {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 12px 0;
+  gap: 22px;
   background: transparent;
   border: none;
   box-shadow: none;
@@ -1982,9 +1991,9 @@ footer {
 /* Header */
 .tg-header {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  gap: 20px;
+  gap: 24px;
   flex-shrink: 0;
 }
 
@@ -1995,7 +2004,10 @@ footer {
   gap: 12px;
 }
 
-.tg-header-controls { gap: 16px; }
+.tg-header-controls {
+  align-items: center;
+  gap: 14px;
+}
 
 .tg-label {
   margin: 0;
@@ -2113,18 +2125,11 @@ footer {
 
 .tg-timer-readout {
   display: flex;
-  align-items: flex-end;
-  flex-direction: column;
-  gap: 5px;
-  min-width: 34px;
+  align-items: center;
+  justify-content: center;
+  min-width: 46px;
+  min-height: 32px;
   font-family: var(--mono);
-}
-
-.tg-timer-readout span {
-  color: var(--muted);
-  font-size: 9px;
-  letter-spacing: .12em;
-  text-transform: uppercase;
 }
 
 .tg-timer-readout strong {
@@ -2138,28 +2143,24 @@ footer {
 
 .tg-test-area {
   display: flex;
-  flex: 1;
   flex-direction: column;
-  justify-content: flex-start;
   width: 100%;
-  max-width: 660px;
+  max-width: 760px;
   margin: 0 auto;
-  padding-top: 16px;
-  gap: 14px;
+  gap: 18px;
 }
 
 /* Words display */
 .tg-words-container {
-  flex: 0 1 150px;
-  min-height: 96px;
+  height: 132px;
   display: flex;
   flex-wrap: wrap;
   gap: 6px 8px;
-  align-content: center;
+  align-content: flex-start;
   overflow: hidden;
-  max-height: 200px;
-  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  padding: 4px 0;
+  mask-image: linear-gradient(to bottom, black 0%, black 72%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 72%, transparent 100%);
 }
 
 .tg-word {
@@ -2219,6 +2220,12 @@ footer {
   box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
+.typing-test-panel .tg-input:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
 .tg-input.input-wrong {
   border-color: rgba(217, 92, 92, 0.3);
   box-shadow: 0 0 0 3px rgba(217, 92, 92, 0.08);
@@ -2230,7 +2237,7 @@ footer {
 
 /* Result */
 .tg-result {
-  flex: 1;
+  min-height: 230px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -2326,10 +2333,13 @@ footer {
 
 /* Standalone typing-test easter egg */
 .typing-test-page {
-  max-width: 780px;
-  min-height: calc(100vh - 160px);
-  padding-top: 128px;
-  padding-bottom: 96px;
+  flex: 1;
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 88px;
+  padding-bottom: 40px;
 }
 
 .typing-test-utility {
@@ -2341,15 +2351,6 @@ footer {
   color: var(--accent);
   font-family: var(--mono);
   font-size: 10px;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-}
-
-.tg-duration-control > span {
-  display: block;
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--accent);
   letter-spacing: .14em;
   text-transform: uppercase;
 }
@@ -2368,8 +2369,7 @@ footer {
 .typing-test-panel {
   position: relative;
   overflow: hidden;
-  min-height: 440px;
-  padding: 30px;
+  padding: 32px 36px 34px;
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
@@ -2379,16 +2379,11 @@ footer {
 .typing-test-panel .tg-shell {
   position: relative;
   z-index: 1;
-  min-height: 380px;
-  height: 100%;
-  padding: 0;
 }
 
 .tg-duration-control {
   display: flex;
-  align-items: flex-end;
-  flex-direction: column;
-  gap: 7px;
+  align-items: center;
 }
 
 .tg-duration-options { display: flex; gap: 6px; }
@@ -2411,6 +2406,13 @@ footer {
   color: var(--text);
   border-color: var(--accent-line);
   background: var(--accent-soft);
+}
+
+.tg-duration-options button:focus-visible,
+.tg-quick-restart:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
 }
 
 .tg-duration-options button:disabled { cursor: not-allowed; opacity: .5; }
@@ -2474,27 +2476,36 @@ footer {
 
 /* Responsive */
 @media (max-width: 900px) {
-  .tg-shell {
-    padding: 20px;
-    min-height: 360px;
-  }
   .tg-result-number { font-size: 44px; }
-  .typing-test-panel .tg-shell { min-height: 380px; padding: 0; }
+  .typing-test-panel { padding-inline: 30px; }
+}
+
+@media (max-width: 720px) {
+  .tg-header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .tg-header-controls {
+    justify-content: space-between;
+    width: 100%;
+  }
+  .tg-timer-readout {
+    align-items: flex-start;
+  }
+  .tg-duration-control { margin-left: auto; }
 }
 
 @media (max-width: 600px) {
-  .typing-test-page { min-height: auto; padding-top: 96px; padding-bottom: 72px; }
+  .typing-test-page { padding-top: 88px; padding-bottom: 32px; }
   .typing-test-utility { margin-bottom: 14px; }
-  .typing-test-panel { min-height: 420px; padding: 20px; }
-  .typing-test-panel .tg-shell { min-height: 380px; }
-  .tg-header { align-items: flex-start; gap: 8px; }
-  .tg-title-group { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .typing-test-panel { padding: 22px 20px 24px; }
   .tg-header-controls { gap: 7px; }
   .tg-duration-options { gap: 4px; }
   .tg-duration-options button { min-width: 38px; min-height: 34px; padding: 5px 7px; }
   .tg-quick-restart { width: 32px; height: 32px; }
-  .tg-test-area { padding-top: 20px; gap: 14px; }
-  .tg-words-container { flex-basis: 150px; min-height: 92px; }
+  .tg-test-area { gap: 14px; }
+  .tg-words-container { height: 126px; }
 }
 
 @media (max-width: 430px) {

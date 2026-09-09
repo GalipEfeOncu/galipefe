@@ -156,11 +156,9 @@ export default function TypingGame() {
                 </div>
                 <div className="tg-header-controls">
                     <div className={`tg-timer-readout${timeLeft <= 3 ? ' urgent' : ''}`} role="timer" aria-label={t('typingGame.timeLeft').replace('{seconds}', timeLeft)}>
-                        <span>{t('typingGame.timeLabel')}</span>
                         <strong>{timeLeft}s</strong>
                     </div>
                     <div className="tg-duration-control" aria-label={t('typingGame.durationLabel')}>
-                        <span>{t('typingGame.durationLabel')}</span>
                         <div className="tg-duration-options">
                             {DURATIONS.map((option) => <button key={option} type="button" className={duration === option ? 'active' : ''} aria-pressed={duration === option} onClick={() => changeDuration(option)}>{t('typingGame.durationOption').replace('{seconds}', option)}</button>)}
                         </div>
