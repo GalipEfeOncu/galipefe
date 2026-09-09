@@ -48,21 +48,11 @@ rg -n "old\.key|oldKey" src docs
 
 ## Proje çevirileri
 
-Statik projelerde beklenen şekil:
-
-```text
-projects.js: translationKey: "myProject"
-translations.en.projectData.myProject
-translations.tr.projectData.myProject
-```
-
-Her proje bloğunda `subtitle` ve `desc` string, `learnings` ise array olmalıdır. Firestore kayıtlarının çift dilli alanları için [`add-project.md`](./add-project.md) dosyasına bakın.
-
-Bilinen bir `translationKey` varsa `Projects` ve `Modal`, `translations.js` içindeki içeriği öncelikli kullanır. Anahtar bulunamazsa seçili dildeki Firestore alanlarına, ardından ortak fallback alanlarına geçilir. Böylece statik katalogdaki metinler liste ve modal görünümünde aynı kalır; yalnızca Firestore'da bulunan projeler de çift dilli çalışmaya devam eder.
+Proje vaka metinleri statik çeviri dosyasında tutulmaz. Firestore kayıtlarında `subtitleEn/Tr`, `descriptionEn/Tr`, `roleEn/Tr`, `outcomeEn/Tr` ve `learningsEn/Tr` alanlarını birlikte doldurun. Ayrıntılar için [`add-project.md`](./add-project.md) dosyasına bakın.
 
 ## Placeholder ve sınırlı biçimlendirme
 
-- `{age}` yalnızca `about.bio1`, `{count}` yalnızca `about.cta.projectsCount`, `{title}` yalnızca `modal.imageFallback`, `{wpm}` ise `typingGame.result.*` anahtarlarında kullanılır.
+- `{age}` yalnızca `about.bio1`, `{title}` yalnızca `modal.imageFallback`, `{wpm}` ise `typingGame.result.*` anahtarlarında kullanılır.
 - Placeholder adını iki locale altında aynı tutun ve değeri render eden bileşendeki `replace()` çağrısını koruyun.
 - `about.bio1`, `bio2`, `bio3` içinde yalnızca `<strong>...</strong>` desteklenir; uygulama bunu `dangerouslySetInnerHTML` yerine kontrollü React elemanlarına çevirir.
 - Başka anahtarlara HTML eklemeyin. Kullanıcı girdisini çeviri HTML'i içine yerleştirmeyin.

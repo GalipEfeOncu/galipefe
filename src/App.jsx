@@ -35,7 +35,13 @@ function ModalLoader() {
 
 function ScrollToTop() {
     const { pathname } = useLocation();
-    useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        const frame = window.requestAnimationFrame(() => {
+            document.getElementById('main-content')?.focus({ preventScroll: true });
+        });
+        return () => window.cancelAnimationFrame(frame);
+    }, [pathname]);
     return null;
 }
 

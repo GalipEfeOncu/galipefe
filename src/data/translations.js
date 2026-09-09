@@ -15,8 +15,8 @@ export const translations = {
             loadingProject: "Loading project details..."
         },
         header: {
-            switchToTurkish: "EN – Switch language to Turkish",
-            switchToEnglish: "TR – Switch language to English",
+            switchToTurkish: "Switch language to Turkish",
+            switchToEnglish: "Switch language to English",
             switchToLight: "Switch to light mode",
             switchToDark: "Switch to dark mode",
             toggleNavigation: "Toggle navigation menu",
@@ -24,7 +24,8 @@ export const translations = {
             mobileNavigation: "Mobile navigation"
         },
         footer: {
-            builtWith: "built with React"
+            builtWith: "AI systems & practical automation",
+            links: "Explore"
         },
         nav: {
             about: "About",
@@ -43,6 +44,20 @@ export const translations = {
                 fitness: "Fitness"
             },
             quote: "\"Life is brilliant. Beautiful. It enchants us, to the point of obsession.\""
+        },
+        agentWorkflow: {
+            label: "Example agent workflow",
+            eyebrow: "WORKFLOW CONSOLE",
+            title: "From signal to a usable handoff.",
+            state: "human review included",
+            outputLabel: "CURRENT STEP",
+            steps: {
+                research: { label: "Research", title: "Ground the work in real signals.", desc: "Collect the brief, market context, and source material before making a recommendation." },
+                build: { label: "Claude Code", title: "Turn decisions into working output.", desc: "Use an implementation agent to shape the site, workflow, or supporting tool around the approved direction." },
+                orchestrate: { label: "n8n", title: "Connect repeatable steps.", desc: "Orchestrate handoffs so research, content, and follow-ups can move through a reliable flow." },
+                review: { label: "Human review", title: "Keep judgment where it matters.", desc: "Check claims, tone, and delivery before anything becomes customer-facing." },
+                deliver: { label: "Delivery", title: "Hand off a usable next action.", desc: "Package the approved output as a clear brief, campaign direction, or implementation-ready asset." }
+            }
         },
         about: {
             title: "About Me",
@@ -64,6 +79,8 @@ export const translations = {
                 projectsDesc: "Agent workflows, automation, and practical product experiments.",
                 contactTitle: "Say hello",
                 contactDesc: "Need an agent workflow or a clearer way to market a project? Let's talk.",
+                briefTitle: "Share a project brief",
+                briefDesc: "Tell me what you want to automate, clarify, or turn into a useful output.",
                 projectsCount: "{count} projects · agents, automation, experiments",
                 contactChannels: "3 ways to reach me"
             },
@@ -91,6 +108,8 @@ export const translations = {
                 wip: "Work in Progress",
                 discontinued: "Discontinued"
             },
+            categoryLabel: "Filter by category",
+            category: { all: "All work", "AI/Automation": "AI / Automation", Web: "Web", Games: "Games", Tools: "Tools", Other: "Other" },
             emptyStateTitle: "No projects found",
             emptyStateDesc: "There are no projects matching the selected status filter.",
             loading: "Loading projects...",
@@ -107,7 +126,11 @@ export const translations = {
                 titleAsc: "Title A–Z",
                 titleDesc: "Title Z–A"
             },
-            viewDetails: "open →"
+            viewDetails: "View details",
+            loadErrorTitle: "Projects are temporarily unavailable",
+            loadErrorDesc: "Please try again, or come back shortly.",
+            retry: "Try again",
+            staleNotice: "Showing the last saved catalogue while the latest version is unavailable."
         },
         modal: {
             keyTakeaways: "KEY TAKEAWAYS",
@@ -164,15 +187,15 @@ export const translations = {
             elsewherePanel: "find me around the web",
             formName: "Name",
             formEmail: "Email",
-            formMessage: "Message",
+            formMessage: "Your project brief",
             formNamePlaceholder: "Your name",
             formEmailPlaceholder: "you@example.com",
-            formMessagePlaceholder: "Write your message here...",
-            formSubmit: "Send Message",
+            formMessagePlaceholder: "What are you trying to achieve, and where does the work get stuck?",
+            formSubmit: "Send brief",
             formSubmitting: "Sending...",
             formSuccess: "Thanks! Your message has been sent successfully.",
             formError: "Oops! There was a problem submitting your message. Please try mail directly.",
-            formTitle: "Send a Message",
+            formTitle: "Share a project brief",
             projectCTA: "Got something in mind?",
             projectCTADesc: "Send a message - I usually get back the same day.",
             availabilityPanel: "status",
@@ -197,8 +220,11 @@ export const translations = {
                 email: "Email"
             },
             viewProjects: "see my work →",
-            formInfoLive: "This form sends messages directly to my inbox via Formspree.",
-            formInfoDemo: "Demo Mode: Formspree ID is not configured. Submissions will be logged to the console."
+            formInfoLive: "This form sends your brief directly to my inbox via Formspree.",
+            formBriefHint: "A few lines on your goal, current process, and desired outcome are enough to start.",
+            formInfoDemo: "Demo Mode: Formspree ID is not configured. Submissions will be logged to the console.",
+            formPrivacy: "Your name, email, and message are sent to Formspree only to deliver this message.",
+            formEmailLink: "Email me directly instead."
         },
         projectData: {
             chaosTyping: {
@@ -335,8 +361,8 @@ export const translations = {
             loadingProject: "Proje ayrıntıları yükleniyor..."
         },
         header: {
-            switchToTurkish: "TR – Dili Türkçe yap",
-            switchToEnglish: "EN – Dili İngilizce yap",
+            switchToTurkish: "Dili Türkçe yap",
+            switchToEnglish: "Dili İngilizce yap",
             switchToLight: "Açık temaya geç",
             switchToDark: "Koyu temaya geç",
             toggleNavigation: "Gezinme menüsünü aç veya kapat",
@@ -344,7 +370,8 @@ export const translations = {
             mobileNavigation: "Mobil gezinme"
         },
         footer: {
-            builtWith: "React ile geliştirildi"
+            builtWith: "Yapay zeka sistemleri ve pratik otomasyon",
+            links: "Keşfet"
         },
         nav: {
             about: "Hakkımda",
@@ -363,6 +390,20 @@ export const translations = {
                 fitness: "Spor"
             },
             quote: "\"Hayat ışıl ışıl, güzel. Bizi büyüler; öyle ki ona tutkuyla bağlanırız.\""
+        },
+        agentWorkflow: {
+            label: "Örnek agent iş akışı",
+            eyebrow: "İŞ AKIŞI KONSOLU",
+            title: "Sinyalden kullanılabilir çıktıya.",
+            state: "insan onayı dahil",
+            outputLabel: "AKTİF ADIM",
+            steps: {
+                research: { label: "Araştırma", title: "İşi gerçek sinyallere dayandır.", desc: "Öneri üretmeden önce brief'i, pazar bağlamını ve kaynak materyali bir araya getir." },
+                build: { label: "Claude Code", title: "Kararı çalışan çıktıya dönüştür.", desc: "Onaylanan yön doğrultusunda siteyi, iş akışını veya destekleyici aracı bir uygulama agent'ıyla şekillendir." },
+                orchestrate: { label: "n8n", title: "Tekrarlanan adımları bağla.", desc: "Araştırma, içerik ve takip işlerinin güvenilir bir akışta ilerlemesi için geçişleri orkestre et." },
+                review: { label: "İnsan onayı", title: "Muhakemeyi doğru yerde tut.", desc: "Müşteriyle buluşacak her şeyden önce iddiaları, tonu ve teslimi kontrol et." },
+                deliver: { label: "Teslim", title: "Kullanılabilir bir sonraki adımı teslim et.", desc: "Onaylanan çıktıyı net bir brief, kampanya yönü veya uygulamaya hazır varlık olarak paketle." }
+            }
         },
         about: {
             title: "Hakkımda",
@@ -384,6 +425,8 @@ export const translations = {
                 projectsDesc: "Agent iş akışları, otomasyonlar ve uygulanabilir ürün deneyleri.",
                 contactTitle: "Bana ulaş",
                 contactDesc: "Bir projeyi agentlarla büyütmek veya daha net pazarlamak istiyorsan konuşalım.",
+                briefTitle: "Proje brief'ini paylaş",
+                briefDesc: "Neyi otomatikleştirmek, netleştirmek veya kullanılabilir bir çıktıya dönüştürmek istediğini anlat.",
                 projectsCount: "{count} proje · agentlar, otomasyonlar, deneyler",
                 contactChannels: "E-posta ve sosyal medya hesaplarım"
             },
@@ -411,6 +454,8 @@ export const translations = {
                 wip: "Geliştiriliyor",
                 discontinued: "Sonlandırıldı"
             },
+            categoryLabel: "Kategoriye göre filtrele",
+            category: { all: "Tüm çalışmalar", "AI/Automation": "AI / Otomasyon", Web: "Web", Games: "Oyunlar", Tools: "Araçlar", Other: "Diğer" },
             emptyStateTitle: "Proje bulunamadı",
             emptyStateDesc: "Seçilen filtreye uygun bir proje yok.",
             loading: "Projeler yükleniyor...",
@@ -427,7 +472,11 @@ export const translations = {
                 titleAsc: "Başlık A–Z",
                 titleDesc: "Başlık Z–A"
             },
-            viewDetails: "Projeyi incele"
+            viewDetails: "Detayları gör",
+            loadErrorTitle: "Projeler geçici olarak görüntülenemiyor",
+            loadErrorDesc: "Lütfen yeniden dene veya biraz sonra tekrar gel.",
+            retry: "Yeniden dene",
+            staleNotice: "Güncel katalog alınamadığı için son kaydedilen sürüm gösteriliyor."
         },
         modal: {
             keyTakeaways: "BU PROJEDE ÖĞRENDİKLERİM",
@@ -483,15 +532,15 @@ export const translations = {
             elsewherePanel: "Diğer hesaplarım",
             formName: "Adın",
             formEmail: "E-posta adresin",
-            formMessage: "Mesajın",
+            formMessage: "Proje brief'in",
             formNamePlaceholder: "Adın ve soyadın",
             formEmailPlaceholder: "ornek@eposta.com",
-            formMessagePlaceholder: "Mesajını buraya yaz...",
-            formSubmit: "Mesaj gönder",
+            formMessagePlaceholder: "Hedefin ne, süreç nerede tıkanıyor ve nasıl bir sonuç bekliyorsun?",
+            formSubmit: "Brief'i gönder",
             formSubmitting: "Gönderiliyor...",
             formSuccess: "Teşekkürler, mesajın bana ulaştı.",
             formError: "Mesaj gönderilemedi. Biraz sonra tekrar deneyebilir veya doğrudan e-posta gönderebilirsin.",
-            formTitle: "Bana mesaj gönder",
+            formTitle: "Proje brief'ini paylaş",
             projectCTA: "Aklında bir proje mi var?",
             projectCTADesc: "Mesajını gönder; genellikle aynı gün içinde yanıtlarım.",
             availabilityPanel: "durum",
@@ -517,8 +566,11 @@ export const translations = {
             },
             viewProjects: "Projelerimi gör →",
             heading: "Bana ulaş.",
-            formInfoLive: "Bu formdan gönderdiğin mesaj doğrudan gelen kutuma ulaşır.",
-            formInfoDemo: "Demo modu: Formspree kimliği ayarlanmamış. Gönderimler yalnızca tarayıcı konsoluna kaydedilir."
+            formInfoLive: "Bu formdan gönderdiğin brief doğrudan gelen kutuma ulaşır.",
+            formBriefHint: "Hedefini, mevcut sürecini ve beklediğin sonucu birkaç cümleyle yazman yeterli.",
+            formInfoDemo: "Demo modu: Formspree kimliği ayarlanmamış. Gönderimler yalnızca tarayıcı konsoluna kaydedilir.",
+            formPrivacy: "Adın, e-posta adresin ve mesajın yalnızca mesajını iletmek için Formspree'e gönderilir.",
+            formEmailLink: "Doğrudan e-posta gönder."
         },
         projectData: {
             chaosTyping: {

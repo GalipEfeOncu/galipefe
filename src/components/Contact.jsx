@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { CONTACTS, SOCIALS } from '../data/profile';
 import useSEO from '../hooks/useSEO';
@@ -9,6 +9,11 @@ export default function Contact() {
     const { t } = useLanguage();
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
     const [status, setStatus] = useState({ submitted: false, error: false, loading: false });
+    const successRef = useRef(null);
+
+    useEffect(() => {
+        if (status.submitted) successRef.current?.focus();
+    }, [status.submitted]);
 
     useSEO({ titleKey: 'contact.title', descriptionKey: 'seo.contactDesc' });
 
@@ -55,11 +60,12 @@ export default function Contact() {
             {/* Horizontal Status Bar */}
             <div className="contact-status-bar">
                 <div className="contact-status-badge">
-                    <span className="contact-pulse-dot" />
-                    <span className="contact-status-text">
-                        {t('contact.availabilityStatus')}
+                    <span className="contact-status-primary">
+                        <span className="contact-pulse-dot" />
+                        <span className="contact-status-text">
+                            {t('contact.availabilityStatus')}
+                        </span>
                     </span>
-                    <span className="contact-status-divider">•</span>
                     <span className="contact-status-types">
                         {t('contact.availabilityTypes')}
                     </span>
@@ -68,7 +74,6 @@ export default function Contact() {
                     <span className="contact-meta-response">
                         {t('contact.responseLabel')}: {t('contact.responseVal')}
                     </span>
-                    <span className="contact-status-divider">•</span>
                     <span className="contact-meta-timezone">
                         {t('contact.timezoneVal')}
                     </span>
@@ -93,14 +98,15 @@ export default function Contact() {
             </div>
 
             {/* Centered Modern Form */}
-            <div className="contact-form-section">
+            <div id="project-brief" className="contact-form-section">
                 <h2 className="contact-form-heading">{t('contact.formTitle')}</h2>
                 <p className="contact-form-info">
                     {FORMSPREE_FORM_ID ? t('contact.formInfoLive') : t('contact.formInfoDemo')}
                 </p>
+                <p className="contact-form-brief-hint">{t('contact.formBriefHint')}</p>
 
                 {status.submitted ? (
-                    <div className="contact-form-success" role="status" aria-live="polite" tabIndex="-1">
+                    <div ref={successRef} className="contact-form-success" role="status" aria-live="polite" tabIndex="-1">
                         <span className="contact-success-icon">✓</span>
                         <p className="contact-success-text">{t('contact.formSuccess')}</p>
                     </div>
@@ -116,6 +122,7 @@ export default function Contact() {
                                     required
                                     className="form-input"
                                     value={formData.name}
+                                    autoComplete="name"
                                     onChange={e => setFormData({ ...formData, name: e.target.value })}
                                     disabled={status.loading}
                                     placeholder={t('contact.formNamePlaceholder')}
@@ -130,6 +137,7 @@ export default function Contact() {
                                     required
                                     className="form-input"
                                     value={formData.email}
+                                    autoComplete="email"
                                     onChange={e => setFormData({ ...formData, email: e.target.value })}
                                     disabled={status.loading}
                                     placeholder={t('contact.formEmailPlaceholder')}
@@ -137,7 +145,7 @@ export default function Contact() {
                             </div>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="message" className="form-label">{t('contact.formMessage')}</label>
+                                <label htmlFor="message" className="form-label">{t('contact.formMessage')}</label>
                             <textarea
                                 id="message"
                                 name="message"
@@ -151,7 +159,7 @@ export default function Contact() {
                         </div>
                         {status.error && (
                             <div className="contact-form-error" role="alert">
-                                {t('contact.formError')}
+                                {t('contact.formError')} <a href="mailto:g.efeoncu@gmail.com">{t('contact.formEmailLink')}</a>
                             </div>
                         )}
                         <button
@@ -161,6 +169,7 @@ export default function Contact() {
                         >
                             {status.loading ? t('contact.formSubmitting') : t('contact.formSubmit')}
                         </button>
+                        <p className="contact-form-privacy">{t('contact.formPrivacy')}</p>
                     </form>
                 )}
             </div>

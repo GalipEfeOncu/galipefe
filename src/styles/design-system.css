@@ -458,6 +458,13 @@ main {
   max-width: 580px;
 }
 
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
 /* Hero Right Side - Floating transparent canvas */
 .hero-right {
   position: relative;
@@ -467,6 +474,20 @@ main {
   justify-content: center;
   align-items: center;
 }
+
+.agent-workflow { width: 100%; min-height: 390px; padding: 24px; display: flex; flex-direction: column; gap: 22px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--r-lg); box-shadow: var(--shadow); }
+.agent-workflow-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.agent-workflow-eyebrow, .agent-workflow-output-label { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; color: var(--accent); }
+.agent-workflow h3 { margin-top: 7px; max-width: 300px; font-family: var(--display); font-size: 25px; line-height: 1.18; }
+.agent-workflow-state { padding: 5px 8px; border: 1px solid var(--accent-line); border-radius: 999px; color: var(--accent); background: var(--accent-soft); font: 10px var(--mono); white-space: nowrap; }
+.agent-workflow-steps { display: grid; grid-template-columns: 1fr; gap: 4px; }
+.agent-workflow-step { display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 10px; text-align: left; color: var(--muted); border: 1px solid transparent; background: transparent; border-radius: var(--r-sm); font: 12px var(--mono); cursor: pointer; }
+.agent-workflow-step > span { color: var(--dim); font-size: 10px; }
+.agent-workflow-step:hover, .agent-workflow-step.active { color: var(--text); border-color: var(--accent-line); background: var(--accent-soft); }
+.agent-workflow-step.active > span { color: var(--accent); }
+.agent-workflow-output { margin-top: auto; padding: 16px; border: 1px solid var(--border-soft); background: var(--bg-2); border-radius: var(--r); }
+.agent-workflow-output strong { display: block; margin-top: 8px; font-family: var(--display); font-size: 18px; }
+.agent-workflow-output p { margin-top: 7px; color: var(--text-2); font-size: 13px; line-height: 1.55; }
 
 .interactive-canvas-wrap {
   width: 100%;
@@ -796,6 +817,7 @@ main {
   flex-wrap: wrap;
   align-items: center;
 }
+.projects-category-filters { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; }
 
 .projects-filter-btn {
   font-size: 12.5px;
@@ -1136,6 +1158,7 @@ main {
 .projects-empty-icon { font-size: 40px; }
 .projects-empty-title { font-size: 18px; font-weight: 600; }
 .projects-empty-desc { font-size: 14px; color: var(--muted); max-width: 320px; }
+.projects-stale-notice { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border: 1px solid var(--accent-line); background: var(--accent-soft); border-radius: var(--r); color: var(--text-2); font-size: 13px; }
 
 /* ============================================================
    Contact Page (Wide Single-Column Directory Layout)
@@ -1172,6 +1195,12 @@ main {
   border: 1px solid var(--accent-line);
   padding: 6px 14px;
   border-radius: 99px;
+}
+
+.contact-status-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .contact-pulse-dot {
@@ -1415,6 +1444,11 @@ textarea.form-input {
   border-radius: var(--r-sm);
 }
 
+.contact-form-error a { color: inherit; font-weight: 700; }
+.contact-form-privacy { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.contact-form-brief-hint { margin: -8px 0 0; color: var(--text-2); font-size: 13px; line-height: 1.55; }
+.proj-grid-details { color: var(--accent); font-family: var(--mono); font-size: 11px; white-space: nowrap; }
+
 /* Personal Socials Footer */
 .contact-socials-row {
   display: flex;
@@ -1562,6 +1596,11 @@ textarea.form-input {
   background: var(--border-soft);
   margin: 4px 6px;
 }
+
+.dock-language-toggle { gap: 3px; }
+.dock-language-toggle > span { color: var(--muted); transition: color 0.2s ease; }
+.dock-language-toggle > span.active { color: var(--accent); font-weight: 700; }
+.dock-language-toggle .dock-language-divider { color: var(--border); }
 
 .dock-nav {
   display: flex;
@@ -1756,6 +1795,12 @@ footer {
   text-align: center;
 }
 
+.site-footer { padding: 20px 24px; color: var(--dim); font-family: var(--mono); font-size: 11px; }
+.site-footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.site-footer-links { display: flex; gap: 14px; flex-wrap: wrap; }
+.site-footer-links a { color: var(--text-2); text-decoration: none; }
+.site-footer-links a:hover { color: var(--accent); }
+
 .not-found-page {
   min-height: calc(100vh - 82px);
   padding-top: 150px;
@@ -1838,6 +1883,7 @@ footer {
   .proj-featured-card { grid-template-columns: 1fr; padding: 24px; gap: 24px; }
   .projects-filter-spacer { display: none; }
   .projects-sort-control { width: 100%; justify-content: space-between; margin-top: 6px; }
+  .projects-stale-notice { align-items: flex-start; flex-direction: column; }
   .project-case-summary { grid-template-columns: 1fr; }
   .modal-overlay { padding: 12px; }
   .modal-body { padding: 22px 18px; }
@@ -1853,6 +1899,23 @@ footer {
   .about-metadata-grid { grid-template-columns: 1fr; }
   .hero-title-main { font-size: 34px; }
   .hero-right { height: 320px; }
+  .hero-actions { width: 100%; }
+  .hero-actions .btn { flex: 1 1 100%; justify-content: center; white-space: nowrap; }
+  .contact-status-bar { gap: 8px; }
+  .contact-status-badge,
+  .contact-status-meta {
+    box-sizing: border-box;
+    width: 100%;
+    align-items: flex-start;
+    border: 1px solid var(--border-soft);
+    border-radius: var(--r);
+    padding: 12px;
+  }
+  .contact-status-badge { flex-direction: column; gap: 7px; }
+  .contact-status-types { font-size: 10px; }
+  .contact-status-meta { flex-direction: column; gap: 5px; }
+  .site-footer-inner { justify-content: center; text-align: center; }
+  .site-footer-links { justify-content: center; }
 }
 
 @media (pointer: coarse) {

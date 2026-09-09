@@ -18,8 +18,8 @@ export const CONTACTS = [
     {
         name: 'Email',
         nameKey: 'contact.channels.email',
-        url: 'mailto:galipefe75@gmail.com',
-        value: 'galipefe75@gmail.com',
+        url: 'mailto:g.efeoncu@gmail.com',
+        value: 'g.efeoncu@gmail.com',
         descKey: 'contact.emailDesc',
         icon: '✉',
     },

@@ -1,13 +1,27 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-import { projects as staticProjects } from '../data/projects';
-import { projectService } from '../services/projectService';
 import { getProjectContent } from '../utils/projectContent';
 import useSEO from '../hooks/useSEO';
 
 // Prefetch Modal chunk on first card hover to eliminate lazy-load delay
 const prefetchModal = () => import('./Modal');
 let modalPrefetched = false;
+const PROJECT_CACHE_KEY = 'galipefe_projects_cache_v1';
+const CATEGORY_KEYS = ['AI/Automation', 'Web', 'Games', 'Tools', 'Other'];
+
+function getCategory(project) {
+    return CATEGORY_KEYS.includes(project.category) ? project.category : 'Other';
+}
+
+function readCachedProjects() {
+    try {
+        const value = window.localStorage.getItem(PROJECT_CACHE_KEY);
+        const projects = value ? JSON.parse(value) : [];
+        return Array.isArray(projects) ? projects : [];
+    } catch {
+        return [];
+    }
+}
 
 function StatusBadge({ status }) {
     const { t } = useLanguage();
@@ -52,9 +66,18 @@ function ProjectImage({ project, height = 140, className = '', loading = 'lazy' 
 export default function Projects({ onOpenModal }) {
     const { t, lang } = useLanguage();
     const [filter, setFilter] = useState('All');
+    const [categoryFilter, setCategoryFilter] = useState('All');
     const [sortOrder, setSortOrder] = useState('featured');
-    const [projectList, setProjectList] = useState(staticProjects);
-    const [loading, setLoading] = useState(true);
+    const [projectList, setProjectList] = useState(readCachedProjects);
+    const [loading, setLoading] = useState(() => readCachedProjects().length === 0);
+    const [loadError, setLoadError] = useState(false);
+    const [showStaleNotice, setShowStaleNotice] = useState(false);
+    const isMounted = useRef(false);
+    const projectListRef = useRef(projectList);
+
+    useEffect(() => {
+        projectListRef.current = projectList;
+    }, [projectList]);
 
     const handleCardMouseEnter = () => {
         if (!modalPrefetched) {
@@ -65,32 +88,60 @@ export default function Projects({ onOpenModal }) {
 
     useSEO({ titleKey: 'projects.title', descriptionKey: 'seo.projectsDesc' });
 
-    useEffect(() => {
-        let active = true;
-        async function fetchProjects() {
-            setLoading(true);
-            const data = await projectService.getProjects();
-            if (active) {
-                if (data && data.length > 0) {
-                    setProjectList(data);
-                } else {
-                    setProjectList(staticProjects);
-                }
-                setLoading(false);
-            }
+    const loadProjects = useCallback(async () => {
+        if (isMounted.current) {
+            setLoadError(false);
+            setShowStaleNotice(false);
         }
-        fetchProjects();
-        return () => { active = false; };
+        try {
+            const { projectService } = await import('../services/projectService');
+            const data = await projectService.getProjects();
+            if (!isMounted.current) return;
+            if (Array.isArray(data) && data.length > 0) {
+                setProjectList(data);
+                try {
+                    window.localStorage.setItem(PROJECT_CACHE_KEY, JSON.stringify(data));
+                } catch {
+                    // Caching is a progressive enhancement; Firestore remains the source of truth.
+                }
+            } else if (Array.isArray(data)) {
+                setProjectList([]);
+                try {
+                    window.localStorage.removeItem(PROJECT_CACHE_KEY);
+                } catch {
+                    // An unavailable cache must not affect the Firestore response.
+                }
+            } else {
+                setLoadError(true);
+                setShowStaleNotice(projectListRef.current.length > 0);
+            }
+        } catch {
+            if (isMounted.current) {
+                setLoadError(true);
+                setShowStaleNotice(projectListRef.current.length > 0);
+            }
+        } finally {
+            if (isMounted.current) setLoading(false);
+        }
     }, []);
 
+    useEffect(() => {
+        isMounted.current = true;
+        loadProjects();
+        return () => { isMounted.current = false; };
+    }, [loadProjects]); // Firestore is intentionally the only public project source.
+
+    const categorizedList = categoryFilter === 'All'
+        ? projectList
+        : projectList.filter((project) => getCategory(project) === categoryFilter);
     const filters = [
-        { key: 'All', label: t('projects.filters.all'), count: projectList.length },
-        { key: 'Completed', label: t('projects.filters.completed'), count: projectList.filter(p => p.status === 'Completed').length },
-        { key: 'Work in Progress', label: t('projects.filters.wip'), count: projectList.filter(p => p.status === 'Work in Progress').length },
-        { key: 'Discontinued', label: t('projects.filters.discontinued'), count: projectList.filter(p => p.status === 'Discontinued').length },
+        { key: 'All', label: t('projects.filters.all'), count: categorizedList.length },
+        { key: 'Completed', label: t('projects.filters.completed'), count: categorizedList.filter(p => p.status === 'Completed').length },
+        { key: 'Work in Progress', label: t('projects.filters.wip'), count: categorizedList.filter(p => p.status === 'Work in Progress').length },
+        { key: 'Discontinued', label: t('projects.filters.discontinued'), count: categorizedList.filter(p => p.status === 'Discontinued').length },
     ];
 
-    const filteredList = filter === 'All' ? projectList : projectList.filter(p => p.status === filter);
+    const filteredList = filter === 'All' ? categorizedList : categorizedList.filter(p => p.status === filter);
     const list = [...filteredList].sort((a, b) => {
         if (sortOrder === 'titleAsc') return a.title.localeCompare(b.title, lang);
         if (sortOrder === 'titleDesc') return b.title.localeCompare(a.title, lang);
@@ -122,6 +173,12 @@ export default function Projects({ onOpenModal }) {
             </div>
 
             <div className="projects-filters">
+                <div className="projects-category-filters" role="group" aria-label={t('projects.categoryLabel')}>
+                    <button type="button" onClick={() => setCategoryFilter('All')} className={`projects-filter-btn ${categoryFilter === 'All' ? 'active' : ''}`} aria-pressed={categoryFilter === 'All'}>{t('projects.category.all')}</button>
+                    {CATEGORY_KEYS.map((category) => (
+                        <button key={category} type="button" onClick={() => setCategoryFilter(category)} className={`projects-filter-btn ${categoryFilter === category ? 'active' : ''}`} aria-pressed={categoryFilter === category}>{t(`projects.category.${category}`)}</button>
+                    ))}
+                </div>
                 {filters.map(f => (
                     <button
                         key={f.key}
@@ -144,13 +201,25 @@ export default function Projects({ onOpenModal }) {
                 </label>
             </div>
 
+            {showStaleNotice && (
+                <div className="projects-stale-notice" role="status">
+                    <span>{t('projects.staleNotice')}</span>
+                    <button className="btn ghost" type="button" onClick={() => { setLoading(true); loadProjects(); }}>{t('projects.retry')}</button>
+                </div>
+            )}
+
             {loading ? (
                 <div className="projects-skeleton" role="status" aria-live="polite">
                     <span className="sr-only">{t('projects.loading')}</span>
                     <span className="projects-skeleton-featured" />
-                    <span className="projects-skeleton-grid">
-                        <span /><span /><span />
-                    </span>
+                    <span className="projects-skeleton-grid"><span /><span /><span /></span>
+                </div>
+            ) : loadError && list.length === 0 ? (
+                <div className="projects-empty" role="alert">
+                    <div className="projects-empty-icon">!</div>
+                    <div className="projects-empty-title">{t('projects.loadErrorTitle')}</div>
+                    <div className="projects-empty-desc">{t('projects.loadErrorDesc')}</div>
+                    <button className="btn" type="button" onClick={() => { setLoading(true); loadProjects(); }}>{t('projects.retry')}</button>
                 </div>
             ) : list.length === 0 ? (
                 <div className="projects-empty">
@@ -167,7 +236,7 @@ export default function Projects({ onOpenModal }) {
                                 
                                 {/* Left Column: Title, Subtitle, Image Box, Buttons */}
                                 <div className="proj-featured-left-col">
-                                    <span className="proj-featured-label">{t('projects.featuredLabel')}</span>
+                                    {sortOrder === 'featured' && <span className="proj-featured-label">{t('projects.featuredLabel')}</span>}
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                                             <h2 className="proj-featured-title" style={{ fontSize: 28, margin: 0 }}>{featured.title}</h2>
@@ -290,6 +359,7 @@ export default function Projects({ onOpenModal }) {
                                     </span>
                                     <span className="proj-grid-footer">
                                         <StatusBadge status={p.status} />
+                                        <span className="proj-grid-details">{t('projects.viewDetails')} →</span>
                                     </span>
                                 </span>
                             </button>

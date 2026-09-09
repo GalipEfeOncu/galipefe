@@ -1,6 +1,6 @@
 # Firebase ve yönetim ekranı
 
-Firebase opsiyoneldir. Yapılandırma yoksa public site statik proje kataloğuyla çalışır; `/admin` ise ayar uyarısı gösterir.
+Firestore, public proje kataloğunun tek kaynağıdır. Firebase yapılandırılmamışsa veya istek başarısız olursa public Projects ekranı açık bir hata ve yeniden deneme kontrolü gösterir; `/admin` ise ayar uyarısı gösterir.
 
 ## Ortam değişkenleri
 
@@ -24,14 +24,14 @@ Formspree bu env akışının parçası değildir. Form kimliği `src/components
 1. `src/config/firebase.js`, env değerleri varsa Firebase app, Auth ve Firestore'u başlatır.
 2. `/admin`, Firebase email/password ile `signInWithEmailAndPassword` kullanır.
 3. `src/services/projectService.js`, `projects` koleksiyonunda okuma/yazma/silme ve `order` güncelleme yapar.
-4. Public `Projects` ve About proje sayacı Firestore'u dener; sonuç yoksa `src/data/projects.js` fallback'ine döner.
+4. Public `Projects`, Firestore `projects` koleksiyonunu kullanır. Son başarılı yanıt tarayıcıda yalnızca performans için önbelleklenebilir; doğruluk kaynağı Firestore'dur.
 
 ## Firestore proje alanları
 
 Admin tarafından yazılan temel alanlar:
 
 ```text
-id, translationKey, title, status, order
+id, translationKey, title, category, status, order
 subtitle, subtitleEn, subtitleTr
 description, descriptionEn, descriptionTr
 learnings, learningsEn, learningsTr
@@ -39,16 +39,6 @@ link, demoLink, image, icon, tags
 ```
 
 `status` enum'u ve kimlik kuralları statik katalogla aynıdır. `order` artan sıralamayı belirler. Görsel data URL olabilir; büyük belgelerin Firestore boyut sınırlarına yaklaşabileceğini unutmayın.
-
-## Seed işlemi
-
-Admin içindeki seed butonu `src/data/projects.js` dizisini sırayla Firestore'a yazar. Bu işlem:
-
-- harici veriyi değiştirir,
-- aynı document ID'lerinde alanları merge eder,
-- silinmiş/eski ekstra Firestore kayıtlarını otomatik temizlemez.
-
-Hedef Firebase projesi ve kullanıcı yetkisi doğrulanmadan seed çalıştırmayın.
 
 ## Güvenlik kontrolü
 
@@ -59,13 +49,13 @@ Hedef Firebase projesi ve kullanıcı yetkisi doğrulanmadan seed çalıştırma
 
 ## Yerel doğrulama
 
-Firebase olmadan fallback testi:
+Firebase yapılandırması olmadan hata durumu testi:
 
 ```bash
 npm run dev
 ```
 
-- `/projects` statik projeleri göstermeli.
+- `/projects` hata mesajını ve yeniden dene kontrolünü göstermeli.
 - `/admin` eksik konfigürasyon ekranını göstermeli.
 
 Firebase ile test yapılacaksa yerel `.env` değerlerini kullanıcı sağlar. Login, listeleme, CRUD ve sıralama gerçek harici veriyi etkileyebileceği için test projesi kullanın. Her iki durumda da son olarak:

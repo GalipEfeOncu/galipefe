@@ -7,7 +7,6 @@ import {
 } from 'firebase/auth';
 import { auth, isFirebaseConfigured } from '../config/firebase';
 import { projectService } from '../services/projectService';
-import { projects as staticProjects } from '../data/projects';
 
 export default function Admin() {
     const navigate = useNavigate();
@@ -57,27 +56,12 @@ export default function Admin() {
         setLoading(false);
     }
 
-    async function seedDatabase() {
-        if (!window.confirm('Bu işlem veritabanını localdeki projelerle dolduracaktır. Emin misiniz?')) return;
-        setLoading(true);
-        try {
-            for (let i = 0; i < staticProjects.length; i++) {
-                const proj = { ...staticProjects[i], order: i };
-                await projectService.saveProject(proj);
-            }
-            showStatus('Veritabanı başarıyla dolduruldu!');
-            loadProjects();
-        } catch (error) {
-            showStatus('Hata: ' + error.message, true);
-            setLoading(false);
-        }
-    }
-
     function getEmptyFormState() {
         return {
             id: '',
             translationKey: '',
             title: '',
+            category: 'Other',
             subtitleEn: '',
             subtitleTr: '',
             status: 'Work in Progress',
@@ -229,6 +213,7 @@ export default function Admin() {
             id: proj.id || Date.now(),
             translationKey: proj.translationKey || '',
             title: proj.title || '',
+            category: proj.category || 'Other',
             subtitleEn: proj.subtitleEn || proj.subtitle || '',
             subtitleTr: proj.subtitleTr || proj.subtitle || '',
             status: proj.status || 'Work in Progress',
@@ -284,6 +269,7 @@ export default function Admin() {
             id: Number(formState.id) || Date.now(),
             translationKey: formState.translationKey || `proj_${formState.id}`,
             title: formState.title,
+            category: formState.category,
             subtitle: formState.subtitleTr || formState.subtitleEn || '', // compatibility fallback
             subtitleEn: formState.subtitleEn,
             subtitleTr: formState.subtitleTr,
@@ -443,11 +429,6 @@ export default function Admin() {
                     <p className="page-subtitle">{user.email} (Yönetici Oturumu)</p>
                 </div>
                 <div style={{ display: 'flex', gap: 12 }}>
-                    {projects.length === 0 && (
-                        <button onClick={seedDatabase} className="btn">
-                            🌱 Local Projeleri Aktar
-                        </button>
-                    )}
                     <button onClick={startCreate} className="btn primary">
                         ＋ Yeni Proje Ekle
                     </button>
@@ -529,6 +510,16 @@ export default function Admin() {
                                     <option value="Completed">Completed (Tamamlandı)</option>
                                     <option value="Work in Progress">Work in Progress (Devam Ediyor)</option>
                                     <option value="Discontinued">Discontinued (Askıya Alındı)</option>
+                                </select>
+                            </div>
+                            <div style={formColStyle}>
+                                <label style={labelStyle}>Kategori</label>
+                                <select value={formState.category} onChange={e => setFormState(prev => ({ ...prev, category: e.target.value }))} style={selectStyle}>
+                                    <option value="AI/Automation">AI / Automation</option>
+                                    <option value="Web">Web</option>
+                                    <option value="Games">Games</option>
+                                    <option value="Tools">Tools</option>
+                                    <option value="Other">Other</option>
                                 </select>
                             </div>
                             <div style={formColStyle}>
@@ -718,8 +709,7 @@ export default function Admin() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                     {projects.length === 0 ? (
                         <div className="metadata-card" style={{ padding: 40, textAlign: 'center', color: 'var(--muted)' }}>
-                            <p style={{ marginBottom: 16 }}>Henüz veritabanında hiçbir proje yok.</p>
-                            <button onClick={seedDatabase} className="btn primary">🌱 Local Projeleri Aktararak Başla</button>
+                            <p>Henüz veritabanında hiçbir proje yok. İlk projeyi oluşturmak için “Yeni Proje Ekle”yi kullanın.</p>
                         </div>
                     ) : (
                         projects.map((proj, idx) => (

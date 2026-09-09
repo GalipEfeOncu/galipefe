@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { SKILLS } from '../data/profile';
-import { projects as staticProjects } from '../data/projects';
-import TypingGame from './TypingGame';
+import AgentWorkflow from './AgentWorkflow';
 import useSEO from '../hooks/useSEO';
 
 const base = import.meta.env.BASE_URL;
@@ -33,33 +32,6 @@ export default function About() {
     const { t } = useLanguage();
     const age = computeAge();
     const detailsSectionRef = useRef(null);
-    const [projectCount, setProjectCount] = useState(staticProjects.length);
-
-    useEffect(() => {
-        let active = true;
-        let idleId;
-        let timeoutId;
-
-        async function fetchCount() {
-            const { projectService } = await import('../services/projectService');
-            const data = await projectService.getProjects();
-            if (active && data && data.length > 0) {
-                setProjectCount(data.length);
-            }
-        }
-        if ('requestIdleCallback' in window) {
-            idleId = window.requestIdleCallback(fetchCount, { timeout: 2500 });
-        } else {
-            timeoutId = window.setTimeout(fetchCount, 800);
-        }
-
-        return () => {
-            active = false;
-            if (idleId) window.cancelIdleCallback(idleId);
-            if (timeoutId) window.clearTimeout(timeoutId);
-        };
-    }, []);
-
     useSEO({ fullTitleKey: 'seo.aboutTitle', descriptionKey: 'seo.aboutDesc' });
 
     const handleScrollDown = () => {
@@ -112,19 +84,19 @@ export default function About() {
                                 {t('hero.desc')}
                             </p>
 
-                            <div style={{ display: 'flex', gap: 12, marginTop: 12 }}>
-                                <button onClick={handleScrollDown} className="btn primary">
-                                    {t('about.title')} ↓
-                                </button>
-                                <Link to="/projects" className="btn ghost">
+                            <div className="hero-actions">
+                                <Link to="/projects" className="btn primary">
                                     {t('about.cta.projectsTitle')} →
+                                </Link>
+                                <Link to="/contact#project-brief" className="btn ghost">
+                                    {t('about.cta.briefTitle')} →
                                 </Link>
                             </div>
                         </div>
 
-                        {/* Hero Right Typing Mini Game */}
+                        {/* Hero Right: agent-workflow proof */}
                         <div className="hero-right">
-                            <TypingGame />
+                            <AgentWorkflow />
                         </div>
 
                     </div>
@@ -217,16 +189,16 @@ export default function About() {
                                 <div className="cta-banner-content">
                                     <span className="cta-banner-title">{t('about.cta.projectsTitle')}</span>
                                     <span className="cta-banner-desc">
-                                        {t('about.cta.projectsCount').replace('{count}', projectCount)}
+                                        {t('about.cta.projectsDesc')}
                                     </span>
                                 </div>
                                 <span className="cta-banner-arrow">→</span>
                             </Link>
-                            <Link to="/contact" className="cta-banner-link">
+                            <Link to="/contact#project-brief" className="cta-banner-link">
                                 <div className="cta-banner-content">
-                                    <span className="cta-banner-title">{t('about.cta.contactTitle')}</span>
+                                    <span className="cta-banner-title">{t('about.cta.briefTitle')}</span>
                                     <span className="cta-banner-desc">
-                                        {t('about.cta.contactChannels')}
+                                        {t('about.cta.briefDesc')}
                                     </span>
                                 </div>
                                 <span className="cta-banner-arrow">→</span>

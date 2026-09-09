@@ -32,28 +32,24 @@ src/main.jsx
 | `theme` | `App` | `localStorage.site_theme`; `dark` veya `light` |
 | `selectedProject` | `App` | Proje modalını açar/kapatır |
 | `showScrollTop` | `App` | Scroll konumuna göre yardımcı düğme |
-| `filter`, `projectList`, `loading` | `Projects` | Filtre ve asenkron proje listesi |
+| `filter`, `projectList`, `loading` | `Projects` | Firestore'dan gelen filtrelenmiş proje listesi |
 | auth/form/project state | `Admin` | Firebase Authentication ve Firestore yönetimi |
 
 Redux veya başka bir global state kütüphanesi yoktur.
 
-## Proje verisinin önceliği
+## Proje verisi
 
 ```text
-Projects/About
+Projects
     │
-    ├─ Firebase yapılandırılmış ve Firestore `projects` dolu
-    │      └─ Firestore verisi kullanılır (`order` artan)
-    │
-    └─ Firebase yok, istek başarısız/zaman aşımı veya koleksiyon boş
-           └─ src/data/projects.js kullanılır
+    └─ Firestore `projects` (`order` artan)
+           ├─ Son başarılı yanıt, performans için localStorage önbelleğinden anında gösterilebilir
+           └─ Firebase yok, istek başarısız/zaman aşımı veya koleksiyon boşsa hata durumu gösterilir
 ```
 
 - Firestore erişimi `src/services/projectService.js` üzerinden yapılır ve üç saniyelik timeout uygular.
-- Statik katalog yalnızca geliştirme verisi değildir; üretim için de gerçek fallback ve `/admin` seed kaynağıdır.
-- Statik dizinin ilk öğesi, aktif filtre içinde featured proje olur. Firestore tarafında sıralamayı `order` alanı belirler.
-- `Projects` ve `Modal`, proje metinlerini `src/utils/projectContent.js` üzerinden aynı sırayla çözer. Bilinen bir `translationKey` için `projectData.<translationKey>` çevirileri önceliklidir; anahtar bulunamazsa seçili dildeki Firestore alanları (`subtitleEn/Tr`, `descriptionEn/Tr`, `roleEn/Tr`, `outcomeEn/Tr`, `learningsEn/Tr`) ve son olarak ortak fallback alanları kullanılır.
-- `About`, ilk render'da statik proje sayısını gösterir; Firestore servis chunk'ını tarayıcı boşta kaldığında dinamik import ederek sayıyı arka planda günceller.
+- `Projects` ile `Modal`, proje metinlerini `src/utils/projectContent.js` üzerinden seçili dildeki Firestore alanlarından (`subtitleEn/Tr`, `descriptionEn/Tr`, `roleEn/Tr`, `outcomeEn/Tr`, `learningsEn/Tr`) çözer; eksik alanda diğer locale, ardından ortak alan kullanılır.
+- Featured proje, yalnızca featured sıralama seçiliyken ilk kayıttır; Firestore tarafında sıralamayı `order` alanı belirler.
 
 Şema ve ekleme adımları için [`add-project.md`](./add-project.md) dosyasına bakın.
 
@@ -77,10 +73,10 @@ Bu veri statiktir; Firestore tarafından değiştirilmez.
 
 ## Sayfalar ve bileşenler
 
-- `About`: hero, dinamik yaş, yetenekler, ilgi alanları, TypingGame ve Firestore/static proje sayısı.
-- `Projects`: Firestore/static veri seçimi, status filtresi, çalışan sıralama kontrolü, featured kart ve modal tetikleme. Featured kart ile modal, proje rolü ve doğrulanabilir sonuç alanlarını case-study özeti olarak gösterebilir.
+- `About`: hero, dinamik yaş, yetenekler, ilgi alanları ve etkileşimli AgentWorkflow konsolu.
+- `Projects`: Firestore verisi, önbellek, hata/yeniden deneme durumu, status filtresi, çalışan sıralama kontrolü, featured kart ve modal tetikleme. Featured kart ile modal, proje rolü ve doğrulanabilir sonuç alanlarını case-study özeti olarak gösterebilir.
 - `Contact`: iletişim kartları, sosyal bağlantılar ve Formspree destekli form. Form kimliği şu anda bileşendeki `FORMSPREE_FORM_ID` sabitidir; sabit boş bırakılırsa form demo modunda gönderimi simüle eder.
-- `Admin`: Firebase email/password girişi; proje oluşturma, güncelleme, silme, sıralama ve statik kataloğu seed etme.
+- `Admin`: Firebase email/password girişi; proje oluşturma, güncelleme, silme ve sıralama.
 - `InteractiveCanvas`: bağımsız canvas animasyonu; şu anda herhangi bir rota tarafından render edilmez.
 
 ## SEO

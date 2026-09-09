@@ -14,6 +14,11 @@ export default function Header({ theme, toggleTheme }) {
         { to: '/contact', label: t('nav.contact') },
     ];
 
+    const prefetchRoute = (to) => {
+        const imports = { '/': () => import('./About'), '/projects': () => import('./Projects'), '/contact': () => import('./Contact') };
+        imports[to]?.();
+    };
+
     useEffect(() => {
         if (!isMobileMenuOpen) return undefined;
 
@@ -53,6 +58,8 @@ export default function Header({ theme, toggleTheme }) {
                                 to={to}
                                 aria-current={location.pathname === to ? 'page' : undefined}
                                 className={`dock-nav-link ${location.pathname === to ? 'active' : ''}`}
+                                onMouseEnter={() => prefetchRoute(to)}
+                                onFocus={() => prefetchRoute(to)}
                             >
                                 {label}
                             </Link>
@@ -64,17 +71,12 @@ export default function Header({ theme, toggleTheme }) {
                         {/* Language Switch Button */}
                         <button
                             onClick={toggleLang}
-                            className="dock-btn"
+                            className="dock-btn dock-language-toggle"
                             aria-label={lang === 'en' ? t('header.switchToTurkish') : t('header.switchToEnglish')}
                         >
-                            <span style={{ 
-                                width: 6, 
-                                height: 6, 
-                                borderRadius: '50%', 
-                                background: 'var(--accent)', 
-                                display: 'inline-block'
-                            }} />
-                            {lang.toUpperCase()}
+                            <span className={lang === 'tr' ? 'active' : ''}>TR</span>
+                            <span className="dock-language-divider" aria-hidden="true">/</span>
+                            <span className={lang === 'en' ? 'active' : ''}>EN</span>
                         </button>
 
                         <div className="dock-separator" />
@@ -86,7 +88,7 @@ export default function Header({ theme, toggleTheme }) {
                             title={theme === 'dark' ? t('header.switchToLight') : t('header.switchToDark')}
                             aria-label={theme === 'dark' ? t('header.switchToLight') : t('header.switchToDark')}
                         >
-                            {theme === 'dark' ? '◑' : '◐'}
+                            {theme === 'dark' ? '☀' : '☾'}
                         </button>
 
                         {/* Mobile Menu Toggle Button (Controlled via CSS display queries) */}
@@ -132,6 +134,8 @@ export default function Header({ theme, toggleTheme }) {
                                     to={to}
                                     aria-current={location.pathname === to ? 'page' : undefined}
                                     onClick={() => setIsMobileMenuOpen(false)}
+                                    onMouseEnter={() => prefetchRoute(to)}
+                                    onFocus={() => prefetchRoute(to)}
                                     className={`dock-nav-link ${location.pathname === to ? 'active' : ''}`}
                                     style={{ 
                                         width: '100%', 
