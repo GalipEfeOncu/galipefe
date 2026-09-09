@@ -1872,15 +1872,14 @@ footer {
 }
 
 @media (max-width: 768px) {
-  .hero-section { min-height: auto; padding: 80px 0 72px; }
-  .hero-grid { gap: 28px; }
+  .hero-section { padding-top: 80px; }
+  .hero-section { padding-bottom: 100px; }
   .hero-title-main { font-size: 40px; }
   .about-bio-heading { font-size: 28px; text-align: center; }
   .section-padding { padding: 60px 0; }
   .dock-mobile-toggle { display: flex !important; }
   .dock-nav { display: none !important; }
-  .hero-right { display: flex; max-width: 100%; }
-  .agent-workflow { max-width: 100%; min-height: 0; padding: 20px; text-align: left; }
+  .hero-right { display: none; }
   
   .modal-container { max-width: 100%; }
   .modal-hero { flex-direction: column; text-align: center; }
@@ -1904,12 +1903,6 @@ footer {
 @media (max-width: 480px) {
   .about-metadata-grid { grid-template-columns: 1fr; }
   .hero-title-main { font-size: 34px; }
-  .agent-workflow { padding: 18px; gap: 14px; }
-  .agent-workflow-header { gap: 10px; }
-  .agent-workflow h3 { font-size: 22px; }
-  .agent-workflow-state { max-width: 118px; white-space: normal; line-height: 1.35; text-align: right; }
-  .agent-workflow-step { min-height: 44px; }
-  .agent-workflow-output { min-height: 112px; }
   .hero-actions { width: 100%; }
   .hero-actions .btn { flex: 1 1 100%; justify-content: center; white-space: nowrap; }
   .contact-status-bar { gap: 8px; }
