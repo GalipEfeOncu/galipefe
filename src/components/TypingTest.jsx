@@ -10,15 +10,16 @@ export default function TypingTest() {
 
     return (
         <div className="page typing-test-page container">
-            <div className="typing-test-heading">
-                <div>
-                    <span className="typing-test-eyebrow">{t('typingGame.easterEgg')}</span>
-                    <h1 className="page-title">{t('typingGame.pageTitle')}</h1>
-                    <p className="page-subtitle">{t('typingGame.pageSubtitle')}</p>
-                </div>
+            <div className="typing-test-utility">
+                <span>{t('typingGame.easterEgg')}</span>
                 <Link className="typing-test-profile-link" to="/">← {t('typingGame.backToProfile')}</Link>
             </div>
-            <div className="typing-test-panel"><TypingGame /></div>
+            <div className="typing-test-panel">
+                <div className="typing-test-signal-burst" aria-hidden="true">
+                    {Array.from({ length: 12 }, (_, index) => <span key={index} />)}
+                </div>
+                <TypingGame />
+            </div>
         </div>
     );
 }
