@@ -107,8 +107,6 @@ export default function TypingGame() {
     const currentExpected = words[currentWordIdx] || '';
     const typedClean = typed.trim();
     const isCurrentWrong = typedClean.length > 0 && !currentExpected.startsWith(typedClean);
-    const circumference = 2 * Math.PI * 16;
-    const dashOffset = circumference * (1 - (timeLeft / duration));
     const wpm = phase === 'done' ? calculateWpm(words, wordStatuses, currentWordIdx, typed, duration) : 0;
     const personalRecord = PERSONAL_RECORDS[duration];
 
@@ -157,6 +155,10 @@ export default function TypingGame() {
                     <div className="tg-record-badge"><span className="tg-record-key">{t('typingGame.record')}</span><span className="tg-record-val">{personalRecord} wpm</span></div>
                 </div>
                 <div className="tg-header-controls">
+                    <div className={`tg-timer-readout${timeLeft <= 3 ? ' urgent' : ''}`} role="timer" aria-label={t('typingGame.timeLeft').replace('{seconds}', timeLeft)}>
+                        <span>{t('typingGame.timeLabel')}</span>
+                        <strong>{timeLeft}s</strong>
+                    </div>
                     <div className="tg-duration-control" aria-label={t('typingGame.durationLabel')}>
                         <span>{t('typingGame.durationLabel')}</span>
                         <div className="tg-duration-options">
@@ -167,9 +169,6 @@ export default function TypingGame() {
                 </div>
             </div>
             {phase !== 'done' && <div className="tg-test-area">
-                <div className={`tg-timer-row${timeLeft <= 3 ? ' urgent' : ''}`} role="timer" aria-label={t('typingGame.timeLeft').replace('{seconds}', timeLeft)}>
-                    <svg className="tg-ring" viewBox="0 0 36 36" width="36" height="36" aria-hidden="true"><circle cx="18" cy="18" r="16" fill="none" strokeWidth="2.5" className="tg-ring-bg" /><circle cx="18" cy="18" r="16" fill="none" strokeWidth="2.5" className="tg-ring-progress" strokeDasharray={circumference} strokeDashoffset={dashOffset} strokeLinecap="round" transform="rotate(-90 18 18)" /><text x="18" y="22" textAnchor="middle" className="tg-ring-text">{timeLeft}</text></svg>
-                </div>
                 <div className="tg-words-container">
                     {words.map((word, index) => {
                         const status = wordStatuses[index];
