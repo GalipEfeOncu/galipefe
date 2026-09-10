@@ -95,16 +95,16 @@ export default function Projects({ onOpenModal }) {
         }
         try {
             const { projectService } = await import('../services/projectService');
-            const data = await projectService.getProjects();
+            const result = await projectService.getProjects();
             if (!isMounted.current) return;
-            if (Array.isArray(data) && data.length > 0) {
-                setProjectList(data);
+            if (result.ok && result.projects.length > 0) {
+                setProjectList(result.projects);
                 try {
-                    window.localStorage.setItem(PROJECT_CACHE_KEY, JSON.stringify(data));
+                    window.localStorage.setItem(PROJECT_CACHE_KEY, JSON.stringify(result.projects));
                 } catch {
                     // Caching is a progressive enhancement; Firestore remains the source of truth.
                 }
-            } else if (Array.isArray(data)) {
+            } else if (result.ok) {
                 setProjectList([]);
                 try {
                     window.localStorage.removeItem(PROJECT_CACHE_KEY);

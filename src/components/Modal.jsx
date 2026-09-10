@@ -24,8 +24,9 @@ function ModalImage({ project }) {
     );
 }
 
-export default function Modal({ project, onClose }) {
-    const { t, lang } = useLanguage();
+export default function Modal({ project, onClose, previewLang }) {
+    const { t, lang: contextLang } = useLanguage();
+    const lang = previewLang || contextLang;
     const modalRef = useRef(null);
     const previouslyFocusedRef = useRef(null);
 

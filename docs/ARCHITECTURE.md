@@ -34,7 +34,7 @@ src/main.jsx
 | `selectedProject` | `App` | Proje modalını açar/kapatır |
 | `showScrollTop` | `App` | Scroll konumuna göre yardımcı düğme |
 | `filter`, `projectList`, `loading` | `Projects` | Firestore'dan gelen filtrelenmiş proje listesi |
-| auth/form/project state | `Admin` | Firebase Authentication ve Firestore yönetimi |
+| auth/form/project state | `Admin` + `admin/useProjectDraft` | Firebase Authentication, yayın editörü ve localStorage kurtarma taslağı |
 
 Redux veya başka bir global state kütüphanesi yoktur.
 
@@ -78,7 +78,7 @@ Bu veri statiktir; Firestore tarafından değiştirilmez.
 - `TypingTest`: Contact sayfasındaki Monkeytype easter egg bağlantısından açılan, süre seçilebilir yerel yazma testi; arama motorları için `noindex` olarak işaretlenir.
 - `Projects`: Firestore verisi, önbellek, hata/yeniden deneme durumu, status filtresi, çalışan sıralama kontrolü, featured kart ve modal tetikleme. Featured kart ile modal, proje rolü ve doğrulanabilir sonuç alanlarını case-study özeti olarak gösterebilir.
 - `Contact`: iletişim kartları, sosyal bağlantılar ve Formspree destekli form. Form kimliği şu anda bileşendeki `FORMSPREE_FORM_ID` sabitidir; sabit boş bırakılırsa form demo modunda gönderimi simüle eder.
-- `Admin`: Firebase email/password girişi; proje oluşturma, güncelleme, silme ve sıralama.
+- `Admin`: Firebase email/password girişi; taslak/yayın akışı, arşivleme, 700 KB sınırlandırılmış data URL kapak işleme, local recovery draft ve tek batch sıralama kaydı.
 - `InteractiveCanvas`: bağımsız canvas animasyonu; şu anda herhangi bir rota tarafından render edilmez.
 
 ## SEO
@@ -105,7 +105,7 @@ Bu veri statiktir; Firestore tarafından değiştirilmez.
 
 - İstemci config'i yalnızca `VITE_FIREBASE_*` env değişkenlerinden okunur.
 - Firebase yapılandırması yoksa uygulama çalışmaya devam eder, ancak `/admin` yapılandırma uyarısı gösterir.
-- `/admin` rotasının menü bağlantısı yoktur; gizli rota olmak yetkilendirme değildir. Gerçek koruma Firebase Authentication ve Firestore Security Rules tarafında uygulanmalıdır.
+- `/admin` rotasının menü bağlantısı yoktur; gizli rota olmak yetkilendirme değildir. Gerçek koruma Firebase Authentication ve custom `admin: true` claim'i isteyen sürüm kontrollü Firestore Security Rules tarafında uygulanır. Public sorgular yalnızca yayınlanmış ve arşivlenmemiş projeleri döndürür.
 - `.env` dosyaları ignore edilir. Gerçek değerleri dokümana, fixture'a veya commit'e eklemeyin.
 
 Kurulum ayrıntıları: [`firebase-admin.md`](./firebase-admin.md).

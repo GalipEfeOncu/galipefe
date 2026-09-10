@@ -1,4 +1,4 @@
-import { collection, getDocs, doc, setDoc, deleteDoc, writeBatch, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, doc, setDoc, deleteDoc, writeBatch, query, orderBy, where, serverTimestamp } from 'firebase/firestore';
 import { db, isFirebaseConfigured } from '../config/firebase';
 
 const COLLECTION_NAME = 'projects';
@@ -26,23 +26,32 @@ const withTimeout = (promise, ms = TIMEOUT_MS) => {
 export const projectService = {
     /**
      * Fetches all projects from Firestore, ordered by the 'order' field ascending.
-     * If Firebase is not configured or fails/times out, returns null.
+     * Returns an explicit result so an empty collection is never confused with a failed request.
      */
-    async getProjects() {
-        if (!isFirebaseConfigured || !db) return null;
+    async getProjects({ admin = false, includeArchived = false } = {}) {
+        if (!isFirebaseConfigured || !db) return { ok: false, error: 'Firebase is not configured' };
         try {
             const projectsRef = collection(db, COLLECTION_NAME);
-            const q = query(projectsRef, orderBy('order', 'asc'));
+            const constraints = [orderBy('order', 'asc')];
+            if (!admin) {
+                constraints.unshift(where('published', '==', true), where('archived', '==', false));
+            }
+            const q = query(projectsRef, ...constraints);
             const querySnapshot = await withTimeout(getDocs(q));
             
             const projectsList = [];
             querySnapshot.forEach((doc) => {
                 projectsList.push({ ...doc.data(), docId: doc.id });
             });
-            return projectsList;
+            return {
+                ok: true,
+                projects: admin && !includeArchived
+                    ? projectsList.filter((project) => project.archived !== true)
+                    : projectsList,
+            };
         } catch (error) {
             console.error('Error fetching projects from Firestore:', error);
-            return null;
+            return { ok: false, error: error.message || 'Firestore projects could not be loaded' };
         }
     },
 
@@ -58,7 +67,7 @@ export const projectService = {
         const docRef = doc(db, COLLECTION_NAME, docId);
         
         try {
-            await withTimeout(setDoc(docRef, project, { merge: true }));
+            await withTimeout(setDoc(docRef, { ...project, updatedAt: serverTimestamp() }, { merge: true }));
             return { ...project, docId };
         } catch (error) {
             console.error('Error saving project to Firestore:', error);
@@ -79,6 +88,12 @@ export const projectService = {
             console.error('Error deleting project from Firestore:', error);
             throw error;
         }
+    },
+
+    async setArchived(projectId, archived) {
+        if (!isFirebaseConfigured || !db) throw new Error('Firebase is not configured');
+        const docRef = doc(db, COLLECTION_NAME, projectId.toString());
+        await withTimeout(setDoc(docRef, { archived, updatedAt: serverTimestamp() }, { merge: true }));
     },
 
     /**
