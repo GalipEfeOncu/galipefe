@@ -27,6 +27,8 @@ Yönetim paneli tek kullanıcı için Türkçe tutulur; public site metinleri is
 3. `src/services/projectService.js`, `projects` koleksiyonunda okuma/yazma/silme ve `order` güncelleme yapar. Public sorgu yalnızca `published: true` ve `archived: false` kayıtlarını ister; admin tüm kayıtları görebilir.
 4. Public `Projects`, Firestore `projects` koleksiyonunu kullanır. Son başarılı yanıt tarayıcıda yalnızca performans için önbelleklenebilir; doğruluk kaynağı Firestore'dur.
 
+Panelde **Sıralama modu** açıldığında projeler tutamaçtan basılı tutulup sürüklenebilir. Sürükleme sırasında yalnızca önizleme ve satır geçişleri hareket eder; yerel proje dizisi işaretçi bırakıldığında tek seferde güncellenir. İşaretçi listenin yatay sınırlarının dışına çıksa da sürükleme devam eder. Klavye kullanıcıları için yukarı/aşağı düğmeleri korunur. Her iki yöntem de yalnızca yerel sıralamayı değiştirir; Firestore `order` alanları **Sıralamayı kaydet** düğmesiyle toplu olarak güncellenir.
+
 ## Firestore proje alanları
 
 Admin tarafından yazılan temel alanlar:
