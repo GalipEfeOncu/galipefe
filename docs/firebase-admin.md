@@ -41,7 +41,7 @@ learnings, learningsEn, learningsTr
 link, demoLink, image, icon, tags
 ```
 
-`status` enum'u ve kimlik kuralları statik katalogla aynıdır. `order` artan sıralamayı belirler. Yeni kayıtlarda `published`, `archived` ve sunucu zamanı ile yazılan `updatedAt` alanları bulunur. Kapak görselleri Storage kullanılmadan tarayıcıda 16:9 WebP'ye sıkıştırılır ve Firestore'a data URL olarak yazılır. Gerçek UTF-8 data URL boyutu 700 KB üstündeyse kaydetme engellenir; bu, 1 MiB belge limitinin altında güvenlik payı bırakır.
+`status` enum'u ve kimlik kuralları statik katalogla aynıdır. `order` artan sıralamayı belirler. `id`, kartlar ve eski statik katalogla uyumluluk için kullanıcıya görünen benzersiz sayısal kimliktir; Firestore'daki kaydın adresi değildir. Yeni proje açıldığında panel mevcut pozitif ID'ler arasındaki en küçük boş değeri otomatik atar; ID daha sonra salt okunurdur. Kayıt oluşturulduğunda Firestore ayrıca değişmez bir belge kimliği üretir ve mevcut kayıtlarda düzenleme/silme/sıralama bu kimliği kullanır. Böylece formdaki bir alan başka kaydın üstüne yazamaz. `translationKey`, eski statik katalogdaki `translations.*.projectData` nesnesinde eşleşen çeviri girdisinin anahtarıdır; Firestore'daki TR/EN alanları kullanıldığında public ekran bu alanı okumaz, ancak geriye dönük uyumluluk için benzersiz tutulur. Mevcut kayıtlarda iki alan da salt okunurdur. Yeni kayıtlarda `published`, `archived` ve sunucu zamanı ile yazılan `updatedAt` alanları bulunur. Kapak görselleri Storage kullanılmadan tarayıcıda 16:9 WebP'ye sıkıştırılır ve Firestore'a data URL olarak yazılır. Gerçek UTF-8 data URL boyutu 700 KB üstündeyse kaydetme engellenir; bu, 1 MiB belge limitinin altında güvenlik payı bırakır.
 
 ## Güvenlik kontrolü
 

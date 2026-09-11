@@ -3,6 +3,7 @@ import { db, isFirebaseConfigured } from '../config/firebase';
 
 const COLLECTION_NAME = 'projects';
 const TIMEOUT_MS = 3000; // 3 seconds timeout
+const documentIdFor = (project) => String(project.docId ?? project.id);
 
 // Helper to prevent database calls from hanging indefinitely (e.g. misconfigured keys or network blocks)
 const withTimeout = (promise, ms = TIMEOUT_MS) => {
@@ -56,19 +57,22 @@ export const projectService = {
     },
 
     /**
-     * Saves a project (creates new or updates existing).
-     * Uses project.id as document ID.
+     * Saves a project. The Firestore document ID is the immutable record
+     * identity; the user-facing `id` field is never used to choose a document.
      */
-    async saveProject(project) {
+    async saveProject(project, existingDocId) {
         if (!isFirebaseConfigured || !db) throw new Error('Firebase is not configured');
-        
-        // Ensure id is present and is a string for document name, but store as number/string in data
-        const docId = project.id.toString();
+
+        // Old records use numeric document IDs. New records receive a generated
+        // Firestore ID, so a form value can never redirect an update to another record.
+        const docId = existingDocId ?? project.docId ?? doc(collection(db, COLLECTION_NAME)).id;
         const docRef = doc(db, COLLECTION_NAME, docId);
         
         try {
-            await withTimeout(setDoc(docRef, { ...project, updatedAt: serverTimestamp() }, { merge: true }));
-            return { ...project, docId };
+            const data = { ...project };
+            delete data.docId;
+            await withTimeout(setDoc(docRef, { ...data, updatedAt: serverTimestamp() }, { merge: true }));
+            return { ...data, docId };
         } catch (error) {
             console.error('Error saving project to Firestore:', error);
             throw error;
@@ -78,10 +82,10 @@ export const projectService = {
     /**
      * Deletes a project by ID.
      */
-    async deleteProject(projectId) {
+    async deleteProject(project) {
         if (!isFirebaseConfigured || !db) throw new Error('Firebase is not configured');
-        
-        const docRef = doc(db, COLLECTION_NAME, projectId.toString());
+
+        const docRef = doc(db, COLLECTION_NAME, documentIdFor(project));
         try {
             await withTimeout(deleteDoc(docRef));
         } catch (error) {
@@ -90,9 +94,9 @@ export const projectService = {
         }
     },
 
-    async setArchived(projectId, archived) {
+    async setArchived(project, archived) {
         if (!isFirebaseConfigured || !db) throw new Error('Firebase is not configured');
-        const docRef = doc(db, COLLECTION_NAME, projectId.toString());
+        const docRef = doc(db, COLLECTION_NAME, documentIdFor(project));
         await withTimeout(setDoc(docRef, { archived, updatedAt: serverTimestamp() }, { merge: true }));
     },
 
@@ -105,7 +109,7 @@ export const projectService = {
         try {
             const batch = writeBatch(db);
             projectsList.forEach((project, index) => {
-                const docRef = doc(db, COLLECTION_NAME, project.id.toString());
+                const docRef = doc(db, COLLECTION_NAME, documentIdFor(project));
                 batch.update(docRef, { order: index });
             });
             await withTimeout(batch.commit());
