@@ -1593,16 +1593,11 @@ textarea.form-input {
   font-weight: 500;
 }
 
-.dock-logo-box {
-  width: 18px;
-  height: 18px;
-  background: var(--accent);
-  border-radius: 4px;
-  color: var(--bg);
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  font-size: 11px;
+.dock-logo-mark {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex: 0 0 auto;
 }
 
 .dock-separator {

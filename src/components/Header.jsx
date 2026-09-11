@@ -45,7 +45,11 @@ export default function Header({ theme, toggleTheme }) {
                     {/* Left Group: Logo */}
                     <div className="dock-group-left">
                         <Link to="/" className="dock-logo" onClick={() => setIsMobileMenuOpen(false)}>
-                            <div className="dock-logo-box">G</div>
+                            <img
+                                className="dock-logo-mark"
+                                src={`${import.meta.env.BASE_URL}brand-mark.png`}
+                                alt=""
+                            />
                             galipefe
                         </Link>
                     </div>
