@@ -97,16 +97,9 @@ Tüm rotalarda `render-blocking-insight` başarısız. Google Fonts veya kritik 
 
 ---
 
-### 1.4 HTML Raporlar
+### 1.4 Ham raporlar
 
-Aşağıdaki HTML raporlar interaktif olarak açılabilir:
-
-| Rota | Profil | Rapor |
-|---|---|---|
-| `/` | Desktop | `reports/lighthouse-home-desktop.report.html` |
-| `/` | Mobile | `reports/lighthouse-home-mobile.report.html` |
-
-> `/projects` ve `/contact` raporları JSON formatında `reports/lh-*.json` dosyalarında.
+Lighthouse HTML/JSON çıktıları tekrar üretilebildiği ve hızla güncelliğini yitirdiği için sürüm kontrolünde tutulmaz. `reports/` klasörü yalnızca yerel çalışma çıktıları içindir ve Git tarafından yok sayılır. Kalıcı bulgular ile doğrulanan skorlar bu dosyada özetlenir.
 
 ---
 
