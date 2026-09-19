@@ -26,6 +26,7 @@ Yönetim paneli tek kullanıcı için Türkçe tutulur; public site metinleri is
 2. `/admin`, Firebase email/password ile `signInWithEmailAndPassword` kullanır.
 3. `src/services/projectService.js`, `projects` koleksiyonunda okuma/yazma/silme ve `order` güncelleme yapar. Public sorgu yalnızca `published: true` ve `archived: false` kayıtlarını ister; admin tüm kayıtları görebilir.
 4. Public `Projects`, Firestore `projects` koleksiyonunu kullanır. Son başarılı yanıt tarayıcıda yalnızca performans için önbelleklenebilir; doğruluk kaynağı Firestore'dur.
+5. Build script'i aynı yayın filtresiyle Firestore REST API'sini okur; public rota HTML'ini, `/projects/<id>` detay sayfalarını ve sitemap'i üretir. Bu işlem Vercel build'inde dört istemci Firebase env değişkenini ve erişilebilir public sorguyu gerektirir. Yeni/değişen proje içeriğinin arama motorlarına sunulan HTML ve sitemap'e geçmesi için yeniden deployment gerekir.
 
 Panelde **Sıralama modu** açıldığında projeler tutamaçtan basılı tutulup sürüklenebilir. Sürükleme sırasında yalnızca önizleme ve satır geçişleri hareket eder; yerel proje dizisi işaretçi bırakıldığında tek seferde güncellenir. İşaretçi listenin yatay sınırlarının dışına çıksa da sürükleme devam eder. Klavye kullanıcıları için yukarı/aşağı düğmeleri korunur. Her iki yöntem de yalnızca yerel sıralamayı değiştirir; Firestore `order` alanları **Sıralamayı kaydet** düğmesiyle toplu olarak güncellenir.
 

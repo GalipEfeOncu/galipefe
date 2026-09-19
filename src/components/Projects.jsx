@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { getProjectContent } from '../utils/projectContent';
+import { projectPath } from '../utils/projectSlug';
 import useSEO from '../hooks/useSEO';
 
 // Prefetch Modal chunk on first card hover to eliminate lazy-load delay
@@ -14,6 +16,7 @@ function getCategory(project) {
 }
 
 function readCachedProjects() {
+    if (typeof window === 'undefined') return [];
     try {
         const value = window.localStorage.getItem(PROJECT_CACHE_KEY);
         const projects = value ? JSON.parse(value) : [];
@@ -63,13 +66,13 @@ function ProjectImage({ project, height = 140, className = '', loading = 'lazy' 
     );
 }
 
-export default function Projects({ onOpenModal }) {
+export default function Projects({ initialProjects, onOpenModal }) {
     const { t, lang } = useLanguage();
     const [filter, setFilter] = useState('All');
     const [categoryFilter, setCategoryFilter] = useState('All');
     const [sortOrder, setSortOrder] = useState('featured');
-    const [projectList, setProjectList] = useState(readCachedProjects);
-    const [loading, setLoading] = useState(() => readCachedProjects().length === 0);
+    const [projectList, setProjectList] = useState(() => Array.isArray(initialProjects) ? initialProjects : []);
+    const [loading, setLoading] = useState(() => !Array.isArray(initialProjects));
     const [loadError, setLoadError] = useState(false);
     const [showStaleNotice, setShowStaleNotice] = useState(false);
     const isMounted = useRef(false);
@@ -127,9 +130,17 @@ export default function Projects({ onOpenModal }) {
 
     useEffect(() => {
         isMounted.current = true;
+        if (!Array.isArray(initialProjects)) {
+            const cachedProjects = readCachedProjects();
+            if (cachedProjects.length > 0) {
+                projectListRef.current = cachedProjects;
+                setProjectList(cachedProjects);
+                setShowStaleNotice(true);
+            }
+        }
         loadProjects();
         return () => { isMounted.current = false; };
-    }, [loadProjects]); // Firestore is intentionally the only public project source.
+    }, [initialProjects, loadProjects]); // Firestore remains the canonical public project source.
 
     const categorizedList = categoryFilter === 'All'
         ? projectList
@@ -257,6 +268,15 @@ export default function Projects({ onOpenModal }) {
 
                                     {/* Buttons */}
                                     <div className="proj-featured-footer" style={{ border: 'none', padding: 0, marginTop: 4 }}>
+                                        <Link
+                                            to={projectPath(featured)}
+                                            state={{ project: featured }}
+                                            className="btn primary"
+                                            aria-label={`${t('projects.viewDetails')}: ${featured.title}`}
+                                            style={{ flex: 1 }}
+                                        >
+                                            {t('projects.viewDetails')} →
+                                        </Link>
                                         {featured.link && (
                                             <a 
                                                 href={featured.link} 
@@ -332,37 +352,51 @@ export default function Projects({ onOpenModal }) {
                     {/* Standard Grid Cards */}
                     <div className="projects-grid">
                         {rest.map(p => (
-                            <button
+                            <article
                                 key={p.id}
                                 className="proj-grid-card"
-                                onClick={() => onOpenModal(p)}
                                 onMouseEnter={handleCardMouseEnter}
-
                             >
-                                <span className="proj-grid-img-wrap">
+                                <div className="proj-grid-img-wrap">
                                     <ProjectImage 
                                         project={p} 
                                         height="100%" 
                                         className="proj-grid-img" 
                                     />
-                                </span>
-                                <span className="proj-grid-body">
-                                    <span className="proj-grid-header">
-                                        <span className="proj-grid-title">{p.title}</span>
-                                        {p.icon && <span className="proj-grid-icon">{p.icon}</span>}
-                                    </span>
-                                    <span className="proj-grid-subtitle">{getSubtitle(p)}</span>
-                                    <span className="proj-grid-tags">
+                                </div>
+                                <div className="proj-grid-body">
+                                    <div className="proj-grid-header">
+                                        <h2 className="proj-grid-title">{p.title}</h2>
+                                        {p.icon && <span className="proj-grid-icon" aria-hidden="true">{p.icon}</span>}
+                                    </div>
+                                    <p className="proj-grid-subtitle">{getSubtitle(p)}</p>
+                                    <div className="proj-grid-tags">
                                         {p.tags.slice(0, 3).map(tag => (
                                             <span key={tag} className="tag">{tag}</span>
                                         ))}
-                                    </span>
-                                    <span className="proj-grid-footer">
+                                    </div>
+                                    <div className="proj-grid-footer">
                                         <StatusBadge status={p.status} />
-                                        <span className="proj-grid-details">{t('projects.viewDetails')} →</span>
-                                    </span>
-                                </span>
-                            </button>
+                                        <Link
+                                            to={projectPath(p)}
+                                            state={{ project: p }}
+                                            className="proj-grid-details"
+                                            aria-label={`${t('projects.viewDetails')}: ${p.title}`}
+                                        >
+                                            {t('projects.viewDetails')} →
+                                        </Link>
+                                        <button
+                                            type="button"
+                                            className="proj-grid-quick-view"
+                                            aria-label={`${t('projectDetail.quickView')}: ${p.title}`}
+                                            title={`${t('projectDetail.quickView')}: ${p.title}`}
+                                            onClick={() => onOpenModal(p)}
+                                        >
+                                            ◉
+                                        </button>
+                                    </div>
+                                </div>
+                            </article>
                         ))}
                     </div>
                 </>

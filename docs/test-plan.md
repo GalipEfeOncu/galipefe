@@ -1,6 +1,6 @@
 # galipefeoncu.com — Kapsamlı Test Planı
 
-> **Son güncelleme:** 2026-08-13  
+> **Son güncelleme:** 2026-09-19
 > **Hedef URL:** `https://www.galipefeoncu.com`
 > **Yerel geliştirme:** `npm run dev` → `http://localhost:5173`
 
@@ -28,7 +28,7 @@
 
 ## 1. Genel Bakış
 
-Bu belge, `galipefeoncu.com` portfolyo sitesinin kalitesini güvence altına almak için izlenmesi gereken test prosedürlerini tanımlar. Site React 19 + Vite 7 tabanlı, iki dilli (TR/EN), SPA mimarisinde ve Vercel'de barındırılmaktadır.
+Bu belge, `galipefeoncu.com` portfolyo sitesinin kalitesini güvence altına almak için izlenmesi gereken test prosedürlerini tanımlar. Site React 19 + Vite 7 tabanlı, iki dilli (TR/EN), Vercel'de barındırılan prerender + hydration mimarisindedir.
 
 ### Test Edilen Rotalar
 
@@ -36,9 +36,11 @@ Bu belge, `galipefeoncu.com` portfolyo sitesinin kalitesini güvence altına alm
 |---|---|---|
 | `/` | `About.jsx` | Hero, profil, yetenekler, ilgi alanları, TypingGame |
 | `/projects` | `Projects.jsx` | Proje kataloğu, filtreleme, sıralama, modal |
+| `/projects/:id` | `ProjectDetail.jsx` | Firestore'da yayınlanmış proje için statik detay sayfası |
 | `/contact` | `Contact.jsx` | İletişim formu (Formspree), sosyal ağlar |
+| `/typing-test` | `TypingTest.jsx` | noindex yerel yazma testi |
 | `/admin` | `Admin.jsx` | Firebase Auth korumalı yönetim paneli |
-| `/*` (404) | `NotFound.jsx` | 404 sayfası, noindex |
+| `/*` (404) | `NotFound.jsx` | Vercel gerçek 404 yanıtı, noindex |
 
 ### Mevcut Altyapı Durumu
 
@@ -87,7 +89,7 @@ Bu belge, `galipefeoncu.com` portfolyo sitesinin kalitesini güvence altına alm
 
 ## 3. Lighthouse Audits
 
-Her rota (`, /projects, /contact, 404`) için Lighthouse raporu çıkarılacaktır. `/admin` rotası `noindex` olduğundan yalnızca fonksiyonel olarak test edilir.
+Ana sayfa, `/projects`, `/contact`, en az bir `/projects/:id` detayı ve 404 için Lighthouse raporu çıkarılacaktır. `/admin` ve `/typing-test` rotaları `noindex` olduğundan yalnızca fonksiyonel/başlık doğrulaması yapılır.
 
 ### 3.1 Performans Skoru
 
@@ -290,13 +292,16 @@ Video Capture: On
 | SEO-02 | `<meta description>` benzersizliği | Her rota farklı açıklama | DevTools | ✅ |
 | SEO-03 | `<title>` uzunluğu | 30–60 karakter aralığı | Manuel | ✅ |
 | SEO-04 | `<meta description>` uzunluğu | 120–160 karakter aralığı | Manuel | ✅ |
-| SEO-05 | Canonical URL | Her rotada doğru canonical link | DevTools → `<link rel="canonical">` | ✅ |
+| SEO-05 | Canonical URL | Indexlenebilir her public rotada doğru canonical; utility/404 rotalarında yok | Raw HTML | ✅ |
 | SEO-06 | `robots.txt` erişimi | `/robots.txt` 200 döndürüyor | `curl` | ✅ |
 | SEO-07 | `sitemap.xml` erişimi | `/sitemap.xml` 200, geçerli XML | `curl` + XML validate | ✅ |
-| SEO-08 | Sitemap URL'leri | 3 rota (`/`, `/projects`, `/contact`) listelenmiş | Manuel | ✅ |
+| SEO-08 | Sitemap URL'leri | `/`, `/projects`, `/contact` ve tüm public Firestore proje rotaları; canonical ile birebir | Manuel | ✅ |
 | SEO-09 | `/admin` noindex | `X-Robots-Tag: noindex, nofollow` header | cURL header check | ✅ |
-| SEO-10 | 404 noindex | `<meta name="robots" content="noindex, follow">` | DevTools | ✅ |
+| SEO-09a | `/typing-test` noindex | `X-Robots-Tag` ve HTML meta `noindex` | cURL + raw HTML | ✅ |
+| SEO-10 | 404 noindex | HTTP 404 + `<meta name="robots" content="noindex, follow">` | cURL + raw HTML | ✅ |
 | SEO-11 | H1 yapısı | Her rotada tek bir `<h1>` | DevTools / axe | ✅ |
+| SEO-11a | HTML ilk yanıtı | `/projects` ve proje detayında JS çalışmadan metin, title ve canonical bulunur | `curl` raw HTML | ✅ |
+| SEO-11b | İç proje linkleri | Her proje kartı normal `/projects/:id` anchor'ı içerir | HTML source | ✅ |
 
 ### 6.2 Open Graph & Sosyal Medya
 
@@ -325,13 +330,23 @@ Video Capture: On
 
 | Test # | Test Adı | Açıklama | Doğrulama |
 |---|---|---|---|
-| SEO-25 | Google Search Console | Tüm sayfalar indekslenmiş | GSC |
-| SEO-26 | SPA rendering | Google bot JS'yi render edebiliyor | [Mobile-Friendly Test](https://search.google.com/test/mobile-friendly) |
+| SEO-25 | Google Search Console | Sitemap kabulü ve URL Inspection durumu gözlemlenir; indeks garantisi varsayılmaz | GSC |
+| SEO-26 | Crawler HTML | JS çalıştırmayan istemci de public metni ilk yanıtta görür | Raw HTTP HTML |
 | SEO-27 | Kırık linkler | Tüm iç ve dış linkler 200 döndürüyor | Screaming Frog |
 | SEO-28 | Redirect zincirleri | Redirect zinciri yok | cURL `-L -v` |
 | SEO-29 | Clean URL'ler | `vercel.json` → `cleanUrls: true` çalışıyor | cURL |
 | SEO-30 | Trailing slash | URL sonunda `/` yok | cURL |
-| SEO-31 | `lastmod` güncelliği | `sitemap.xml` tarihleri güncel | Manuel |
+| SEO-31 | `lastmod` doğruluğu | Yalnızca Firestore `updatedAt` gerçekse tarih var; uydurma tarih yok | Sitemap + Firestore karşılaştırması |
+
+### 6.5 Search Console / Bing Webmaster yayın sonrası
+
+Bu adımlar yeni production deployment tamamlandıktan sonra ilgili hesap sahibi tarafından yapılır; repository build'i bu hesaplara veri göndermez.
+
+1. Google Search Console'da `https://www.galipefeoncu.com/` property'sini doğrulayın; DNS erişiminiz varsa domain property ile apex, www ve alt alan adlarını da izleyin.
+2. `https://www.galipefeoncu.com/sitemap.xml` sitemap'ini gönderin; sitemap durumunun ve sayfa URL'lerinin işlendiğini kontrol edin ([Google sitemap rehberi](https://support.google.com/webmasters/answer/7451001?hl=en)).
+3. URL Inspection ile `/`, `/projects`, `/contact` ve en önemli `/projects/:id` rotalarının canlı HTML'ini test edin; deployment sonrası gerekirse indeksleme isteği gönderin ([URL Inspection rehberi](https://support.google.com/webmasters/answer/12482179?hl=en)). İstek, indeksleme veya sıralama garantisi değildir.
+4. Bing Webmaster Tools'ta siteyi doğrulayın ve aynı canonical sitemap'i gönderin; istenirse Search Console içe aktarma özelliğini kullanın ([site doğrulama](https://www2.bing.com/webmasters/help/add-and-verify-site-12184f8b), [sitemap gönderimi](https://www4.bing.com/webmasters/help/sitemaps-3b5cf6ed)).
+5. Sahip olunan alt alan adları için URL Inspection/site sorgularıyla noindex durumunu izleyin. Arama motoru `noindex` başlığını/meta etiketini okuyabilsin diye crawler erişimini robots.txt ile kapatmayın ([Google noindex rehberi](https://developers.google.com/search/docs/crawling-indexing/block-indexing)); eski sonuçlar yeniden taranana kadar görünebilir.
 
 ---
 
@@ -396,8 +411,10 @@ Video Capture: On
 | FN-01 | Ana sayfa yüklenme | `GET /` | About bileşeni render edilir |
 | FN-02 | Projeler sayfası | Nav → "Projects" tıkla | Projects bileşeni, URL `/projects` |
 | FN-03 | İletişim sayfası | Nav → "Contact" tıkla | Contact bileşeni, URL `/contact` |
-| FN-04 | 404 sayfası | Geçersiz URL (`/xyz`) | NotFound bileşeni |
-| FN-05 | Doğrudan erişim | Tarayıcıda `/projects` adresini doğrudan aç | SPA rewrite çalışır |
+| FN-04 | 404 sayfası | Geçersiz URL (`/xyz`) | HTTP 404 ve NotFound bileşeni |
+| FN-05 | Doğrudan erişim | Tarayıcıda `/projects` adresini doğrudan aç | Statik HTML gelir; JS yalnızca hydrate eder |
+| FN-05a | Proje deep link'i | Yayınlanmış bir `/projects/:id` adresini doğrudan aç/yenile | HTTP 200, o projeye ait HTML, title ve canonical |
+| FN-05b | Olmayan proje | Yayında olmayan `/projects/:id` aç | HTTP 404, noindex |
 | FN-06 | Geri/ileri navigasyon | About → Projects → geri butonu | About'a döner |
 | FN-07 | Scroll to top | Rota değişikliğinde sayfa başına kaydırılır | `window.scrollY === 0` |
 
@@ -418,7 +435,7 @@ Video Capture: On
 
 | Test # | Test Adı | Adımlar | Beklenen |
 |---|---|---|---|
-| FN-16 | Proje listesi yüklenme | `/projects` aç | Projeler listelenir (Firestore veya static fallback) |
+| FN-16 | Proje listesi yüklenme | `/projects` aç | Public Firestore kataloğu statik HTML'de ve runtime'da görünür |
 | FN-17 | Filtre: Tümü | "All" filtre seç | Tüm projeler görünür |
 | FN-18 | Filtre: Completed | "Completed" filtre seç | Yalnızca completed projeler |
 | FN-19 | Filtre: WIP | "Work in Progress" filtre seç | Yalnızca WIP projeler |
@@ -432,7 +449,7 @@ Video Capture: On
 | FN-27 | Modal kapama (Escape) | Modal açık → Escape tuşu | Modal kapanır |
 | FN-28 | Modal kapama (overlay) | Modal dışına tıkla | Modal kapanır |
 | FN-29 | Skeleton loading | Yavaş bağlantıda sayfa aç | İskelet kartları görünür |
-| FN-30 | Firestore fallback | Firebase ayarı yok / bağlantı hatası | Statik veri yüklenir |
+| FN-30 | Firestore hata durumu | Firebase ayarı yok / bağlantı hatası | Açık hata durumu ve yeniden deneme görünür |
 | FN-31 | Proje görseli hata yönetimi | Görsel yüklenemezse | Fallback görsel/stil uygulanır |
 
 ### 8.4 İletişim Sayfası

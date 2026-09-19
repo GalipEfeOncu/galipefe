@@ -2,13 +2,14 @@ import { useLanguage } from '../context/LanguageContext';
 import { Link } from 'react-router-dom';
 import { CONTACTS } from '../data/profile';
 
-export default function Footer() {
+export default function Footer({ year }) {
     const { t } = useLanguage();
+    const displayYear = year ?? new Date().getFullYear();
 
     return (
         <footer className="site-footer">
             <div className="site-footer-inner">
-                <span>© {new Date().getFullYear()} Galip Efe Öncü · {t('footer.builtWith')}</span>
+                <span>© {displayYear} Galip Efe Öncü · {t('footer.builtWith')}</span>
                 <nav aria-label={t('footer.links')} className="site-footer-links">
                     <Link to="/projects">{t('nav.projects')}</Link>
                     <Link to="/contact">{t('nav.contact')}</Link>

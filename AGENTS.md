@@ -4,11 +4,11 @@ Bu dosya repository genelinde geçerlidir. Değişiklik yapmadan önce ilgili ka
 
 ## Proje özeti
 
-- React 19 + Vite 7 ile geliştirilmiş iki dilli (TR/EN) kişisel portfolyo SPA'sı.
-- Router: `BrowserRouter`; yollar `/`, `/projects`, `/contact` ve gizli yönetim yolu `/admin`.
+- React 19 + Vite 7 ile geliştirilmiş iki dilli (TR/EN) kişisel portfolyo; public sayfalar build sırasında statik render edilir ve React ile hydrate edilir.
+- Router: `BrowserRouter`; yollar `/`, `/projects`, `/projects/:id`, `/contact`, indeks dışı `/typing-test` ve gizli yönetim yolu `/admin`.
 - Stil: vanilla CSS; asıl stil kaynağı `src/styles/design-system.css`.
-- Proje verisi: Firestore kullanılabiliyorsa `projects` koleksiyonu, aksi halde `src/data/projects.js`.
-- Yayın: Vercel; SPA fallback kuralları `vercel.json` içinde.
+- Proje verisinin tek kaynağı Firestore `projects` koleksiyonudur; public kayıtlar `scripts/prerender.mjs` ile üretim HTML'i ve sitemap'e yazılır.
+- Yayın: Vercel; public HTML rotaları `cleanUrls`, `trailingSlash` ve statik dosya eşleşmesiyle, bilinmeyen yollar `404.html` ile sunulur.
 
 ## Başlangıç ve doğrulama
 
@@ -31,7 +31,7 @@ npm run preview
 | Uygulama rotaları, tema, modal | `src/App.jsx` |
 | Dil seçimi ve `t()` | `src/context/LanguageContext.jsx` |
 | Bütün statik çeviriler | `src/data/translations.js` |
-| Statik/fallback proje kataloğu | `src/data/projects.js` |
+| Firestore kataloğu, kalıcı proje URL'leri ve statik üretim | `src/services/projectService.js`, `src/utils/projectSlug.js`, `scripts/prerender.mjs` |
 | İletişim, sosyal ağlar, yetenekler | `src/data/profile.js` |
 | Firestore ayarları ve veri erişimi | `src/config/firebase.js`, `src/services/projectService.js` |
 | Yönetim ekranı | `src/components/Admin.jsx` |
@@ -44,10 +44,10 @@ npm run preview
 
 - Kullanıcıya görünen yeni metinleri `t('...')` ile verin ve aynı anahtarı `translations.en` ile `translations.tr` altında ekleyin.
 - Proje durumları yalnızca `Completed`, `Work in Progress` veya `Discontinued` olabilir.
-- Statik proje `id` ve `translationKey` değerleri benzersiz olmalıdır. Çeviri anahtarı `projectData.<translationKey>` ile birebir eşleşmelidir.
+- Firestore `docId` public detay URL'lerinin kalıcı kimliğidir; yoksa benzersiz proje `id` yedek olarak kullanılır. `translationKey` de benzersiz kalmalı ve gerekiyorsa `projectData.<translationKey>` ile eşleşmelidir.
 - Public varlık yollarını `import.meta.env.BASE_URL` üzerinden kurun. Yeni görseller için WebP ve yaklaşık 16:9 oranını tercih edin.
 - Yeni renk/boşluk değerleri üretmeden önce mevcut CSS token ve sınıflarını kullanın. CSS-in-JS, Tailwind veya UI kütüphanesi eklemeyin.
-- `BrowserRouter`, Vite `base: '/'` ve `vercel.json` rewrite birlikteliğini koruyun.
+- `BrowserRouter` ve Vite `base: '/'` birlikteliğini koruyun; public route HTML'i, admin/typing-test shell'leri, clean URL'ler ve gerçek 404 davranışı `vercel.json` ile `scripts/prerender.mjs` arasında tutarlı olmalıdır. Bilinmeyen rotalara SPA catch-all rewrite eklemeyin.
 - Yeni bağımlılık ancak mevcut araçlarla makul biçimde çözülemeyen bir ihtiyaç varsa eklenebilir; eklenirse lockfile da güncellenmelidir.
 - Firebase kimlik bilgilerini veya başka sırları kaynak koda, loglara ya da dokümanlara yazmayın. Yalnızca `VITE_` önekli istemci değişkenlerinin adlarını belgeleyin.
 - Kullanıcının alakasız, commit edilmemiş değişikliklerini geri almayın.
@@ -65,13 +65,13 @@ npm run preview
 
 1. Değişiklik istenen davranışı en küçük kapsamda gerçekleştirir.
 2. Lint ve production build başarılıdır; başarısızlık varsa açıkça raporlanır.
-3. Çeviri, tema, responsive görünüm ve statik fallback gibi etkilenen yollar kontrol edilmiştir.
+3. Çeviri, tema, responsive görünüm, Firestore'dan üretilecek statik HTML ve runtime katalog yenilemesi gibi etkilenen yollar kontrol edilmiştir.
 4. Mimari, komut, veri şeması veya çalışma akışı değiştiyse ilgili doküman da güncellenmiştir.
 5. Son yanıtta değişen dosyalar, yapılan doğrulamalar ve bilinen sınırlamalar özetlenir.
 
 ## Review guidelines
 
 - Ham çeviri yollarının UI'a sızmasını, eksik locale eşlerini ve kullanıcıya görünen hardcoded metinleri hata sayın.
-- Proje durum enum'u, `translationKey` eşleşmesi, benzersiz kimlikler ve Firestore/static fallback davranışındaki regresyonları önceliklendirin.
+- Proje durum enum'u, `translationKey` eşleşmesi, benzersiz kimlikler, Firestore yayın filtresi, build-time HTML/sitemap ve runtime katalog yenilemesindeki regresyonları önceliklendirin.
 - Klavye erişimi, focus yönetimi, `aria-*`, dış linklerde `rel="noopener noreferrer"` ve görsel `alt` metinlerini kontrol edin.
 - Sır sızıntısı, korumasız yönetim akışı veya üretim verisini yanlışlıkla değiştiren işlemleri yüksek önemle raporlayın.

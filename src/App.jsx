@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense, useRef, useCallback } from 'react';
+import { useState, useEffect, lazy, Suspense, useRef, useCallback, useSyncExternalStore } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -11,6 +11,45 @@ const TypingTest = lazy(() => import('./components/TypingTest'));
 const Modal = lazy(() => import('./components/Modal'));
 const Admin = lazy(() => import('./components/Admin'));
 const NotFound = lazy(() => import('./components/NotFound'));
+const ProjectDetail = lazy(() => import('./components/ProjectDetail'));
+
+let themeWithoutStorage = null;
+
+function getPreferredTheme() {
+    if (typeof window === 'undefined') return 'dark';
+
+    try {
+        const saved = window.localStorage.getItem('site_theme');
+        if (saved === 'dark' || saved === 'light') return saved;
+    } catch {
+        if (themeWithoutStorage) return themeWithoutStorage;
+    }
+
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+}
+
+function subscribeToTheme(onChange) {
+    window.addEventListener('storage', onChange);
+    window.addEventListener('portfolio-theme-change', onChange);
+    const media = window.matchMedia('(prefers-color-scheme: light)');
+    media.addEventListener('change', onChange);
+    return () => {
+        window.removeEventListener('storage', onChange);
+        window.removeEventListener('portfolio-theme-change', onChange);
+        media.removeEventListener('change', onChange);
+    };
+}
+
+function saveTheme(nextTheme) {
+    try {
+        window.localStorage.setItem('site_theme', nextTheme);
+        themeWithoutStorage = null;
+    } catch {
+        themeWithoutStorage = nextTheme;
+    }
+    document.documentElement.setAttribute('data-theme', nextTheme);
+    window.dispatchEvent(new Event('portfolio-theme-change'));
+}
 
 function PageLoader() {
     const { t } = useLanguage();
@@ -46,24 +85,16 @@ function ScrollToTop() {
     return null;
 }
 
-function App() {
+function App({ prerenderData }) {
     const { t } = useLanguage();
     const [selectedProject, setSelectedProject] = useState(null);
-    const [theme, setTheme] = useState(() => {
-        const saved = localStorage.getItem('site_theme');
-        const validThemes = ['dark', 'light'];
-        if (saved && validThemes.includes(saved)) return saved;
-
-        // Dynamic fallback based on prefers-color-scheme
-        return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-    });
+    const theme = useSyncExternalStore(subscribeToTheme, getPreferredTheme, () => 'dark');
 
     useEffect(() => {
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('site_theme', theme);
+        if (getPreferredTheme() === theme) document.documentElement.setAttribute('data-theme', theme);
     }, [theme]);
 
-    const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark');
+    const toggleTheme = () => saveTheme(theme === 'dark' ? 'light' : 'dark');
 
     const [showScrollTop, setShowScrollTop] = useState(false);
     const tickingRef = useRef(false);
@@ -106,8 +137,9 @@ function App() {
             <main id="main-content" tabIndex="-1">
                 <Suspense fallback={<PageLoader />}>
                     <Routes>
-                        <Route path="/" element={<About />} />
-                        <Route path="/projects" element={<Projects onOpenModal={setSelectedProject} />} />
+                        <Route path="/" element={<About initialAge={prerenderData?.age} />} />
+                        <Route path="/projects" element={<Projects initialProjects={prerenderData?.projects} onOpenModal={setSelectedProject} />} />
+                        <Route path="/projects/:slug" element={<ProjectDetail initialProject={prerenderData?.project} />} />
                         <Route path="/contact" element={<Contact />} />
                         <Route path="/typing-test" element={<TypingTest />} />
                         <Route path="/admin" element={<Admin />} />
@@ -115,7 +147,7 @@ function App() {
                     </Routes>
                 </Suspense>
             </main>
-            <Footer />
+            <Footer year={prerenderData?.year} />
             {selectedProject && (
                 <Suspense fallback={<ModalLoader />}>
                     <Modal project={selectedProject} onClose={closeProject} />

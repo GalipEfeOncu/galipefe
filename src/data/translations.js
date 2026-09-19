@@ -110,6 +110,8 @@ export const translations = {
                 discontinued: "Discontinued"
             },
             categoryLabel: "Filter by category",
+            categoryField: "Category",
+            tagsLabel: "Project technologies and topics",
             category: { all: "All work", "AI/Automation": "AI / Automation", Web: "Web", Games: "Games", Tools: "Tools", Other: "Other" },
             emptyStateTitle: "No projects found",
             emptyStateDesc: "There are no projects matching the selected status filter.",
@@ -146,6 +148,13 @@ export const translations = {
             role: "MY ROLE",
             outcome: "OUTCOME",
             imageFallback: "{title} project image coming soon"
+        },
+        projectDetail: {
+            backToProjects: "Back to projects",
+            loading: "Loading project…",
+            notFoundTitle: "Project not found",
+            notFoundDescription: "This project is not currently available in the public portfolio.",
+            quickView: "Quick view"
         },
         notFound: {
             title: "That page isn't here.",
@@ -469,6 +478,8 @@ export const translations = {
                 discontinued: "Sonlandırıldı"
             },
             categoryLabel: "Kategoriye göre filtrele",
+            categoryField: "Kategori",
+            tagsLabel: "Proje teknolojileri ve konuları",
             category: { all: "Tüm çalışmalar", "AI/Automation": "AI / Otomasyon", Web: "Web", Games: "Oyunlar", Tools: "Araçlar", Other: "Diğer" },
             emptyStateTitle: "Proje bulunamadı",
             emptyStateDesc: "Seçilen filtreye uygun bir proje yok.",
@@ -505,6 +516,13 @@ export const translations = {
             role: "PROJEDEKİ ROLÜM",
             outcome: "ORTAYA ÇIKAN SONUÇ",
             imageFallback: "{title} proje görseli yakında"
+        },
+        projectDetail: {
+            backToProjects: "Projelere dön",
+            loading: "Proje yükleniyor…",
+            notFoundTitle: "Proje bulunamadı",
+            notFoundDescription: "Bu proje şu anda herkese açık portfolyoda bulunmuyor.",
+            quickView: "Hızlı görüntüle"
         },
         notFound: {
             title: "Bu sayfa burada değil.",

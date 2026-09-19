@@ -1105,6 +1105,7 @@ main:has(> .typing-test-page) {
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   width: 100%;
   text-align: left;
+  color: var(--text);
 }
 
 .proj-grid-card:hover {
@@ -1151,12 +1152,38 @@ main:has(> .typing-test-page) {
   font-size: 16px;
   font-weight: 600;
   color: var(--text);
+  margin: 0;
 }
 
 .proj-grid-icon { font-size: 18px; }
 .proj-grid-subtitle { font-size: 12px; color: var(--muted); margin-top: -4px; }
 .proj-grid-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
-.proj-grid-footer { margin-top: auto; padding-top: 14px; display: flex; justify-content: space-between; align-items: center; }
+.proj-grid-footer { margin-top: auto; padding-top: 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.proj-grid-details { margin-left: auto; color: var(--accent); font-size: 12px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+.proj-grid-details:hover { text-decoration: underline; text-underline-offset: 3px; }
+.proj-grid-quick-view { display: grid; place-items: center; flex: 0 0 32px; width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 50%; background: transparent; color: var(--muted); cursor: pointer; }
+.proj-grid-quick-view:hover { border-color: var(--accent-line); color: var(--accent); }
+
+.project-detail-page { padding-top: 104px; padding-bottom: 76px; }
+.project-detail-back { display: inline-flex; margin-bottom: 24px; color: var(--muted); font-size: 13px; text-decoration: none; }
+.project-detail-back:hover { color: var(--accent); }
+.project-detail-header { display: flex; flex-direction: column; gap: 10px; }
+.project-detail-heading-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.project-detail-heading-row .page-title { margin: 0; }
+.project-detail-grid { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); align-items: start; gap: clamp(24px, 4vw, 56px); margin-top: 32px; }
+.project-detail-media-column, .project-detail-copy { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.project-detail-image { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--bg-2); }
+.project-detail-image-fallback { display: grid; place-items: center; padding: 24px; color: var(--muted); text-align: center; }
+.project-detail-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.project-detail-actions .btn { flex: 1 1 150px; }
+.project-detail-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0; }
+.project-detail-facts > div { min-width: 0; padding: 14px; border: 1px solid var(--border-soft); border-radius: var(--r); background: var(--bg-2); }
+.project-detail-facts dt { margin-bottom: 6px; color: var(--accent); font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+.project-detail-facts dd { margin: 0; color: var(--text-2); font-size: 13px; }
+.project-detail-description { margin: 0; }
+.project-detail-tags { margin: 0; }
+.project-detail-learnings { margin: 0; }
+.project-detail-learnings h2 { margin: 0 0 10px; }
 
 /* Empty projects state */
 .projects-empty {
@@ -1891,6 +1918,8 @@ footer {
   .modal-hero { flex-direction: column; text-align: center; }
   .modal-actions { flex-direction: column; }
   .modal-grid { grid-template-columns: 1fr; gap: 24px; }
+  .project-detail-page { padding-top: 92px; }
+  .project-detail-grid { grid-template-columns: 1fr; gap: 24px; }
   .proj-featured-card { grid-template-columns: 1fr; padding: 24px; gap: 24px; }
   .projects-filter-spacer { display: none; }
   .projects-sort-control { width: 100%; justify-content: space-between; margin-top: 6px; }
@@ -1904,6 +1933,7 @@ footer {
   .projects-grid { grid-template-columns: 1fr; }
   .projects-skeleton-grid { grid-template-columns: 1fr; }
   .projects-skeleton-grid > span:not(:first-child) { display: none; }
+  .project-detail-facts { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {

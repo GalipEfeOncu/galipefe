@@ -1,15 +1,15 @@
-# Galip Efe Öncü — Portfolio
+# Galip Efe Öncü — AI Agent Systems
 
-Oyun geliştirme, web uygulamaları ve geliştirici araçları üzerine çalışmalarımı sergileyen iki dilli kişisel portfolyo.
+Galip Efe Öncü'nün AI agent sistemleri, otomasyon, web uygulamaları ve geliştirici araçları çalışmalarını sergileyen iki dilli kişisel portfolyosu.
 
-Canlı site: [galipefeoncu.com](https://galipefeoncu.com/)
+Canlı site: [www.galipefeoncu.com](https://www.galipefeoncu.com/)
 
 ## Teknolojiler
 
 - React 19, React Router 7, Vite 7
 - Vanilla CSS tasarım sistemi; koyu/açık tema
 - Özel TR/EN i18n context'i
-- Opsiyonel Firebase Authentication + Firestore proje yönetimi
+- Firebase Authentication + Firestore proje yönetimi ve build-time statik sayfa üretimi
 - Formspree destekli iletişim formu
 - Vercel Analytics, Speed Insights ve Vercel deployment
 
@@ -32,9 +32,11 @@ npm run preview
 
 Repository'de otomatik test paketi bulunmuyor; değişiklikler lint, production build ve ilgili sayfanın manuel kontrolüyle doğrulanır.
 
+`npm run build`, `/`, `/projects`, `/contact` ve yayınlanmış her proje için sunucu tarafında HTML üretir, istemci tarafında React ile hydrate eder. Proje detayları `/projects/<Firestore document ID>` biçiminde kalıcı URL alır. Firestore'daki yeni/yayımlanmış proje değişiklikleri arama motorlarına statik HTML ve sitemap olarak aktarılmak için yeni bir deployment gerektirir.
+
 ## Ortam değişkenleri
 
-Firebase opsiyoneldir. Firebase yoksa site `src/data/projects.js` içindeki statik kataloğu kullanır. Değişken adları ve admin akışı için [`docs/firebase-admin.md`](./docs/firebase-admin.md) dosyasına bakın. Formspree form kimliği şu anda `src/components/Contact.jsx` içinde istemciye açık bir sabit olarak tanımlıdır.
+Public proje kataloğunun tek kaynağı Firestore'dur. Tam proje sayfası ve dinamik sitemap üretimi için yerel build'de `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID` ve `VITE_FIREBASE_APP_ID` değerleri gerekir. Vercel build'i yayınlanmış Firestore kataloğunu okuyamazsa eksik proje sayfaları yayımlanmaması için hata verir. Değişken adları ve admin akışı için [`docs/firebase-admin.md`](./docs/firebase-admin.md) dosyasına bakın. Formspree form kimliği şu anda `src/components/Contact.jsx` içinde istemciye açık bir sabit olarak tanımlıdır.
 
 Gerçek `.env` değerlerini commit etmeyin.
 
@@ -44,11 +46,13 @@ Gerçek `.env` değerlerini commit etmeyin.
 src/
 ├─ components/      sayfalar, modal, admin ve etkileşimli bileşenler
 ├─ context/         dil state'i ve t() fonksiyonu
-├─ data/            statik proje, profil ve çeviri verileri
+├─ data/            profil ve çeviri verileri
 ├─ services/        Firestore veri erişimi
 ├─ hooks/           sayfa SEO yönetimi
 └─ styles/          aktif tasarım sistemi
-public/             favicon, sitemap ve optimize görseller
+scripts/
+└─ prerender.mjs    public HTML rotaları ve Firestore tabanlı sitemap üretimi
+public/             favicon, robots.txt ve optimize görseller
 docs/               mimari ve görev rehberleri
 ```
 

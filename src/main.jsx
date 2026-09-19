@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot, hydrateRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx';
 import { LanguageProvider } from './context/LanguageContext.jsx';
@@ -8,14 +8,25 @@ import { SpeedInsights } from '@vercel/speed-insights/react';
 import './styles/design-system.css';
 import './index.css';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+const rootElement = document.getElementById('root');
+const prerenderElement = document.getElementById('portfolio-prerender-data');
+const prerenderData = prerenderElement ? JSON.parse(prerenderElement.textContent) : undefined;
+const isStaticNotFoundPage = prerenderElement?.dataset.staticStatus === '404';
+
+const application = (
   <React.StrictMode>
     <BrowserRouter>
-      <LanguageProvider>
-        <App />
+      <LanguageProvider initialLanguage={prerenderData?.lang ?? 'en'}>
+        <App prerenderData={prerenderData} />
         <Analytics />
         <SpeedInsights />
       </LanguageProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
+
+if (rootElement.hasChildNodes() && !isStaticNotFoundPage) {
+  hydrateRoot(rootElement, application);
+} else {
+  createRoot(rootElement).render(application);
+}

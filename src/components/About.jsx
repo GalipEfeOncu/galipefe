@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useSyncExternalStore } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { SKILLS } from '../data/profile';
@@ -16,6 +16,15 @@ function computeAge() {
     return age;
 }
 
+function subscribeToAge(onChange) {
+    window.addEventListener('focus', onChange);
+    document.addEventListener('visibilitychange', onChange);
+    return () => {
+        window.removeEventListener('focus', onChange);
+        document.removeEventListener('visibilitychange', onChange);
+    };
+}
+
 function formatSafeHTML(text) {
     if (!text) return '';
     const parts = text.split(/(<strong>.*?<\/strong>)/g);
@@ -28,9 +37,13 @@ function formatSafeHTML(text) {
     });
 }
 
-export default function About() {
+export default function About({ initialAge }) {
     const { t } = useLanguage();
-    const age = computeAge();
+    const age = useSyncExternalStore(
+        subscribeToAge,
+        computeAge,
+        () => Number.isInteger(initialAge) ? initialAge : computeAge(),
+    );
     const detailsSectionRef = useRef(null);
     useSEO({ fullTitleKey: 'seo.aboutTitle', descriptionKey: 'seo.aboutDesc' });
 

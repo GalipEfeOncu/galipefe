@@ -15,20 +15,20 @@ const DEFAULT_IMAGE = `${SITE_URL}/assets/images/pp.webp`;
  * @param {string} [params.ogImage] - Optional absolute URL for sharing image
  * @param {boolean} [params.noIndex] - Prevent indexing for utility/error routes
  */
-export default function useSEO({ titleKey, fullTitleKey, descriptionKey, ogImage, noIndex = false }) {
+export default function useSEO({ titleKey, fullTitleKey, descriptionKey, title, description, canonicalPath, ogImage, noIndex = false }) {
     const { t, lang } = useLanguage();
 
     useEffect(() => {
         // 1. Update document title
-        const pageTitle = fullTitleKey
+        const pageTitle = title || (fullTitleKey
             ? t(fullTitleKey)
             : titleKey
                 ? `${t(titleKey)} | Galip Efe Öncü`
-                : 'Galip Efe Öncü | Portfolio';
+                : 'Galip Efe Öncü | Portfolio');
         document.title = pageTitle;
 
         // 2. Resolve description text
-        const pageDesc = descriptionKey ? t(descriptionKey) : t('hero.desc');
+        const pageDesc = description || (descriptionKey ? t(descriptionKey) : t('hero.desc'));
 
         // Helper to update or create meta tags
         const updateMeta = (selector, queryAttr, attrValue, content) => {
@@ -52,20 +52,23 @@ export default function useSEO({ titleKey, fullTitleKey, descriptionKey, ogImage
             el.setAttribute('href', href);
         };
 
-        const normalizedPath = window.location.pathname === '/'
-            ? '/'
-            : window.location.pathname.replace(/\/+$/, '');
+        const currentPath = canonicalPath ?? window.location.pathname;
+        const normalizedPath = currentPath === '/' ? '/' : currentPath.replace(/\/+$/, '');
         const canonicalUrl = `${SITE_URL}${normalizedPath}`;
 
         // 3. Update Meta Description
         updateMeta('meta[name="description"]', 'name', 'description', pageDesc);
         updateMeta('meta[name="robots"]', 'name', 'robots', noIndex ? 'noindex, follow' : 'index, follow');
-        updateLink('link[rel="canonical"]', 'canonical', canonicalUrl);
+        if (noIndex) {
+            document.querySelector('link[rel="canonical"]')?.remove();
+        } else {
+            updateLink('link[rel="canonical"]', 'canonical', canonicalUrl);
+        }
 
         // 4. Update Open Graph tags
         updateMeta('meta[property="og:title"]', 'property', 'og:title', pageTitle);
         updateMeta('meta[property="og:description"]', 'property', 'og:description', pageDesc);
-        updateMeta('meta[property="og:url"]', 'property', 'og:url', canonicalUrl);
+        updateMeta('meta[property="og:url"]', 'property', 'og:url', noIndex ? SITE_URL : canonicalUrl);
         updateMeta('meta[property="og:site_name"]', 'property', 'og:site_name', 'Galip Efe Öncü');
         updateMeta('meta[property="og:locale"]', 'property', 'og:locale', lang === 'tr' ? 'tr_TR' : 'en_US');
 
@@ -74,10 +77,11 @@ export default function useSEO({ titleKey, fullTitleKey, descriptionKey, ogImage
         updateMeta('meta[property="og:image:alt"]', 'property', 'og:image:alt', 'Galip Efe Öncü');
 
         // 5. Update Twitter Card tags
-        updateMeta('meta[property="twitter:title"]', 'property', 'twitter:title', pageTitle);
-        updateMeta('meta[property="twitter:description"]', 'property', 'twitter:description', pageDesc);
-        updateMeta('meta[property="twitter:url"]', 'property', 'twitter:url', canonicalUrl);
-        updateMeta('meta[property="twitter:image"]', 'property', 'twitter:image', absoluteImage);
-        updateMeta('meta[property="twitter:image:alt"]', 'property', 'twitter:image:alt', 'Galip Efe Öncü');
-    }, [t, lang, titleKey, fullTitleKey, descriptionKey, ogImage, noIndex]);
+        updateMeta('meta[name="twitter:card"]', 'name', 'twitter:card', 'summary_large_image');
+        updateMeta('meta[name="twitter:title"]', 'name', 'twitter:title', pageTitle);
+        updateMeta('meta[name="twitter:description"]', 'name', 'twitter:description', pageDesc);
+        updateMeta('meta[name="twitter:url"]', 'name', 'twitter:url', noIndex ? SITE_URL : canonicalUrl);
+        updateMeta('meta[name="twitter:image"]', 'name', 'twitter:image', absoluteImage);
+        updateMeta('meta[name="twitter:image:alt"]', 'name', 'twitter:image:alt', 'Galip Efe Öncü');
+    }, [t, lang, titleKey, fullTitleKey, descriptionKey, title, description, canonicalPath, ogImage, noIndex]);
 }

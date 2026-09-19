@@ -1,22 +1,55 @@
-import { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useContext, useEffect, useSyncExternalStore } from 'react';
 import { translations } from '../data/translations';
 
 const LanguageContext = createContext();
+let languageWithoutStorage = null;
 
-export const LanguageProvider = ({ children }) => {
-    // Check localStorage for saved lang, otherwise default to 'tr' or 'en', validating input.
-    const [lang, setLang] = useState(() => {
-        const saved = localStorage.getItem('site_lang');
-        const validLangs = ['en', 'tr'];
-        if (saved && validLangs.includes(saved)) return saved;
+function getPreferredLanguage(fallback) {
+    if (typeof window === 'undefined') return fallback;
 
-        // Dynamic fallback based on browser preferences
-        const browserLang = navigator.language || navigator.userLanguage || '';
-        return browserLang.startsWith('tr') ? 'tr' : 'en';
-    });
+    try {
+        const saved = window.localStorage.getItem('site_lang');
+        if (saved === 'en' || saved === 'tr') return saved;
+    } catch {
+        if (languageWithoutStorage) return languageWithoutStorage;
+    }
+
+    const browserLanguage = navigator.language || navigator.userLanguage || '';
+    return browserLanguage.startsWith('tr') ? 'tr' : fallback;
+}
+
+function subscribeToLanguage(onChange) {
+    window.addEventListener('storage', onChange);
+    window.addEventListener('portfolio-language-change', onChange);
+    return () => {
+        window.removeEventListener('storage', onChange);
+        window.removeEventListener('portfolio-language-change', onChange);
+    };
+}
+
+export const LanguageProvider = ({ children, initialLanguage = 'en' }) => {
+    const lang = useSyncExternalStore(
+        subscribeToLanguage,
+        () => getPreferredLanguage(initialLanguage),
+        () => initialLanguage,
+    );
+
+    const setLang = (nextValue) => {
+        const current = getPreferredLanguage(initialLanguage);
+        const next = typeof nextValue === 'function' ? nextValue(current) : nextValue;
+        if (next !== 'en' && next !== 'tr') return;
+
+        try {
+            window.localStorage.setItem('site_lang', next);
+            languageWithoutStorage = null;
+        } catch {
+            languageWithoutStorage = next;
+        }
+        document.documentElement.lang = next;
+        window.dispatchEvent(new Event('portfolio-language-change'));
+    };
 
     useEffect(() => {
-        localStorage.setItem('site_lang', lang);
         document.documentElement.lang = lang;
     }, [lang]);
 
