@@ -12,6 +12,8 @@ export function getProjectContent(project, lang) {
         description: getLocalizedField(project, lang, 'description') ?? '',
         role: getLocalizedField(project, lang, 'role') ?? '',
         outcome: getLocalizedField(project, lang, 'outcome') ?? '',
-        learnings: Array.isArray(fallbackLearnings) ? fallbackLearnings : [],
+        learnings: Array.isArray(fallbackLearnings)
+            ? fallbackLearnings.filter((item) => typeof item === 'string')
+            : [],
     };
 }

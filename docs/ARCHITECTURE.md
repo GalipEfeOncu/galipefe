@@ -6,9 +6,11 @@ Bu belge uygulamanın güncel teknik haritasıdır. Günlük kurallar için önc
 
 ```text
 npm run build
+├─ npm test
 ├─ vite build
 └─ scripts/prerender.mjs
    ├─ Firestore'dan public projects kayıtlarını okur
+   ├─ test edilmiş rota manifestini oluşturur
    ├─ StaticRouter + React ile HTML üretir
    └─ route HTML'i + dinamik sitemap.xml yazar
 
@@ -112,6 +114,9 @@ Bu veri statiktir; Firestore tarafından değiştirilmez.
 - İstemci config'i yalnızca `VITE_FIREBASE_*` env değişkenlerinden okunur.
 - Firebase yapılandırması yoksa uygulama çalışmaya devam eder, ancak `/admin` yapılandırma uyarısı gösterir.
 - `/admin` rotasının menü bağlantısı yoktur; gizli rota olmak yetkilendirme değildir. Gerçek koruma Firebase Authentication ve custom `admin: true` claim'i isteyen sürüm kontrollü Firestore Security Rules tarafında uygulanır. Public sorgular yalnızca yayınlanmış ve arşivlenmemiş projeleri döndürür.
+- `firestore.rules`, proje belge alanlarının tür/uzunluk/enum sınırlarını doğrular. Yeni proje öncesi allocator mevcut kayıtlarla başlatılır; proje yaratma transaction'ı allocator'a tam bir yeni kimlik ekler ve projeyi birlikte yazar. Rules önceki ve sonraki allocator durumunu, benzersiz değerleri, allocator'daki son `docId`/kimlik bağlantısını ve ortak sunucu zamanını denetler; allocator tek başına güncellenemez. Public ve prerender katalogları bozuk liste elemanlarını metin dışıysa atar.
+- CSP şu anda Vercel `Content-Security-Policy-Report-Only` başlığıyla ölçüm modundadır. `/api/csp-report` direktifleri doğrular, URL'lerin yalnız orijinini ve satır numarasını tutar, aynı raporu bir warm function instance içinde tekrar loglamaz ve farklı raporları instance başına 25 kayıtla sınırlar. Enforcing moda geçmeden önce canlı tarayıcı raporları ve auth, Firestore, görsel, font, iletişim, Analytics akışları kontrol edilmelidir.
+- Yönetim paneli yayın/arsiv/silme işleminin Firestore'a yazıldığını, statik sayfa ve sitemap'in ise bir sonraki Vercel deployment'ında güncelleneceğini açıkça bildirir.
 - `.env` dosyaları ignore edilir. Gerçek değerleri dokümana, fixture'a veya commit'e eklemeyin.
 
 Kurulum ayrıntıları: [`firebase-admin.md`](./firebase-admin.md).
@@ -119,7 +124,8 @@ Kurulum ayrıntıları: [`firebase-admin.md`](./firebase-admin.md).
 ## Build ve deployment
 
 - Vite `base: '/'` ile build alır.
-- `npm run build` önce Vite varlıklarını oluşturur, sonra `scripts/prerender.mjs` route HTML'i ve Firestore tabanlı `sitemap.xml` yazar. Production katalog üretimi için Vercel'de `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID` ve `VITE_FIREBASE_APP_ID` gerekir.
+- `npm run build` önce `npm test` çalıştırır, ardından Vite varlıklarını oluşturur ve `scripts/prerender.mjs` route HTML'i ile Firestore tabanlı `sitemap.xml` yazar. Production katalog üretimi için Vercel'de `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID` ve `VITE_FIREBASE_APP_ID` gerekir.
+- `npm test` prerender manifesti, slug çakışması, sitemap filtreleri, 404/bootstrap çıktısı ve atomik kimlik yardımcılarını fixture verisiyle doğrular.
 - `vercel.json` `cleanUrls: true` ve `trailingSlash: false` kullanır; public HTML dosyaları doğrudan sunulur. SPA catch-all rewrite kullanılmaz. Yeni public rota prerender üretim listesine de eklenmelidir; yönetim ve utility sayfaları shell + noindex olarak kalır.
 - Vercel Analytics ve Speed Insights `main.jsx` içinde provider ağacına eklenmiştir.
 - Production build çıktısı `dist/` klasörüdür ve Git tarafından ignore edilir.

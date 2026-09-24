@@ -1,5 +1,7 @@
-import { collection, getDocs, doc, setDoc, deleteDoc, writeBatch, query, orderBy, where, serverTimestamp } from 'firebase/firestore';
+import { collection, getDocs, doc, setDoc, deleteDoc, writeBatch, query, orderBy, where, serverTimestamp, runTransaction } from 'firebase/firestore';
 import { db, isFirebaseConfigured } from '../config/firebase';
+import { mergeProjectIdentities, nextAvailableIdFrom } from '../utils/projectIdentity';
+import { normalizeProjectArrays } from '../utils/projectData';
 
 const COLLECTION_NAME = 'projects';
 const TIMEOUT_MS = 3000; // 3 seconds timeout
@@ -33,17 +35,22 @@ export const projectService = {
         if (!isFirebaseConfigured || !db) return { ok: false, error: 'Firebase is not configured' };
         try {
             const projectsRef = collection(db, COLLECTION_NAME);
-            const constraints = [orderBy('order', 'asc')];
+            const constraints = [];
             if (!admin) {
-                constraints.unshift(where('published', '==', true), where('archived', '==', false));
+                constraints.push(
+                    where('published', '==', true),
+                    where('archived', '==', false),
+                    orderBy('order', 'asc'),
+                );
             }
             const q = query(projectsRef, ...constraints);
             const querySnapshot = await withTimeout(getDocs(q));
             
             const projectsList = [];
             querySnapshot.forEach((doc) => {
-                projectsList.push({ ...doc.data(), docId: doc.id });
+                projectsList.push(normalizeProjectArrays({ ...doc.data(), docId: doc.id }));
             });
+            if (admin) projectsList.sort((first, second) => (first.order ?? 0) - (second.order ?? 0));
             return {
                 ok: true,
                 projects: admin && !includeArchived
@@ -75,6 +82,81 @@ export const projectService = {
             return { ...data, docId };
         } catch (error) {
             console.error('Error saving project to Firestore:', error);
+            throw error;
+        }
+    },
+
+    async ensureProjectIdentityAllocator(knownProjects = []) {
+        const identitiesRef = doc(db, 'systemMetadata', 'project-identities');
+        return withTimeout(runTransaction(db, async (transaction) => {
+            const snapshot = await transaction.get(identitiesRef);
+            if (snapshot.exists()) return snapshot.data();
+
+            const identities = mergeProjectIdentities(null, knownProjects);
+            if (identities.usedIds.length > 5000 || identities.usedTranslationKeys.length > 5000) {
+                throw new Error('The existing project catalogue is too large to initialize the identity allocator.');
+            }
+            transaction.set(identitiesRef, {
+                ...identities,
+                updatedAt: serverTimestamp(),
+            });
+            return identities;
+        }));
+    },
+
+    /**
+     * Creates a project and reserves its public numeric ID and translation key
+     * in the same Firestore transaction, so concurrent admin tabs cannot reuse
+     * either identity. The allocator is initialized from the complete admin
+     * catalogue in a separate transaction the first time it is needed.
+     */
+    async createProject(project, knownProjects = []) {
+        if (!isFirebaseConfigured || !db) throw new Error('Firebase is not configured');
+
+        const projectRef = doc(collection(db, COLLECTION_NAME));
+        const identitiesRef = doc(db, 'systemMetadata', 'project-identities');
+
+        try {
+            await this.ensureProjectIdentityAllocator(knownProjects);
+            return await withTimeout(runTransaction(db, async (transaction) => {
+                const [projectSnapshot, identitiesSnapshot] = await Promise.all([
+                    transaction.get(projectRef),
+                    transaction.get(identitiesRef),
+                ]);
+
+                if (projectSnapshot.exists()) throw new Error('A project record with this document ID already exists.');
+                if (!identitiesSnapshot.exists()) throw new Error('Project identity allocator is unavailable.');
+
+                const identities = mergeProjectIdentities(identitiesSnapshot.data());
+                const id = nextAvailableIdFrom(identities.usedIds);
+                const requestedKey = String(project.translationKey ?? '').trim();
+                const isGeneratedKey = requestedKey === `proj_${project.id}`;
+                const translationKey = isGeneratedKey ? `proj_${id}` : requestedKey;
+
+                if (!translationKey) throw new Error('translationKey is required.');
+                if (identities.usedTranslationKeys.includes(translationKey)) {
+                    const error = new Error('translationKey already exists');
+                    error.code = 'project/translation-key-already-exists';
+                    throw error;
+                }
+
+                const data = { ...project, id, translationKey, updatedAt: serverTimestamp() };
+                delete data.docId;
+
+                transaction.set(identitiesRef, {
+                    usedIds: [...identities.usedIds, id],
+                    usedTranslationKeys: [...identities.usedTranslationKeys, translationKey],
+                    updatedAt: serverTimestamp(),
+                    lastProjectDocId: projectRef.id,
+                    lastAllocatedId: id,
+                    lastTranslationKey: translationKey,
+                });
+                transaction.set(projectRef, data);
+
+                return { ...data, docId: projectRef.id };
+            }));
+        } catch (error) {
+            console.error('Error creating project in Firestore:', error);
             throw error;
         }
     },

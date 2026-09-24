@@ -6,13 +6,23 @@ import React from 'react';
 import { renderToPipeableStream } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
 import { createServer, loadEnv } from 'vite';
-import { projectPath, projectSlug } from '../src/utils/projectSlug.js';
+import {
+    buildPageData,
+    buildProjectRouteManifest,
+    buildSitemap,
+    filterPublicProjects,
+    makeNotFoundPage,
+    safeJson,
+    serializePrerenderData,
+} from './prerender-manifest.mjs';
+import { projectPath } from '../src/utils/projectSlug.js';
+import { normalizeProjectArrays } from '../src/utils/projectData.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
 const SITE_URL = 'https://www.galipefeoncu.com';
 const PROJECT_FIELDS = [
-    'id', 'translationKey', 'category', 'title', 'status', 'subtitle', 'subtitleEn', 'subtitleTr',
+    'id', 'translationKey', 'published', 'archived', 'category', 'title', 'status', 'subtitle', 'subtitleEn', 'subtitleTr',
     'description', 'descriptionEn', 'descriptionTr', 'role', 'roleEn', 'roleTr', 'outcome',
     'outcomeEn', 'outcomeTr', 'learnings', 'learningsEn', 'learningsTr', 'tags', 'image', 'icon',
     'link', 'demoLink', 'order', 'updatedAt',
@@ -42,8 +52,7 @@ function projectFromDocument(document) {
     const project = Object.fromEntries(
         PROJECT_FIELDS.filter((key) => fields[key] !== undefined).map((key) => [key, fields[key]]),
     );
-    project.docId = document.name.split('/').at(-1);
-    return project;
+    return normalizeProjectArrays({ ...project, docId: document.name.split('/').at(-1) });
 }
 
 async function fetchPublicProjects() {
@@ -108,15 +117,7 @@ async function fetchPublicProjects() {
         }
 
         const projects = rows.filter((row) => row.document).map((row) => projectFromDocument(row.document));
-        const seenSlugs = new Set();
-
-        for (const project of projects) {
-            const slug = projectSlug(project);
-            if (seenSlugs.has(slug)) throw new Error(`Published project URL collision for slug "${slug}".`);
-            seenSlugs.add(slug);
-        }
-
-        return projects;
+        return filterPublicProjects(projects);
     } catch (error) {
         const reason = error.cause?.code ?? error.name ?? 'unknown error';
         if (process.env.VERCEL) {
@@ -127,30 +128,12 @@ async function fetchPublicProjects() {
     }
 }
 
-function safeJson(value) {
-    return JSON.stringify(value)
-        .replace(/</g, '\\u003c')
-        .replace(/>/g, '\\u003e')
-        .replace(/&/g, '\\u0026')
-        .replace(/\u2028/g, '\\u2028')
-        .replace(/\u2029/g, '\\u2029');
-}
-
 function escapeHtml(value) {
     return String(value)
         .replace(/&/g, '&amp;')
         .replace(/"/g, '&quot;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
-}
-
-function escapeXml(value) {
-    return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&apos;');
 }
 
 function truncateDescription(value, maxLength = 160) {
@@ -282,8 +265,7 @@ function prepareDocument(template, markup, page, bootstrapData, baseGraph) {
 
     html = updateStructuredData(html, page, baseGraph);
 
-    const statusAttribute = page.type === 'not-found' ? ' data-static-status="404"' : '';
-    const payload = `<script id="portfolio-prerender-data"${statusAttribute} type="application/json">${safeJson(bootstrapData)}</script>`;
+    const payload = serializePrerenderData(bootstrapData, page.type === 'not-found');
     html = html.replace('</head>', `  ${payload}\n  </head>`);
     const rootPattern = /<div id="root"><\/div>/;
     if (!rootPattern.test(html)) throw new Error('Could not find the empty #root element in built index.html.');
@@ -302,29 +284,6 @@ function prepareUtilityShell(template, page, baseGraph) {
     html = updateMeta(html, 'name', 'twitter:url', SITE_URL);
     html = html.replace(/<link\b(?=[^>]*\brel="canonical")[^>]*>\s*/i, '');
     return updateStructuredData(html, { type: 'not-found' }, baseGraph);
-}
-
-function updatedDate(project) {
-    const date = project.updatedAt instanceof Date
-        ? project.updatedAt
-        : project.updatedAt?.seconds
-            ? new Date(project.updatedAt.seconds * 1000)
-            : null;
-    return date && Number.isFinite(date.getTime()) ? date.toISOString().slice(0, 10) : null;
-}
-
-function buildSitemap(projects) {
-    const urls = [
-        { path: '/', lastmod: null },
-        { path: '/projects', lastmod: null },
-        { path: '/contact', lastmod: null },
-        ...(projects ?? []).map((project) => ({ path: projectPath(project), lastmod: updatedDate(project) })),
-    ];
-    const entries = urls.map(({ path: urlPath, lastmod }) => {
-        const url = `${SITE_URL}${urlPath === '/' ? '/' : urlPath}`;
-        return `  <url><loc>${escapeXml(url)}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}</url>`;
-    });
-    return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries.join('\n')}\n</urlset>\n`;
 }
 
 async function renderMarkup(App, LanguageProvider, location, prerenderData) {
@@ -417,37 +376,30 @@ async function main() {
 
         if (projects !== null) {
             pages.find((page) => page.type === 'projects').projects = projects;
-            for (const project of projects) {
+            for (const route of buildProjectRouteManifest(projects, DIST, SITE_URL)) {
+                const { project } = route;
                 const content = getProjectContent(project, 'en');
                 const description = truncateDescription([content.subtitle, content.description].filter(Boolean).join(' '));
-                const canonical = `${SITE_URL}${projectPath(project)}`;
                 const image = typeof project.image === 'string' && /^https:\/\//i.test(project.image)
                     ? project.image
                     : undefined;
                 pages.push({
-                    type: 'project', path: projectPath(project), file: path.join(DIST, 'projects', `${projectSlug(project)}.html`),
-                    canonical, title: `${project.title} | Galip Efe Öncü`, description, project,
+                    ...route,
+                    type: 'project', title: `${project.title} | Galip Efe Öncü`, description,
                     image, imageAlt: `${project.title} project`,
                 });
             }
         }
 
         for (const page of pages) {
-            const pageData = {
-                ...commonData,
-                ...(page.type === 'projects' ? { projects } : {}),
-                ...(page.type === 'project' ? { project: page.project } : {}),
-            };
+            const pageData = buildPageData(page, commonData, projects);
             const markup = await renderMarkup(App, LanguageProvider, page.path, pageData);
             const html = prepareDocument(template, markup, page, pageData, baseGraph);
             await mkdir(path.dirname(page.file), { recursive: true });
             await writeFile(page.file, html);
         }
 
-        const notFoundPage = {
-            type: 'not-found', path: '/__portfolio_not_found__', file: path.join(DIST, '404.html'),
-            title: copy.seo.notFoundTitle, description: copy.seo.notFoundDesc, noIndex: true,
-        };
+        const notFoundPage = makeNotFoundPage(DIST, copy.seo.notFoundTitle, copy.seo.notFoundDesc);
         const notFoundMarkup = await renderMarkup(App, LanguageProvider, notFoundPage.path, commonData);
         await writeFile(notFoundPage.file, prepareDocument(template, notFoundMarkup, notFoundPage, commonData, baseGraph));
         await writeFile(path.join(DIST, 'admin.html'), prepareUtilityShell(template, {
@@ -456,7 +408,7 @@ async function main() {
         await writeFile(path.join(DIST, 'typing-test.html'), prepareUtilityShell(template, {
             title: `${copy.typingGame.pageTitle} | Galip Efe Öncü`, description: copy.seo.typingTestDesc, robots: 'noindex, follow',
         }, baseGraph));
-        await writeFile(path.join(DIST, 'sitemap.xml'), buildSitemap(projects));
+        await writeFile(path.join(DIST, 'sitemap.xml'), buildSitemap(projects, SITE_URL));
 
         console.log(`[prerender] Generated ${pages.length} public HTML routes${projects === null ? ' (Firestore catalogue unavailable locally)' : ` from ${projects.length} public projects`}.`);
     } finally {

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { getProjectContent } from '../utils/projectContent';
+import { normalizeProjectArrays } from '../utils/projectData';
 import { projectPath } from '../utils/projectSlug';
 import useSEO from '../hooks/useSEO';
 
@@ -20,7 +21,7 @@ function readCachedProjects() {
     try {
         const value = window.localStorage.getItem(PROJECT_CACHE_KEY);
         const projects = value ? JSON.parse(value) : [];
-        return Array.isArray(projects) ? projects : [];
+        return Array.isArray(projects) ? projects.map(normalizeProjectArrays) : [];
     } catch {
         return [];
     }

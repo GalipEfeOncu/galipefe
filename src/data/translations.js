@@ -9,6 +9,15 @@ export const translations = {
             notFoundTitle: "Page Not Found | Galip Efe Öncü",
             notFoundDesc: "The requested page could not be found. Return to Galip Efe Öncü's portfolio homepage."
         },
+        admin: {
+            staticDeploymentNotice: "Firestore is updated immediately. Static project pages and the sitemap show the latest content after the next Vercel deployment.",
+            projectSavedPendingDeployment: "Firestore was updated. Static project pages and the sitemap still reflect the previous deployment.",
+            draftSaved: "Draft saved to Firestore.",
+            translationKeyAlreadyUsed: "That translation key is already used by another project.",
+            invalidTranslationKey: "Use 1–80 letters, numbers, or underscores, starting with a letter.",
+            projectArchivedPendingDeployment: "Project archived in Firestore. Its static detail page may remain available until the next deployment.",
+            projectDeletedPendingDeployment: "Project deleted from Firestore. Its static detail page may remain available until the next deployment."
+        },
         app: {
             scrollToTop: "Scroll to top",
             skipToContent: "Skip to main content",
@@ -376,6 +385,15 @@ export const translations = {
             typingTestDesc: "Galip Efe Öncü portfolyosundaki gizli yazma testi easter egg'i.",
             notFoundTitle: "Sayfa Bulunamadı | Galip Efe Öncü",
             notFoundDesc: "Aradığınız sayfa bulunamadı. Galip Efe Öncü'nün portfolyo ana sayfasına dönebilirsiniz."
+        },
+        admin: {
+            staticDeploymentNotice: "Firestore değişiklikleri anında kaydeder. Statik proje sayfaları ve site haritası en son Vercel dağıtımını gösterir.",
+            projectSavedPendingDeployment: "Firestore güncellendi. Statik proje sayfaları ve site haritası önceki dağıtımı göstermeye devam ediyor.",
+            draftSaved: "Taslak Firestore'a kaydedildi.",
+            translationKeyAlreadyUsed: "Bu çeviri anahtarı başka bir projede kullanılıyor.",
+            invalidTranslationKey: "İlk karakter harf olmalı; toplam 1–80 harf, rakam veya alt çizgi kullanın.",
+            projectArchivedPendingDeployment: "Proje Firestore'da arşivlendi. Statik detay sayfası sonraki dağıtıma kadar erişilebilir olabilir.",
+            projectDeletedPendingDeployment: "Proje Firestore'dan silindi. Statik detay sayfası sonraki dağıtıma kadar erişilebilir olabilir."
         },
         app: {
             scrollToTop: "Sayfanın başına dön",

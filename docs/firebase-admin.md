@@ -26,7 +26,7 @@ Yönetim paneli tek kullanıcı için Türkçe tutulur; public site metinleri is
 2. `/admin`, Firebase email/password ile `signInWithEmailAndPassword` kullanır.
 3. `src/services/projectService.js`, `projects` koleksiyonunda okuma/yazma/silme ve `order` güncelleme yapar. Public sorgu yalnızca `published: true` ve `archived: false` kayıtlarını ister; admin tüm kayıtları görebilir.
 4. Public `Projects`, Firestore `projects` koleksiyonunu kullanır. Son başarılı yanıt tarayıcıda yalnızca performans için önbelleklenebilir; doğruluk kaynağı Firestore'dur.
-5. Build script'i aynı yayın filtresiyle Firestore REST API'sini okur; public rota HTML'ini, `/projects/<id>` detay sayfalarını ve sitemap'i üretir. Bu işlem Vercel build'inde dört istemci Firebase env değişkenini ve erişilebilir public sorguyu gerektirir. Yeni/değişen proje içeriğinin arama motorlarına sunulan HTML ve sitemap'e geçmesi için yeniden deployment gerekir.
+5. Build script'i aynı yayın filtresiyle Firestore REST API'sini okur; public rota HTML'ini, `/projects/<id>` detay sayfalarını ve sitemap'i üretir. Bu işlem Vercel build'inde dört istemci Firebase env değişkenini ve erişilebilir public sorguyu gerektirir. Firestore değişikliği anında katalogda görünür; statik detay sayfaları ve sitemap son deployment sürümünü gösterir. Admin paneli bu ayrımı kayıt sonrası da belirtir; yayın, arşiv veya silme sonrasında statik çıktının yenilenmesi için Vercel deployment gerekir.
 
 Panelde **Sıralama modu** açıldığında projeler tutamaçtan basılı tutulup sürüklenebilir. Sürükleme sırasında yalnızca önizleme ve satır geçişleri hareket eder; yerel proje dizisi işaretçi bırakıldığında tek seferde güncellenir. İşaretçi listenin yatay sınırlarının dışına çıksa da sürükleme devam eder. Klavye kullanıcıları için yukarı/aşağı düğmeleri korunur. Her iki yöntem de yalnızca yerel sıralamayı değiştirir; Firestore `order` alanları **Sıralamayı kaydet** düğmesiyle toplu olarak güncellenir.
 
@@ -42,14 +42,18 @@ learnings, learningsEn, learningsTr
 link, demoLink, image, icon, tags
 ```
 
-`status` enum'u ve kimlik kuralları statik katalogla aynıdır. `order` artan sıralamayı belirler. `id`, kartlar ve eski statik katalogla uyumluluk için kullanıcıya görünen benzersiz sayısal kimliktir; Firestore'daki kaydın adresi değildir. Yeni proje açıldığında panel mevcut pozitif ID'ler arasındaki en küçük boş değeri otomatik atar; ID daha sonra salt okunurdur. Kayıt oluşturulduğunda Firestore ayrıca değişmez bir belge kimliği üretir ve mevcut kayıtlarda düzenleme/silme/sıralama bu kimliği kullanır. Böylece formdaki bir alan başka kaydın üstüne yazamaz. `translationKey`, eski statik katalogdaki `translations.*.projectData` nesnesinde eşleşen çeviri girdisinin anahtarıdır; Firestore'daki TR/EN alanları kullanıldığında public ekran bu alanı okumaz, ancak geriye dönük uyumluluk için benzersiz tutulur. Mevcut kayıtlarda iki alan da salt okunurdur. Yeni kayıtlarda `published`, `archived` ve sunucu zamanı ile yazılan `updatedAt` alanları bulunur. Kapak görselleri Storage kullanılmadan tarayıcıda 16:9 WebP'ye sıkıştırılır ve Firestore'a data URL olarak yazılır. Gerçek UTF-8 data URL boyutu 700 KB üstündeyse kaydetme engellenir; bu, 1 MiB belge limitinin altında güvenlik payı bırakır.
+`status` yalnızca `Completed`, `Work in Progress` veya `Discontinued`; `category` yalnızca `AI/Automation`, `Web`, `Games`, `Tools` veya `Other` olabilir. Firestore Rules zorunlu alanların türünü, metin uzunluklarını, tags listesinin oluşturma sırasında bulunmasını, isteğe bağlı liste türü/boyutunu ve timestamp alanlarını denetler. Rules listelerin tüm elemanlarının türünü toplu doğrulayamadığından runtime ve prerender girişleri yalnızca metin olan tags/learning değerlerini kullanır; tags tekrarları da temizlenir.
+
+`order` artan sıralamayı belirler. `id`, kartlar ve eski statik katalogla uyumluluk için kullanıcıya görünen benzersiz sayısal kimliktir; Firestore'daki kaydın adresi değildir. Yeni proje açıldığında panel mevcut pozitif ID'ler arasındaki en küçük boş değeri gösterir. İlk yeni kayıt öncesinde `systemMetadata/project-identities` belgesi, Admin'in sırasız koleksiyon sorgusuyla aldığı tüm mevcut kayıt kimliklerinden ayrı bir transaction'da başlatılır. Sonraki kayıtlar `projectService.createProject()` içinde ID ve `translationKey` değerini bu belgenin önceki ve sonraki halini karşılaştıran bir transaction'da yeni proje belgesiyle birlikte ayırır. Rules mevcut kimliğin önceden allocator'da bulunmadığını, her iki dizinin de tam bir yeni değer eklediğini, başka değer silinmediğini ve allocator'daki son proje `docId`, `id`, `translationKey` alanlarının aynı yeni proje belgesine işaret ettiğini doğrular. Böylece allocator tek başına kimlik ayıramaz ve aynı batch içinde iki proje aynı ayrılmış kimliği kullanamaz. Silinen projelerin kimlikleri yeniden kullanılmaz. Proje liste anahtarları, seçim, sürükleme ve kayıt işlemleri değişmez Firestore `docId` kullanır. Böylece eşzamanlı güncel admin sekmeleri aynı `id` veya `translationKey` değerini ayıramaz; formdaki bir alan başka kaydın adresini belirleyemez.
+
+`translationKey`, eski statik katalogdaki `translations.*.projectData` nesnesinde eşleşen çeviri girdisinin anahtarıdır; Firestore'daki TR/EN alanları kullanıldığında public ekran bu alanı okumaz, ancak geriye dönük uyumluluk için benzersiz tutulur. Mevcut kayıtlarda iki alan da salt okunurdur. Yeni kayıtlarda `published`, `archived` ve sunucu zamanı ile yazılan `updatedAt` alanları bulunur. Kapak görselleri Storage kullanılmadan tarayıcıda 16:9 WebP'ye sıkıştırılır ve Firestore'a data URL olarak yazılır. Gerçek UTF-8 data URL boyutu 700 KB üstündeyse kaydetme engellenir; bu, 1 MiB belge limitinin altında güvenlik payı bırakır.
 
 ## Güvenlik kontrolü
 
 - `/admin` linkinin navigasyonda gizli olması koruma değildir.
 - Firebase Authentication yalnızca kimlik doğrular; Firestore kuralları yazmayı izinli kullanıcılarla sınırlandırmalıdır.
 - Sürüm kontrollü kurallar `firestore.rules` dosyasındadır. Yazma için Firebase Auth custom claim'i `admin: true` gerekir; uygulama e-posta adresi veya UID tahmin ederek yetki vermez.
-- Kuralları canlıya almadan önce doğru Firebase projesini seçip `firebase deploy --only firestore` çalıştırın. Bu komut veri migration'ı yapmaz.
+- Proje oluşturma için Rules, önceden başlatılmış `systemMetadata/project-identities` kaydının yeni proje yazımıyla atomik güncellenmesini şart koşar. Allocator güncellemesi son proje `docId`, numeric `id`, translation key ve sunucu zamanını kaydeder; Rules bunları aynı atomik yazıdaki yeni proje belgesiyle eşleştirir. Yeni proje oluşturma akışını açmadan önce doğru Firebase projesinde `firebase deploy --only firestore:rules` çalıştırın; sonra frontend deployment'ını tamamlayıp açık admin sekmelerini yenileyin. Eski create akışları yeni kurallarla reddedilir. İlk yeni kayıt allocator belgesini otomatik başlatır; bu komut veri migration'ı yapmaz.
 - Production değişikliklerinde doğru Firebase project ID'si ve Vercel environment'ı doğrulanmalıdır.
 - Hata loglarına form parolası, token veya env değeri eklemeyin.
 
@@ -68,6 +72,7 @@ Firebase ile test yapılacaksa yerel `.env` değerlerini kullanıcı sağlar. Lo
 
 ```bash
 npm run lint
+npm test
 npm run build
 ```
 
@@ -76,3 +81,5 @@ npm run build
 Public sorgu güvenlik nedeniyle yalnızca `published: true` ve `archived: false` belgelerini kabul eder. Bu sorgunun `order` sıralaması için gereken birleşik index `firestore.indexes.json` içinde sürüm kontrollüdür. Mevcut public belgeleri geçirmek için önce test projesindeki her eski kayda bu alanları ekleyin (`published: true`, `archived: false`), ardından production için aynı migration'ı açık onayla çalıştırın. Migration tamamlanmadan eski belgeler public katalogda görünmez.
 
 Firebase Console Rules Simulator veya Emulator Suite ile authenticated olmayan okuma (yalnız yayınlanmış kayıt), authenticated olmayan yazma (reddedilir), `admin` claim'i olmayan kullanıcı yazması (reddedilir), `admin: true` claim'i olan kullanıcının yazması (izin verilir) senaryolarını doğrulayın. Görsel fallback için 700 KB altı ve üstü data URL kaydetme kontrollerini admin formunda test edin.
+
+Rules değişikliğini canlıya almadan önce Emulator Suite/Rules Simulator'da project create transaction'ının allocator belgesiyle birlikte izin aldığını, allocator olmadan create ve bozuk tip/enum içeren create/update işlemlerinin reddedildiğini doğrulayın.

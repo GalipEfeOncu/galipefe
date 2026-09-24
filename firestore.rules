@@ -5,10 +5,156 @@ service cloud.firestore {
       return request.auth != null && request.auth.token.admin == true;
     }
 
+    function optionalString(data, field, maxLength) {
+      return data.get(field, '') is string && data.get(field, '').size() <= maxLength;
+    }
+
+    function optionalList(data, field, maxLength) {
+      return data.get(field, []) is list && data.get(field, []).size() <= maxLength;
+    }
+
+    function optionalTimestamp(data, field) {
+      return !(field in data) || data[field] is timestamp;
+    }
+
+    function validProject(data, requireTags) {
+      return data.keys().hasAll([
+          'id', 'translationKey', 'title', 'category', 'status', 'order',
+          'published', 'archived'
+        ])
+        && data.id is int && data.id > 0 && data.id <= 9007199254740991
+        && data.translationKey is string
+        && data.translationKey.matches('^[A-Za-z][A-Za-z0-9_]{0,79}$')
+        && data.title is string && data.title.size() > 0 && data.title.size() <= 180
+        && data.category is string
+        && data.category in ['AI/Automation', 'Web', 'Games', 'Tools', 'Other']
+        && data.status is string
+        && data.status in ['Completed', 'Work in Progress', 'Discontinued']
+        && data.order is int && data.order >= 0
+        && data.published is bool
+        && data.archived is bool
+        && optionalString(data, 'subtitle', 500)
+        && optionalString(data, 'subtitleTr', 500)
+        && optionalString(data, 'subtitleEn', 500)
+        && optionalString(data, 'description', 12000)
+        && optionalString(data, 'descriptionTr', 12000)
+        && optionalString(data, 'descriptionEn', 12000)
+        && optionalString(data, 'role', 1000)
+        && optionalString(data, 'roleTr', 1000)
+        && optionalString(data, 'roleEn', 1000)
+        && optionalString(data, 'outcome', 4000)
+        && optionalString(data, 'outcomeTr', 4000)
+        && optionalString(data, 'outcomeEn', 4000)
+        && optionalString(data, 'link', 2048)
+        && optionalString(data, 'demoLink', 2048)
+        && optionalString(data, 'icon', 64)
+        && optionalString(data, 'image', 950000)
+        && (!requireTags || 'tags' in data)
+        && optionalList(data, 'tags', 50)
+        && optionalList(data, 'learnings', 50)
+        && optionalList(data, 'learningsTr', 50)
+        && optionalList(data, 'learningsEn', 50)
+        && optionalTimestamp(data, 'createdAt')
+        && optionalTimestamp(data, 'updatedAt');
+    }
+
+    function identityDocumentPath() {
+      return /databases/$(database)/documents/systemMetadata/project-identities;
+    }
+
+    function projectDocumentPath(projectId) {
+      return /databases/$(database)/documents/projects/$(projectId);
+    }
+
+    function validProjectIdentities(data) {
+      return data.keys().hasAll(['usedIds', 'usedTranslationKeys', 'updatedAt'])
+        && data.keys().hasOnly([
+          'usedIds', 'usedTranslationKeys', 'updatedAt',
+          'lastProjectDocId', 'lastAllocatedId', 'lastTranslationKey'
+        ])
+        && data.usedIds is list && data.usedIds.size() <= 5000
+        && data.usedIds.toSet().size() == data.usedIds.size()
+        && data.usedTranslationKeys is list && data.usedTranslationKeys.size() <= 5000
+        && data.usedTranslationKeys.toSet().size() == data.usedTranslationKeys.size()
+        && data.updatedAt is timestamp
+        && (
+          (!('lastProjectDocId' in data) && !('lastAllocatedId' in data) && !('lastTranslationKey' in data))
+          || (
+            data.lastProjectDocId is string
+            && data.lastProjectDocId.matches('^[A-Za-z0-9]{20}$')
+            && data.lastAllocatedId is int
+            && data.lastAllocatedId > 0
+            && data.lastAllocatedId <= 9007199254740991
+            && data.lastTranslationKey is string
+            && data.lastTranslationKey.matches('^[A-Za-z][A-Za-z0-9_]{0,79}$')
+          )
+        );
+    }
+
+    function validProjectIdentitySeed(data) {
+      return validProjectIdentities(data)
+        && !('lastProjectDocId' in data)
+        && !('lastAllocatedId' in data)
+        && !('lastTranslationKey' in data);
+    }
+
+    function appendsOneValue(previous, next) {
+      return next.hasAll(previous)
+        && next.size() == previous.size() + 1
+        && next.toSet().difference(previous.toSet()).size() == 1;
+    }
+
     match /projects/{projectId} {
       // Drafts and archived records are never returned to a public client.
       allow get, list: if (resource.data.published == true && resource.data.archived == false) || isAdmin();
-      allow create, update, delete: if isAdmin();
+      allow create: if isAdmin()
+        && validProject(request.resource.data, true)
+        && exists(identityDocumentPath())
+        && validProjectIdentities(get(identityDocumentPath()).data)
+        && validProjectIdentities(getAfter(identityDocumentPath()).data)
+        && !get(identityDocumentPath()).data.usedIds.hasAny([request.resource.data.id])
+        && !get(identityDocumentPath()).data.usedTranslationKeys.hasAny([request.resource.data.translationKey])
+        && getAfter(identityDocumentPath()).data.usedIds.hasAny([request.resource.data.id])
+        && getAfter(identityDocumentPath()).data.usedTranslationKeys.hasAny([request.resource.data.translationKey])
+        && getAfter(identityDocumentPath()).data.lastProjectDocId == projectId
+        && getAfter(identityDocumentPath()).data.lastAllocatedId == request.resource.data.id
+        && getAfter(identityDocumentPath()).data.lastTranslationKey == request.resource.data.translationKey
+        && appendsOneValue(
+          get(identityDocumentPath()).data.usedIds,
+          getAfter(identityDocumentPath()).data.usedIds
+        )
+        && appendsOneValue(
+          get(identityDocumentPath()).data.usedTranslationKeys,
+          getAfter(identityDocumentPath()).data.usedTranslationKeys
+        )
+        && getAfter(identityDocumentPath()).data.updatedAt == request.time;
+      allow update: if isAdmin()
+        && validProject(request.resource.data, false)
+        && request.resource.data.id == resource.data.id
+        && request.resource.data.translationKey == resource.data.translationKey;
+      allow delete: if isAdmin();
+    }
+
+    match /systemMetadata/{documentId} {
+      allow read: if isAdmin() && documentId == 'project-identities';
+      allow create: if isAdmin()
+        && documentId == 'project-identities'
+        && validProjectIdentitySeed(request.resource.data);
+      allow update: if isAdmin()
+        && documentId == 'project-identities'
+        && validProjectIdentities(request.resource.data)
+        && request.resource.data.keys().hasAll([
+          'lastProjectDocId', 'lastAllocatedId', 'lastTranslationKey'
+        ])
+        && appendsOneValue(resource.data.usedIds, request.resource.data.usedIds)
+        && appendsOneValue(resource.data.usedTranslationKeys, request.resource.data.usedTranslationKeys)
+        && !exists(projectDocumentPath(request.resource.data.lastProjectDocId))
+        && existsAfter(projectDocumentPath(request.resource.data.lastProjectDocId))
+        && getAfter(projectDocumentPath(request.resource.data.lastProjectDocId)).data.id == request.resource.data.lastAllocatedId
+        && getAfter(projectDocumentPath(request.resource.data.lastProjectDocId)).data.translationKey == request.resource.data.lastTranslationKey
+        && getAfter(projectDocumentPath(request.resource.data.lastProjectDocId)).data.updatedAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if false;
     }
   }
 }

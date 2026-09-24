@@ -26,11 +26,12 @@ Varsayılan geliştirme adresi `http://localhost:5173/` olur.
 
 ```bash
 npm run lint
+npm test
 npm run build
 npm run preview
 ```
 
-Repository'de otomatik test paketi bulunmuyor; değişiklikler lint, production build ve ilgili sayfanın manuel kontrolüyle doğrulanır.
+`npm test`, fixture tabanlı proje kimliği, prerender rotası, sitemap, 404 ve bootstrap veri testlerini çalıştırır.
 
 `npm run build`, `/`, `/projects`, `/contact` ve yayınlanmış her proje için sunucu tarafında HTML üretir, istemci tarafında React ile hydrate eder. Proje detayları `/projects/<Firestore document ID>` biçiminde kalıcı URL alır. Firestore'daki yeni/yayımlanmış proje değişiklikleri arama motorlarına statik HTML ve sitemap olarak aktarılmak için yeni bir deployment gerektirir.
 
