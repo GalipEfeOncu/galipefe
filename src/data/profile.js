@@ -2,7 +2,7 @@ export const CONTACTS = [
     {
         name: 'GitHub',
         nameKey: 'contact.channels.github',
-        url: 'https://github.com/GalipEfeOncu?tab=repositories',
+        url: 'https://github.com/GalipEfeOncu',
         value: '@GalipEfeOncu',
         descKey: 'contact.githubDesc',
         icon: '⎇',
