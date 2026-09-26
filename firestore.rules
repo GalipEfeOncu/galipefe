@@ -62,10 +62,6 @@ service cloud.firestore {
       return /databases/$(database)/documents/systemMetadata/project-identities;
     }
 
-    function projectDocumentPath(projectId) {
-      return /databases/$(database)/documents/projects/$(projectId);
-    }
-
     function validProjectIdentities(data) {
       return data.keys().hasAll(['usedIds', 'usedTranslationKeys', 'updatedAt'])
         && data.keys().hasOnly([
@@ -104,30 +100,30 @@ service cloud.firestore {
         && next.toSet().difference(previous.toSet()).size() == 1;
     }
 
+    function allocatedForNewProject(data, projectId) {
+      let before = get(identityDocumentPath()).data;
+      let after = getAfter(identityDocumentPath()).data;
+      return after.updatedAt == request.time
+        && after.lastProjectDocId == projectId
+        && after.lastAllocatedId == data.id
+        && after.lastTranslationKey == data.translationKey
+        && validProjectIdentities(before)
+        && validProjectIdentities(after)
+        && !before.usedIds.hasAny([data.id])
+        && !before.usedTranslationKeys.hasAny([data.translationKey])
+        && after.usedIds.hasAny([data.id])
+        && after.usedTranslationKeys.hasAny([data.translationKey])
+        && appendsOneValue(before.usedIds, after.usedIds)
+        && appendsOneValue(before.usedTranslationKeys, after.usedTranslationKeys);
+    }
+
     match /projects/{projectId} {
       // Drafts and archived records are never returned to a public client.
       allow get, list: if (resource.data.published == true && resource.data.archived == false) || isAdmin();
       allow create: if isAdmin()
         && validProject(request.resource.data, true)
         && exists(identityDocumentPath())
-        && validProjectIdentities(get(identityDocumentPath()).data)
-        && validProjectIdentities(getAfter(identityDocumentPath()).data)
-        && !get(identityDocumentPath()).data.usedIds.hasAny([request.resource.data.id])
-        && !get(identityDocumentPath()).data.usedTranslationKeys.hasAny([request.resource.data.translationKey])
-        && getAfter(identityDocumentPath()).data.usedIds.hasAny([request.resource.data.id])
-        && getAfter(identityDocumentPath()).data.usedTranslationKeys.hasAny([request.resource.data.translationKey])
-        && getAfter(identityDocumentPath()).data.lastProjectDocId == projectId
-        && getAfter(identityDocumentPath()).data.lastAllocatedId == request.resource.data.id
-        && getAfter(identityDocumentPath()).data.lastTranslationKey == request.resource.data.translationKey
-        && appendsOneValue(
-          get(identityDocumentPath()).data.usedIds,
-          getAfter(identityDocumentPath()).data.usedIds
-        )
-        && appendsOneValue(
-          get(identityDocumentPath()).data.usedTranslationKeys,
-          getAfter(identityDocumentPath()).data.usedTranslationKeys
-        )
-        && getAfter(identityDocumentPath()).data.updatedAt == request.time;
+        && allocatedForNewProject(request.resource.data, projectId);
       allow update: if isAdmin()
         && validProject(request.resource.data, false)
         && request.resource.data.id == resource.data.id
@@ -148,11 +144,10 @@ service cloud.firestore {
         ])
         && appendsOneValue(resource.data.usedIds, request.resource.data.usedIds)
         && appendsOneValue(resource.data.usedTranslationKeys, request.resource.data.usedTranslationKeys)
-        && !exists(projectDocumentPath(request.resource.data.lastProjectDocId))
-        && existsAfter(projectDocumentPath(request.resource.data.lastProjectDocId))
-        && getAfter(projectDocumentPath(request.resource.data.lastProjectDocId)).data.id == request.resource.data.lastAllocatedId
-        && getAfter(projectDocumentPath(request.resource.data.lastProjectDocId)).data.translationKey == request.resource.data.lastTranslationKey
-        && getAfter(projectDocumentPath(request.resource.data.lastProjectDocId)).data.updatedAt == request.time
+        && !resource.data.usedIds.hasAny([request.resource.data.lastAllocatedId])
+        && !resource.data.usedTranslationKeys.hasAny([request.resource.data.lastTranslationKey])
+        && request.resource.data.usedIds.hasAny([request.resource.data.lastAllocatedId])
+        && request.resource.data.usedTranslationKeys.hasAny([request.resource.data.lastTranslationKey])
         && request.resource.data.updatedAt == request.time;
       allow delete: if false;
     }
