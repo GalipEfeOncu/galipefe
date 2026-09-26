@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://www.galipefeoncu.com/</loc>
-  </url>
-  <url>
-    <loc>https://www.galipefeoncu.com/projects</loc>
-  </url>
-  <url>
-    <loc>https://www.galipefeoncu.com/contact</loc>
-  </url>
-  <!-- Public Firestore project-detail URLs are added to the production sitemap during the build. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url><loc>https://www.galipefeoncu.com/</loc><xhtml:link rel="alternate" hreflang="en" href="https://www.galipefeoncu.com/"/><xhtml:link rel="alternate" hreflang="tr" href="https://www.galipefeoncu.com/tr"/><xhtml:link rel="alternate" hreflang="x-default" href="https://www.galipefeoncu.com/"/></url>
+  <url><loc>https://www.galipefeoncu.com/tr</loc><xhtml:link rel="alternate" hreflang="en" href="https://www.galipefeoncu.com/"/><xhtml:link rel="alternate" hreflang="tr" href="https://www.galipefeoncu.com/tr"/><xhtml:link rel="alternate" hreflang="x-default" href="https://www.galipefeoncu.com/"/></url>
+  <url><loc>https://www.galipefeoncu.com/projects</loc><xhtml:link rel="alternate" hreflang="en" href="https://www.galipefeoncu.com/projects"/><xhtml:link rel="alternate" hreflang="tr" href="https://www.galipefeoncu.com/tr/projects"/><xhtml:link rel="alternate" hreflang="x-default" href="https://www.galipefeoncu.com/projects"/></url>
+  <url><loc>https://www.galipefeoncu.com/tr/projects</loc><xhtml:link rel="alternate" hreflang="en" href="https://www.galipefeoncu.com/projects"/><xhtml:link rel="alternate" hreflang="tr" href="https://www.galipefeoncu.com/tr/projects"/><xhtml:link rel="alternate" hreflang="x-default" href="https://www.galipefeoncu.com/projects"/></url>
+  <url><loc>https://www.galipefeoncu.com/contact</loc><xhtml:link rel="alternate" hreflang="en" href="https://www.galipefeoncu.com/contact"/><xhtml:link rel="alternate" hreflang="tr" href="https://www.galipefeoncu.com/tr/contact"/><xhtml:link rel="alternate" hreflang="x-default" href="https://www.galipefeoncu.com/contact"/></url>
+  <url><loc>https://www.galipefeoncu.com/tr/contact</loc><xhtml:link rel="alternate" hreflang="en" href="https://www.galipefeoncu.com/contact"/><xhtml:link rel="alternate" hreflang="tr" href="https://www.galipefeoncu.com/tr/contact"/><xhtml:link rel="alternate" hreflang="x-default" href="https://www.galipefeoncu.com/contact"/></url>
 </urlset>

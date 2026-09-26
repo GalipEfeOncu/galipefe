@@ -17,6 +17,7 @@ import {
 } from './prerender-manifest.mjs';
 import { projectPath } from '../src/utils/projectSlug.js';
 import { normalizeProjectArrays } from '../src/utils/projectData.js';
+import { localizedPath } from '../src/utils/localePath.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
@@ -185,6 +186,7 @@ function makeWebPageEntity(page, websiteId, personId) {
         url: page.url,
         name: page.title,
         description: page.description,
+        inLanguage: page.lang,
         isPartOf: { '@id': websiteId },
         about: { '@id': personId },
     };
@@ -193,7 +195,7 @@ function makeWebPageEntity(page, websiteId, personId) {
         webpage.mainEntity = {
             '@type': 'ItemList',
             itemListElement: (page.projects ?? []).map((project, index) => {
-                const url = `${SITE_URL}${projectPath(project)}`;
+                const url = `${SITE_URL}${localizedPath(projectPath(project), page.lang)}`;
                 return {
                     '@type': 'ListItem',
                     position: index + 1,
@@ -223,28 +225,35 @@ function makeWebPageEntity(page, websiteId, personId) {
 function updateStructuredData(html, page, baseGraph) {
     const match = html.match(/<script\b[^>]*type="application\/ld\+json"[^>]*>[\s\S]*?<\/script>/i);
     if (!match) throw new Error('Could not find JSON-LD in index.html.');
-    if (page.type === 'home') return html;
-
     if (page.type === 'not-found') return html.replace(match[0], '');
 
     const website = baseGraph['@graph'].find((entry) => entry['@type'] === 'WebSite');
     const person = baseGraph['@graph'].find((entry) => entry['@type'] === 'Person');
     const websiteId = website['@id'];
     const personId = person['@id'];
-    const graph = [website, person, ...makeWebPageEntity({ ...page, url: page.canonical }, websiteId, personId)];
+    const graph = page.type === 'home'
+        ? [website, person, {
+            ...baseGraph['@graph'].find((entry) => entry['@type'] === 'ProfilePage'),
+            '@id': `${page.canonical}#profile-page`,
+            url: page.canonical,
+            name: page.title,
+            inLanguage: page.lang,
+        }]
+        : [website, person, ...makeWebPageEntity({ ...page, url: page.canonical }, websiteId, personId)];
     const script = `<script type="application/ld+json">\n${safeJson({ '@context': 'https://schema.org', '@graph': graph })}\n    </script>`;
     return html.replace(match[0], script);
 }
 
 function prepareDocument(template, markup, page, bootstrapData, baseGraph) {
     let html = template;
+    html = html.replace(/<html lang="[^"]*">/i, `<html lang="${page.lang}">`);
     html = html.replace(/<title[^>]*>[\s\S]*?<\/title>/i, `<title>${escapeHtml(page.title)}</title>`);
     html = updateMeta(html, 'name', 'description', page.description);
     html = updateMeta(html, 'name', 'robots', page.noIndex ? 'noindex, follow' : 'index, follow');
     html = updateMeta(html, 'property', 'og:title', page.title);
     html = updateMeta(html, 'property', 'og:description', page.description);
     html = updateMeta(html, 'property', 'og:site_name', 'Galip Efe Öncü');
-    html = updateMeta(html, 'property', 'og:locale', 'en_US');
+    html = updateMeta(html, 'property', 'og:locale', page.lang === 'tr' ? 'tr_TR' : 'en_US');
     html = updateMeta(html, 'property', 'og:image', page.image ?? `${SITE_URL}/assets/images/pp.webp`);
     html = updateMeta(html, 'property', 'og:image:alt', page.imageAlt ?? 'Galip Efe Öncü');
     html = updateMeta(html, 'name', 'twitter:card', 'summary_large_image');
@@ -257,6 +266,12 @@ function prepareDocument(template, markup, page, bootstrapData, baseGraph) {
         html = updateCanonical(html, page.canonical);
         html = updateMeta(html, 'property', 'og:url', page.canonical);
         html = updateMeta(html, 'name', 'twitter:url', page.canonical);
+        const basePath = page.path === '/tr' ? '/' : page.path.replace(/^\/tr\//, '/');
+        const alternatives = ['en', 'tr'].map((lang) =>
+            `  <link rel="alternate" hreflang="${lang}" href="${escapeHtml(`${SITE_URL}${localizedPath(basePath, lang)}`)}" />`,
+        );
+        alternatives.push(`  <link rel="alternate" hreflang="x-default" href="${escapeHtml(`${SITE_URL}${basePath}`)}" />`);
+        html = html.replace('</head>', `${alternatives.join('\n')}\n  </head>`);
     } else {
         html = html.replace(/<link\b(?=[^>]*\brel="canonical")[^>]*>\s*/i, '');
         html = updateMeta(html, 'property', 'og:url', SITE_URL);
@@ -273,9 +288,11 @@ function prepareDocument(template, markup, page, bootstrapData, baseGraph) {
 }
 
 function prepareUtilityShell(template, page, baseGraph) {
-    let html = template.replace(/<title[^>]*>[\s\S]*?<\/title>/i, `<title>${escapeHtml(page.title)}</title>`);
+    let html = template.replace(/<html lang="[^"]*">/i, `<html lang="${page.lang}">`)
+        .replace(/<title[^>]*>[\s\S]*?<\/title>/i, `<title>${escapeHtml(page.title)}</title>`);
     html = updateMeta(html, 'name', 'description', page.description);
     html = updateMeta(html, 'name', 'robots', page.robots);
+    html = updateMeta(html, 'property', 'og:locale', page.lang === 'tr' ? 'tr_TR' : 'en_US');
     html = updateMeta(html, 'property', 'og:title', page.title);
     html = updateMeta(html, 'property', 'og:description', page.description);
     html = updateMeta(html, 'name', 'twitter:title', page.title);
@@ -292,7 +309,7 @@ async function renderMarkup(App, LanguageProvider, location, prerenderData) {
         null,
         React.createElement(
             StaticRouter,
-            { location },
+            { location, basename: prerenderData.lang === 'tr' ? '/tr' : '/' },
             React.createElement(
                 LanguageProvider,
                 { initialLanguage: prerenderData.lang },
@@ -356,42 +373,37 @@ async function main() {
         const jsonLdMatch = template.match(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/i);
         if (!jsonLdMatch) throw new Error('The base page is missing its identity JSON-LD.');
         const baseGraph = JSON.parse(jsonLdMatch[1]);
-        const copy = translations.en;
         const now = new Date();
-        const commonData = { lang: 'en', year: now.getFullYear(), age: calculateAge(now) };
-        const pages = [
-            {
-                type: 'home', path: '/', file: path.join(DIST, 'index.html'), canonical: `${SITE_URL}/`,
-                title: copy.seo.aboutTitle, description: copy.seo.aboutDesc,
-            },
-            {
-                type: 'projects', path: '/projects', file: path.join(DIST, 'projects.html'), canonical: `${SITE_URL}/projects`,
-                title: `${copy.projects.title} | Galip Efe Öncü`, description: copy.seo.projectsDesc,
-            },
-            {
-                type: 'contact', path: '/contact', file: path.join(DIST, 'contact.html'), canonical: `${SITE_URL}/contact`,
-                title: `${copy.contact.title} | Galip Efe Öncü`, description: copy.seo.contactDesc,
-            },
-        ];
+        const pages = [];
+        for (const lang of ['en', 'tr']) {
+            const copy = translations[lang];
+            const staticRoutes = [
+                { type: 'home', path: '/', file: lang === 'tr' ? path.join(DIST, 'tr.html') : path.join(DIST, 'index.html'), title: copy.seo.aboutTitle, description: copy.seo.aboutDesc },
+                { type: 'projects', path: '/projects', file: path.join(DIST, ...(lang === 'tr' ? ['tr'] : []), 'projects.html'), title: `${copy.projects.title} | Galip Efe Öncü`, description: copy.seo.projectsDesc, projects },
+                { type: 'contact', path: '/contact', file: path.join(DIST, ...(lang === 'tr' ? ['tr'] : []), 'contact.html'), title: `${copy.contact.title} | Galip Efe Öncü`, description: copy.seo.contactDesc },
+            ];
+            pages.push(...staticRoutes.map((page) => ({
+                ...page, lang, path: localizedPath(page.path, lang), canonical: `${SITE_URL}${localizedPath(page.path, lang)}`,
+            })));
 
-        if (projects !== null) {
-            pages.find((page) => page.type === 'projects').projects = projects;
-            for (const route of buildProjectRouteManifest(projects, DIST, SITE_URL)) {
-                const { project } = route;
-                const content = getProjectContent(project, 'en');
-                const description = truncateDescription([content.subtitle, content.description].filter(Boolean).join(' '));
-                const image = typeof project.image === 'string' && /^https:\/\//i.test(project.image)
-                    ? project.image
-                    : undefined;
-                pages.push({
-                    ...route,
-                    type: 'project', title: `${project.title} | Galip Efe Öncü`, description,
-                    image, imageAlt: `${project.title} project`,
-                });
+            if (projects !== null) {
+                for (const route of buildProjectRouteManifest(projects, DIST, SITE_URL, lang)) {
+                    const { project } = route;
+                    const content = getProjectContent(project, lang);
+                    const description = truncateDescription([content.subtitle, content.description].filter(Boolean).join(' '));
+                    const image = typeof project.image === 'string' && /^https:\/\//i.test(project.image)
+                        ? project.image
+                        : undefined;
+                    pages.push({
+                        ...route, lang, type: 'project', title: `${project.title} | Galip Efe Öncü`, description,
+                        image, imageAlt: project.title,
+                    });
+                }
             }
         }
 
         for (const page of pages) {
+            const commonData = { lang: page.lang, year: now.getFullYear(), age: calculateAge(now) };
             const pageData = buildPageData(page, commonData, projects);
             const markup = await renderMarkup(App, LanguageProvider, page.path, pageData);
             const html = prepareDocument(template, markup, page, pageData, baseGraph);
@@ -399,15 +411,21 @@ async function main() {
             await writeFile(page.file, html);
         }
 
-        const notFoundPage = makeNotFoundPage(DIST, copy.seo.notFoundTitle, copy.seo.notFoundDesc);
+        const copy = translations.en;
+        const commonData = { lang: 'en', year: now.getFullYear(), age: calculateAge(now) };
+        const notFoundPage = { ...makeNotFoundPage(DIST, copy.seo.notFoundTitle, copy.seo.notFoundDesc), lang: 'en' };
         const notFoundMarkup = await renderMarkup(App, LanguageProvider, notFoundPage.path, commonData);
         await writeFile(notFoundPage.file, prepareDocument(template, notFoundMarkup, notFoundPage, commonData, baseGraph));
-        await writeFile(path.join(DIST, 'admin.html'), prepareUtilityShell(template, {
-            title: 'Admin | Galip Efe Öncü', description: 'Private portfolio administration route.', robots: 'noindex, nofollow',
-        }, baseGraph));
-        await writeFile(path.join(DIST, 'typing-test.html'), prepareUtilityShell(template, {
-            title: `${copy.typingGame.pageTitle} | Galip Efe Öncü`, description: copy.seo.typingTestDesc, robots: 'noindex, follow',
-        }, baseGraph));
+        for (const lang of ['en', 'tr']) {
+            const utilityCopy = translations[lang];
+            const utilityDirectory = path.join(DIST, ...(lang === 'tr' ? ['tr'] : []));
+            await writeFile(path.join(utilityDirectory, 'admin.html'), prepareUtilityShell(template, {
+                lang, title: 'Admin | Galip Efe Öncü', description: 'Private portfolio administration route.', robots: 'noindex, nofollow',
+            }, baseGraph));
+            await writeFile(path.join(utilityDirectory, 'typing-test.html'), prepareUtilityShell(template, {
+                lang, title: `${utilityCopy.typingGame.pageTitle} | Galip Efe Öncü`, description: utilityCopy.seo.typingTestDesc, robots: 'noindex, follow',
+            }, baseGraph));
+        }
         await writeFile(path.join(DIST, 'sitemap.xml'), buildSitemap(projects, SITE_URL));
 
         console.log(`[prerender] Generated ${pages.length} public HTML routes${projects === null ? ' (Firestore catalogue unavailable locally)' : ` from ${projects.length} public projects`}.`);

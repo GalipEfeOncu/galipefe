@@ -7,16 +7,18 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import './styles/design-system.css';
 import './index.css';
+import { localeFromPath } from './utils/localePath.js';
 
 const rootElement = document.getElementById('root');
 const prerenderElement = document.getElementById('portfolio-prerender-data');
 const prerenderData = prerenderElement ? JSON.parse(prerenderElement.textContent) : undefined;
 const isStaticNotFoundPage = prerenderElement?.dataset.staticStatus === '404';
+const pathLanguage = localeFromPath(window.location.pathname);
 
 const application = (
   <React.StrictMode>
-    <BrowserRouter>
-      <LanguageProvider initialLanguage={prerenderData?.lang ?? 'en'}>
+    <BrowserRouter basename={pathLanguage === 'tr' ? '/tr' : '/'}>
+      <LanguageProvider initialLanguage={pathLanguage}>
         <App prerenderData={prerenderData} />
         <Analytics />
         <SpeedInsights />

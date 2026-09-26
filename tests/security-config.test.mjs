@@ -22,3 +22,11 @@ test('HTML loads the theme script from the same origin and has no inline event h
     assert.match(indexHtml, /<script src="\/theme\.js"><\/script>/);
     assert.doesNotMatch(indexHtml, /\son[a-z]+="/i);
 });
+
+test('utility routes in both languages retain noindex response headers', () => {
+    for (const route of ['/admin(.*)', '/tr/admin(.*)', '/typing-test(.*)', '/tr/typing-test(.*)']) {
+        const rule = vercel.headers.find(({ source }) => source === route);
+        assert.ok(rule, route);
+        assert.match(rule.headers.find(({ key }) => key === 'X-Robots-Tag').value, /noindex/);
+    }
+});

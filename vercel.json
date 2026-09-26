@@ -26,6 +26,18 @@
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, follow" }
       ]
+    },
+    {
+      "source": "/tr/admin(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    },
+    {
+      "source": "/tr/typing-test(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, follow" }
+      ]
     }
   ]
 }

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { localizedPath } from '../utils/localePath';
 
 const SITE_URL = 'https://www.galipefeoncu.com';
 const DEFAULT_IMAGE = `${SITE_URL}/assets/images/pp.webp`;
@@ -53,7 +54,7 @@ export default function useSEO({ titleKey, fullTitleKey, descriptionKey, title, 
         };
 
         const currentPath = canonicalPath ?? window.location.pathname;
-        const normalizedPath = currentPath === '/' ? '/' : currentPath.replace(/\/+$/, '');
+        const normalizedPath = localizedPath(currentPath === '/' ? '/' : currentPath.replace(/\/+$/, ''), lang);
         const canonicalUrl = `${SITE_URL}${normalizedPath}`;
 
         // 3. Update Meta Description
@@ -61,8 +62,20 @@ export default function useSEO({ titleKey, fullTitleKey, descriptionKey, title, 
         updateMeta('meta[name="robots"]', 'name', 'robots', noIndex ? 'noindex, follow' : 'index, follow');
         if (noIndex) {
             document.querySelector('link[rel="canonical"]')?.remove();
+            document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((link) => link.remove());
         } else {
             updateLink('link[rel="canonical"]', 'canonical', canonicalUrl);
+            for (const alternateLang of ['en', 'tr', 'x-default']) {
+                const linkLang = alternateLang === 'x-default' ? 'en' : alternateLang;
+                let link = document.querySelector(`link[rel="alternate"][hreflang="${alternateLang}"]`);
+                if (!link) {
+                    link = document.createElement('link');
+                    link.rel = 'alternate';
+                    link.hreflang = alternateLang;
+                    document.head.appendChild(link);
+                }
+                link.href = `${SITE_URL}${localizedPath(normalizedPath, linkLang)}`;
+            }
         }
 
         // 4. Update Open Graph tags

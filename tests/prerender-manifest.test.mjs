@@ -9,6 +9,7 @@ import {
     makeNotFoundPage,
     serializePrerenderData,
 } from '../scripts/prerender-manifest.mjs';
+import { localeFromPath, localizedPath, unlocalizedPath } from '../src/utils/localePath.js';
 
 const siteUrl = 'https://www.galipefeoncu.com';
 const projects = [
@@ -32,6 +33,20 @@ test('only published, unarchived projects enter the static route manifest', () =
     assert.equal(routes[0].path, '/projects/project-one');
     assert.equal(routes[0].file, path.join('/repo/dist', 'projects', 'project-one.html'));
     assert.equal(routes[0].canonical, `${siteUrl}/projects/project-one`);
+    const turkishRoutes = buildProjectRouteManifest(projects, '/repo/dist', siteUrl, 'tr');
+    assert.equal(turkishRoutes[0].path, '/tr/projects/project-one');
+    assert.equal(turkishRoutes[0].file, path.join('/repo/dist', 'tr', 'projects', 'project-one.html'));
+    assert.equal(turkishRoutes[0].canonical, `${siteUrl}/tr/projects/project-one`);
+});
+
+test('locale URLs preserve the English public routes and map Turkish equivalents', () => {
+    assert.equal(localizedPath('/', 'en'), '/');
+    assert.equal(localizedPath('/', 'tr'), '/tr');
+    assert.equal(localizedPath('/projects/project-one', 'tr'), '/tr/projects/project-one');
+    assert.equal(localizedPath('/tr/projects/project-one', 'en'), '/projects/project-one');
+    assert.equal(unlocalizedPath('/tr/contact'), '/contact');
+    assert.equal(localeFromPath('/tr/contact'), 'tr');
+    assert.equal(localeFromPath('/typing-test'), 'en');
 });
 
 test('slug collisions fail before static HTML files can overwrite one another', () => {
@@ -51,6 +66,10 @@ test('sitemap contains only public route paths and escapes project timestamps', 
     assert.match(sitemap, new RegExp(`${siteUrl}/projects`));
     assert.match(sitemap, new RegExp(`${siteUrl}/contact`));
     assert.match(sitemap, new RegExp(`${siteUrl}/projects/project-one`));
+    assert.match(sitemap, new RegExp(`${siteUrl}/tr/projects/project-one`));
+    assert.match(sitemap, /hreflang="en"/);
+    assert.match(sitemap, /hreflang="tr"/);
+    assert.match(sitemap, /hreflang="x-default"/);
     assert.match(sitemap, /<lastmod>2026-09-24<\/lastmod>/);
     assert.doesNotMatch(sitemap, /draft-project|archived-project/);
 });

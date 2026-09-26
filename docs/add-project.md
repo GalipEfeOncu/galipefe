@@ -16,7 +16,7 @@ Public katalog yalnızca Firestore `projects` koleksiyonundan gelir. Değişikli
 
 Eksik URL veya içerik için tahmin üretmeyin. Doğrulanamayan isteğe bağlı alanı boş bırakın.
 
-Firestore belge kimliği `docId`, proje detay sayfasının kalıcı adresini `/projects/<docId>` biçiminde belirler; eski veya yerel veride yoksa benzersiz sayısal `id` kullanılır. Firestore belge kimliği değişmezdir; `translationKey` URL olarak kullanılmaz. Public detay sayfası, katalogdaki normal `<a href>` bağlantılarıyla keşfedilebilir.
+Firestore belge kimliği `docId`, proje detay sayfasının kalıcı İngilizce adresini `/projects/<docId>`, Türkçe karşılığını `/tr/projects/<docId>` biçiminde belirler; eski veya yerel veride yoksa benzersiz sayısal `id` kullanılır. Firestore belge kimliği değişmezdir; `translationKey` URL olarak kullanılmaz. Public detay sayfaları, ilgili dildeki katalogdaki normal `<a href>` bağlantılarıyla keşfedilebilir.
 
 ## Firestore ve `/admin` yolu
 

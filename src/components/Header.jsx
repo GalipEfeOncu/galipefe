@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
+import { localizedPath } from '../utils/localePath';
 
 export default function Header({ theme, toggleTheme }) {
     const location = useLocation();
-    const { lang, toggleLang, t } = useLanguage();
+    const { lang, t } = useLanguage();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const headerRef = useRef(null);
 
@@ -73,15 +74,15 @@ export default function Header({ theme, toggleTheme }) {
                     {/* Right Group: Action Controls */}
                     <div className="dock-group-right">
                         {/* Language Switch Button */}
-                        <button
-                            onClick={toggleLang}
+                        <a
+                            href={`${localizedPath(location.pathname, lang === 'en' ? 'tr' : 'en')}${location.search}${location.hash}`}
                             className="dock-btn dock-language-toggle"
                             aria-label={lang === 'en' ? t('header.switchToTurkish') : t('header.switchToEnglish')}
                         >
                             <span className={lang === 'tr' ? 'active' : ''}>TR</span>
                             <span className="dock-language-divider" aria-hidden="true">/</span>
                             <span className={lang === 'en' ? 'active' : ''}>EN</span>
-                        </button>
+                        </a>
 
                         <div className="dock-separator" />
 

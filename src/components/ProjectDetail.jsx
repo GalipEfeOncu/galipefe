@@ -59,7 +59,7 @@ export default function ProjectDetail({ initialProject }) {
     const location = useLocation();
     const { lang, t } = useLanguage();
     const locationProject = location.state?.project;
-    const routeProject = initialProject ?? locationProject ?? null;
+    const routeProject = [initialProject, locationProject].find((item) => item && projectSlug(item) === slug) ?? null;
     const [project, setProject] = useState(routeProject);
     const [loading, setLoading] = useState(!routeProject);
 

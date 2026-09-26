@@ -16,22 +16,22 @@ npm run build
 
 src/main.jsx → hydrateRoot (prerender HTML varsa) / createRoot (geliştirme kabuğuysa)
 └─ BrowserRouter → LanguageProvider → App
-   ├─ /                 → About
-   ├─ /projects         → Projects
-   ├─ /projects/:slug   → ProjectDetail (slug, değişmez Firestore docId'sidir)
-   ├─ /contact          → Contact
-   ├─ /typing-test      → TypingTest (noindex)
-   ├─ /admin            → Admin (noindex)
+   ├─ / ve /tr                 → About
+   ├─ /projects ve /tr/projects → Projects
+   ├─ /projects/:slug ve /tr/projects/:slug → ProjectDetail (slug, değişmez Firestore docId'sidir)
+   ├─ /contact ve /tr/contact → Contact
+   ├─ /typing-test ve /tr/typing-test → TypingTest (noindex)
+   ├─ /admin ve /tr/admin → Admin (noindex)
    └─ *                 → NotFound (Vercel 404.html)
 ```
 
-`About`, `Projects`, `ProjectDetail`, `Contact`, `TypingTest`, `Admin`, `NotFound` ve `Modal` lazy-load edilir. Production'da public rotaların ilk HTML'i build sırasında üretilir; `main.jsx` bu içeriği hydrate eder. Route geçişlerinde çevrilmiş yükleme göstergesi, modal chunk'ı beklenirken overlay geri bildirimi gösterilir. `App` tema, seçili proje ve scroll-to-top görünürlüğünü yönetir. Dil state'i `LanguageProvider` içindedir. Server ve ilk hydration çıktısı İngilizce üretim varsayılanını kullanır; kayıtlı/tarayıcı dili hydration sonrasında uygulanır.
+`About`, `Projects`, `ProjectDetail`, `Contact`, `TypingTest`, `Admin`, `NotFound` ve `Modal` lazy-load edilir. Production'da public rotaların iki dildeki ilk HTML'i build sırasında üretilir; `main.jsx` URL diline göre bu içeriği hydrate eder. Route geçişlerinde çevrilmiş yükleme göstergesi, modal chunk'ı beklenirken overlay geri bildirimi gösterilir. `App` tema, seçili proje ve scroll-to-top görünürlüğünü yönetir. Dil URL tarafından belirlenir: mevcut kök yollar İngilizce, `/tr` altındaki eşleri Türkçedir.
 
 ## Global ve yerel state
 
 | State | Sahibi | Kalıcılık / amaç |
 |---|---|---|
-| `lang` | `LanguageContext` | `localStorage.site_lang`; tarayıcı dilinden başlangıç değeri |
+| `lang` | `LanguageContext` | URL yolu; `/tr` öneki Türkçe, diğer yollar İngilizce |
 | `theme` | `App` | `localStorage.site_theme`; `dark` veya `light` |
 | `selectedProject` | `App` | Proje modalını açar/kapatır |
 | `showScrollTop` | `App` | Scroll konumuna göre yardımcı düğme |
@@ -64,7 +64,8 @@ Projects
 - Locale kaynağı `src/data/translations.js`; desteklenen diller `en` ve `tr`.
 - `t('a.b.c')`, seçili locale ağacında dot-path yürür. Anahtar yoksa development console'a uyarı yazar ve ham yolu döndürür.
 - Yeni statik UI metinleri iki locale altında aynı yapıda bulunmalıdır.
-- Dil değiştiğinde `localStorage.site_lang` ve `<html lang>` birlikte güncellenir.
+- Dil seçicisi aynı sayfanın karşı dildeki adresine normal bağlantıyla gider; URL dili, kayıtlı tercih veya tarayıcı dili tarafından geçersiz kılınmaz. `<html lang>` ilk HTML'de doğru üretilir.
+- `BrowserRouter` ve `StaticRouter` Türkçe public sayfalarda `/tr` basename kullanır; bileşenlerdeki mevcut `/projects` gibi `Link` hedefleri bu önekle otomatik çözülür.
 - `about.bio1..bio3` içindeki yalnızca `<strong>` parçaları `About.formatSafeHTML()` tarafından React elemanına çevrilir. Kullanıcı girdisini HTML gibi işlemeyin.
 
 ## Profil içeriği
@@ -89,10 +90,11 @@ Bu veri statiktir; Firestore tarafından değiştirilmez.
 ## SEO
 
 - `scripts/prerender.mjs`, her public route için HTML içeriğini, benzersiz title/description/canonical/Open Graph/Twitter etiketlerini ve sayfa JSON-LD'sini build sırasında üretir. `/projects` katalog HTML'i ve proje detay metaverileri aynı yayınlanmış Firestore kayıtlarından gelir.
+- İngilizce mevcut public URL'ler korunur; Türkçe karşılıklar `/tr`, `/tr/projects`, `/tr/projects/:slug` ve `/tr/contact` adreslerinde üretilir. Her sayfada kendine işaret eden canonical, `en`, `tr` ve İngilizce köke işaret eden `x-default` alternatifleri bulunur. Sitemap iki dildeki URL'leri ve karşılıklı dil bağlantılarını içerir.
 - `index.html` ana sayfa için favicon, canonical, meta, Open Graph, Twitter ve `WebSite` + `ProfilePage` + `Person` JSON-LD varsayılanlarını içerir. Person entity `sameAs` profilleri ve `knowsAbout` alanlarıyla kişiyi portfolyo domainine bağlar.
 - `src/hooks/useSEO.js` SPA içi gezinme, dil ve tema kullanımında sayfa başlığı/meta/canonical/sosyal alanları istemci tarafında eşitler; arama motorunun ilk yanıtı için bu hook tek başına yeterli sayılmaz, prerender çıktısı esas alınır.
 - Sayfa açıklamaları `seo.*Desc` anahtarlarından gelir.
-- `/admin` ve `/typing-test`, `noindex` meta + Vercel `X-Robots-Tag` ile dışarıda tutulur; canonical ve JSON-LD içermez, sitemap'e alınmaz.
+- `/admin`, `/typing-test` ve `/tr` altındaki eşleri, `noindex` meta + Vercel `X-Robots-Tag` ile dışarıda tutulur; canonical ve JSON-LD içermez, sitemap'e alınmaz.
 - Firestore yayınlanmış proje detayları da dahil olmak üzere yalnızca canonical public sayfalar dinamik sitemap'te yer alır. Proje `lastmod` değeri sadece Firestore `updatedAt` alanı geçerli bir tarihse eklenir; statik rotalara uydurma tarih yazılmaz.
 - Vercel clean URL ayarları `.html` dosyalarını uzantısız sunar; bilinmeyen yollar catch-all SPA rewrite yerine gerçek `404.html` üzerinden `noindex` ile döner.
 - Ana domainin `robots.txt` dosyası genel crawler'lara izin verir ve canonical www sitemap'ini gösterir. Subdomain'ler ayrı robots/HTTP kapsamıdır; demo veya işletme subdomain'lerinde arama dışı kalma gereksinimi varsa her uygulamanın kendisi `noindex` header/meta vermelidir. `robots.txt` ile taramayı engellemek, `noindex` direktifinin okunmasını önleyebilir.
@@ -126,7 +128,7 @@ Kurulum ayrıntıları: [`firebase-admin.md`](./firebase-admin.md).
 - Vite `base: '/'` ile build alır.
 - `npm run build` önce `npm test` çalıştırır, ardından Vite varlıklarını oluşturur ve `scripts/prerender.mjs` route HTML'i ile Firestore tabanlı `sitemap.xml` yazar. Production katalog üretimi için Vercel'de `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID` ve `VITE_FIREBASE_APP_ID` gerekir.
 - `npm test` prerender manifesti, slug çakışması, sitemap filtreleri, 404/bootstrap çıktısı ve atomik kimlik yardımcılarını fixture verisiyle doğrular.
-- `vercel.json` `cleanUrls: true` ve `trailingSlash: false` kullanır; public HTML dosyaları doğrudan sunulur. SPA catch-all rewrite kullanılmaz. Yeni public rota prerender üretim listesine de eklenmelidir; yönetim ve utility sayfaları shell + noindex olarak kalır.
+- `vercel.json` `cleanUrls: true` ve `trailingSlash: false` kullanır; `/tr` yolu `tr.html`, diğer Türkçe yollar `tr/` altındaki HTML dosyalarıyla sunulur. SPA catch-all rewrite kullanılmaz. Yeni public rota prerender üretim listesine her iki dilde de eklenmelidir; yönetim ve utility sayfaları shell + noindex olarak kalır.
 - Vercel Analytics ve Speed Insights `main.jsx` içinde provider ağacına eklenmiştir.
 - Production build çıktısı `dist/` klasörüdür ve Git tarafından ignore edilir.
 
